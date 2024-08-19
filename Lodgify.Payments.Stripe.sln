@@ -2,6 +2,17 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lodgify.Payments.Stripe.Server", "Lodgify.Payments.Stripe.Server\Lodgify.Payments.Stripe.Server.csproj", "{3D1D2059-9D59-410B-8981-704DBB2D82D7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{70E700E7-1C0B-4702-A614-6048142B759E}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		coverlet.runsettings = coverlet.runsettings
+		Directory.Build.props = Directory.Build.props
+		lodgify-icon.png = lodgify-icon.png
+		nuget.config = nuget.config
+		README.md = README.md
+		service.datadog.yaml = service.datadog.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
