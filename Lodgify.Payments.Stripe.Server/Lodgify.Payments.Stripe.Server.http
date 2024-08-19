@@ -1,0 +1,6 @@
+@Lodgify.Payments.Stripe.Server_HostAddress = http://localhost:5101
+
+GET {{Lodgify.Payments.Stripe.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
