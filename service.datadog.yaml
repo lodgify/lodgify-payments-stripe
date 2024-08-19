@@ -1,0 +1,18 @@
+schema-version: v2.1
+dd-service: lodgify-payments-stripe
+team: trust
+application: lodgify-payments-stripe
+tier: tier2
+lifecycle: production
+links:
+  - name: Source Code
+    type: repo
+    provider: github
+    url: https://github.com/lodgify/lodgify-payments-stripe
+  - name: Notion page
+    type: doc
+    provider: Notion
+    url: https://www.notion.so/lodgify
+tags:
+  - service-type:bounded-context
+  

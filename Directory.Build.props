@@ -1,0 +1,13 @@
+<Project>
+    <PropertyGroup>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Label="SDK Versions">
+        <TargetFrameworkVersion>net8.0</TargetFrameworkVersion>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+</Project>
