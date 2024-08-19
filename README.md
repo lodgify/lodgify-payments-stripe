@@ -1,2 +1,2 @@
-# lodgify-payment-stripe
+# lodgify-payments-stripe
 stripe payments
