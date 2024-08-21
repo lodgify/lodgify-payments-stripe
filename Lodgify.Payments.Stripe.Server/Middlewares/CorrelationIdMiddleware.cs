@@ -3,18 +3,16 @@ using Lodgify.CorrelationContext;
 
 namespace Lodgify.Payments.Stripe.Server.Middlewares;
 
-public sealed class CorrelationIdMiddleware
+public sealed class CorrelationIdMiddleware : IMiddleware
 {
-    private readonly RequestDelegate _next;
     private readonly ILogger _logger;
 
-    public CorrelationIdMiddleware(RequestDelegate next, ILogger<CorrelationIdMiddleware> logger)
+    public CorrelationIdMiddleware(ILogger<CorrelationIdMiddleware> logger)
     {
-        _next = next;
         _logger = logger;
     }
 
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var correlationId = string.Empty;
         var requestId = context.TraceIdentifier;
@@ -49,7 +47,7 @@ public sealed class CorrelationIdMiddleware
                    { CorrelationKeys.CorrelationIdForLogs, correlationId }
                }))
         {
-            await _next.Invoke(context);
+            await next.Invoke(context);
         }
     }
 }

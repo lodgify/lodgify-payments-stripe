@@ -4,16 +4,13 @@ namespace Lodgify.Payments.Stripe.Domain.Accounts;
 
 public class Account : Aggregate
 {
+    public string Email { get; init; }
     public string StripeAccountId { get; init; }
-    public string Object { get; init; }
-    public string ExternalAccountUrl { get; init; }
-    public string LoginLinkUrl { get; init; }
-    public string OrderId { get; init; }
-    // public List<string> CurrentlyDue { get; init; }
-    // public List<string> EventuallyDue { get; init; }
-    // public List<string> PastDue { get; init; }
-    // public string DisabledReason { get; init; }
-    public string Type { get; init; }
+    public string Dashboard { get; init; }
+    public string RequirementCollection { get; init; }
+    public string Fees { get; init; }
+    public string Losses { get; init; }
+    public string ControllerType { get; init; }
 
 
     private Account()
@@ -24,18 +21,18 @@ public class Account : Aggregate
     {
     }
 
-    public static Account Create(string stripeAccountId, string externalAccountUrl, string loginLinkUrl, string orderId, string type)
+    public static Account Create(string email, string stripeAccountId, string controllerType, string losses, string fees, string requirementCollection, string dashboard)
     {
         return new Account()
         {
             Id = Guid.NewGuid(),
+            Email = email,
             StripeAccountId = stripeAccountId,
-            Object = "account",
-            ExternalAccountUrl = externalAccountUrl,
-            LoginLinkUrl = loginLinkUrl,
-            OrderId = orderId,
-            Type = type
-
+            ControllerType = controllerType,
+            Losses = losses,
+            Fees = fees,
+            RequirementCollection = requirementCollection,
+            Dashboard = dashboard
         };
     }
 }

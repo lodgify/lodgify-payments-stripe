@@ -19,7 +19,7 @@ public class AccountController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateAccount(CreateAccountRequest request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new CreateAccountCommand(request.Country, request.Email, request.FeePayer, request.LossPayments, request.DashboardType), cancellationToken);
+        var response = await _mediator.Send(new CreateAccountCommand(request.Country, request.Email), cancellationToken);
         return Ok(response);
     }
 }

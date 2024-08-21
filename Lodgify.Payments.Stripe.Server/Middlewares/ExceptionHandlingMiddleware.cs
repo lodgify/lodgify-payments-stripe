@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Stripe;
 
 namespace Lodgify.Payments.Stripe.Server.Middlewares;
 
@@ -13,9 +14,26 @@ public class ExceptionHandlingMiddleware : IMiddleware
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
+        
         try
         {
             await next(context);
+        }
+        catch (StripeException ex)
+        {
+            _logger.LogError(ex, "Stripe error");
+
+            var problemDetails = new ProblemDetails
+            {
+                Status = StatusCodes.Status500InternalServerError,
+                Title = $"Stripe error: {ex.StripeError.Code}",
+                Detail = ex.Message,
+                Instance = context.Request.Path,
+                Extensions = new Dictionary<string, object?>()
+                {
+                    { "StackTrace", ex.StackTrace }
+                }
+            };
         }
         catch (Exception ex)
         {

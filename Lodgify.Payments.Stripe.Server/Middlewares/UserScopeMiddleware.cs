@@ -7,9 +7,9 @@ namespace Lodgify.Payments.Stripe.Server.Middlewares;
 /// </summary>
 /// <param name="next">request delegate.</param>
 /// <param name="logger">logger.</param>
-public class UserScopeMiddleware(RequestDelegate next, ILogger<UserScopeMiddleware> logger)
+public class UserScopeMiddleware(ILogger<UserScopeMiddleware> logger) : IMiddleware
 {
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         if (context.User.Identity is { IsAuthenticated: true } && !string.IsNullOrEmpty(context.User.Identity.Name))
         {

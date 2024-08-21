@@ -17,14 +17,14 @@ public class CreateAccountCommandHandler : ICommandHandler<CreateAccountCommand,
         _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
-    
+
     public async Task<CreateAccountResponse> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
     {
-        var account = await _stripeClient.CreateAccount(request.Country, request.Email, request.FeePayer, request.LossPayments, request.DashboardType, cancellationToken);
-        
+        var account = await _stripeClient.CreateAccount(request.Country, request.Email, cancellationToken);
+
         await _accountRepository.AddAccountAsync(account, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
-        
+
         return new CreateAccountResponse(account.StripeAccountId);
     }
 }

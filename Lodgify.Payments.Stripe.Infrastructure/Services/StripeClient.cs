@@ -1,39 +1,46 @@
-﻿using Stripe;
+﻿using Lodgify.Payments.Stripe.Infrastructure.Settings;
+using Microsoft.Extensions.Options;
+using Stripe;
 
 namespace Lodgify.Payments.Stripe.Infrastructure.Services;
 
 public class StripeClient : Lodgify.Payments.Stripe.Application.Services.IStripeClient
 {
-    public async Task<Lodgify.Payments.Stripe.Domain.Accounts.Account> CreateAccount(string country, string email, string feePayer, string lossPayments, string dashboardType, CancellationToken cancellationToken = default)
+    public StripeClient(IOptions<StripeSettings> stripeSettings)
     {
-        StripeConfiguration.ApiKey = "";
+        StripeConfiguration.ApiKey = stripeSettings.Value.ApiKey;
+    }
+
+    public async Task<Lodgify.Payments.Stripe.Domain.Accounts.Account> CreateAccount(string country, string email, CancellationToken cancellationToken = default)
+    {
         var options = new AccountCreateOptions
         {
             Country = country,
             Email = email,
             Controller = new AccountControllerOptions
             {
-                Fees = new AccountControllerFeesOptions { Payer = feePayer },
-                Losses = new AccountControllerLossesOptions { Payments = lossPayments },
                 StripeDashboard = new AccountControllerStripeDashboardOptions
                 {
-                    Type = dashboardType,
+                    Type = "none",
                 },
             },
+            Capabilities = new AccountCapabilitiesOptions
+            {
+                CardPayments = new AccountCapabilitiesCardPaymentsOptions { Requested = true },
+                Transfers = new AccountCapabilitiesTransfersOptions { Requested = true }
+            }
         };
         var service = new AccountService();
         var stripeAccount = await service.CreateAsync(options, cancellationToken: cancellationToken);
 
         return Domain.Accounts.Account.Create(
+            email,
             stripeAccount.Id,
-            stripeAccount.ExternalAccounts.Url,
-            "",
-            stripeAccount.Metadata["order_id"].ToString(),
-            //CurrentlyDue = stripeAccoun
-            //EventuallyDue = stripeAccount.EventuallyDue,
-            //PastDue = stripeAccount.PastDue,
-            //DisabledReason = stripeAccount.DisabledReason,
-            stripeAccount.Type
+            stripeAccount.Controller.Type,
+            stripeAccount.Controller.Losses.Payments,
+            stripeAccount.Controller.Fees.Payer,
+            stripeAccount.Controller.RequirementCollection,
+            stripeAccount.Controller.StripeDashboard.Type
         );
     }
 }

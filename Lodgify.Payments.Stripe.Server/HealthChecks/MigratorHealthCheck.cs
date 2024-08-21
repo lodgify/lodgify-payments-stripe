@@ -8,18 +8,18 @@ public class MigratorHealthCheck : IHealthCheck
 {
     private bool _isHealthy;
     private readonly ILogger<MigratorHealthCheck> _logger;
-    private readonly IDatabaseMigrator[] _migrators;
+    private readonly IDatabaseMigrator _migrator;
     private readonly string? _migrationTarget;
 
     public MigratorHealthCheck(
         IOptions<MigratorHealthCheckSettings> migratorSettingsOptions,
         ILogger<MigratorHealthCheck> logger,
-        IDatabaseMigrator[] migrators)
+        IDatabaseMigrator migrator)
     {
         var migratorSettings = migratorSettingsOptions.Value;
         _migrationTarget = migratorSettings.TargetMigration;
         _logger = logger;
-        _migrators = migrators;
+        _migrator = migrator;
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(
@@ -33,23 +33,20 @@ public class MigratorHealthCheck : IHealthCheck
 
         try
         {
-            foreach (var migrator in _migrators)
+            var target = _migrationTarget;
+
+            if (string.IsNullOrEmpty(target))
             {
-                var target = _migrationTarget;
+                var pendingMigrations = (await _migrator.GetPendingMigrationsAsync(cancel))
+                    .ToArray();
+                if (!pendingMigrations.Any())
+                    return Healthy("No pending migrations");
 
-                if (string.IsNullOrEmpty(target))
-                {
-                    var pendingMigrations = (await migrator.GetPendingMigrationsAsync(cancel))
-                        .ToArray();
-                    if (!pendingMigrations.Any())
-                        continue;
-
-                    target = pendingMigrations.Last();
-                }
-
-                await migrator.MigrateAsync(target, cancel);
-                appliedMigrations.Add(target);
+                target = pendingMigrations.Last();
             }
+
+            await _migrator.MigrateAsync(target, cancel);
+            appliedMigrations.Add(target);
         }
         catch (Exception ex)
         {

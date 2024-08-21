@@ -22,6 +22,10 @@ public static class HostingExtensions
 
         builder.Services.AddApplication();
 
+        builder.Services.AddTransient<CorrelationIdMiddleware>();
+        builder.Services.AddTransient<UserScopeMiddleware>();
+        builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+
         builder.Services
             .AddHealthChecks()
             .AddCheck<MigratorHealthCheck>(nameof(MigratorHealthCheck))
@@ -47,7 +51,7 @@ public static class HostingExtensions
             app.UseSwaggerUI();
         }
 
-        app.UseLodgifyNLogMiddlewares();
+        // app.UseLodgifyNLogMiddlewares();
         app.UseMiddleware<CorrelationIdMiddleware>();
         app.UseMiddleware<UserScopeMiddleware>();
         app.UseMiddleware<ExceptionHandlingMiddleware>();

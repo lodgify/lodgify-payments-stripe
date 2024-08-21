@@ -2,5 +2,5 @@
 
 public interface IStripeClient
 {
-    Task<Lodgify.Payments.Stripe.Domain.Accounts.Account> CreateAccount(string country, string email, string feePayer, string lossPayments, string dashboardType, CancellationToken cancellationToken = default);
+    Task<Lodgify.Payments.Stripe.Domain.Accounts.Account> CreateAccount(string country, string email, CancellationToken cancellationToken = default);
 }
