@@ -5,6 +5,7 @@ namespace Lodgify.Payments.Stripe.Domain.AccountSessions;
 public class AccountSession : Aggregate
 {
     public string StripeAccountId { get; init; }
+    public string ClientSecret { get; init; }
 
     private AccountSession()
     {
@@ -14,12 +15,13 @@ public class AccountSession : Aggregate
     {
     }
 
-    public static AccountSession Create(string stripeAccountId)
+    public static AccountSession Create(string stripeAccountId, string clientSecret)
     {
         return new AccountSession()
         {
             Id = Guid.NewGuid(),
-            StripeAccountId = stripeAccountId
+            StripeAccountId = stripeAccountId,
+            ClientSecret = clientSecret
         };
     }
 }

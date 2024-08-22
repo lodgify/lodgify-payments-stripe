@@ -63,8 +63,8 @@ public class StripeClient : Lodgify.Payments.Stripe.Application.Services.IStripe
             },
         };
         var service = new AccountSessionService();
-        var stripeAccountSession = await service.CreateAsync(options);
-        
-        return AccountSession.Create(stripeAccountId);
+        var stripeAccountSession = await service.CreateAsync(options, cancellationToken: cancellationToken);
+
+        return AccountSession.Create(stripeAccountId, stripeAccountSession.ClientSecret);
     }
 }

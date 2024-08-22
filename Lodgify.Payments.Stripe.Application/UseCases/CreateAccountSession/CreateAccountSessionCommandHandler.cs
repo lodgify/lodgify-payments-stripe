@@ -26,6 +26,6 @@ public class CreateAccountSessionCommandHandler : ICommandHandler<CreateAccountS
         await _sessionAccountRepository.AddAccountAsync(account, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
 
-        return new CreateAccountSessionResponse();
+        return new CreateAccountSessionResponse(account.StripeAccountId, account.ClientSecret);
     }
 }

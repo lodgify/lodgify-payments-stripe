@@ -1,6 +1,3 @@
 ﻿namespace Lodgify.Payments.Stripe.Application.UseCases.CreateAccountSession;
 
-public class CreateAccountSessionResponse
-{
-    
-}
+public sealed record CreateAccountSessionResponse(string StripeAccountId, string ClientSecret);
