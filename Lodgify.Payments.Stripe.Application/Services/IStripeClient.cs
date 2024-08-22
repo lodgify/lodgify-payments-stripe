@@ -2,5 +2,6 @@
 
 public interface IStripeClient
 {
-    Task<Lodgify.Payments.Stripe.Domain.Accounts.Account> CreateAccount(string country, string email, CancellationToken cancellationToken = default);
+    Task<Domain.Accounts.Account> CreateAccount(string country, string email, CancellationToken cancellationToken = default);
+    Task<Domain.AccountSessions.AccountSession> CreateAccountSession(string stripeAccountId, CancellationToken cancellationToken = default);
 }
