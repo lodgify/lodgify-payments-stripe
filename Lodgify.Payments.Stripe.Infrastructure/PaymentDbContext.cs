@@ -1,4 +1,5 @@
 ﻿using Lodgify.Payments.Stripe.Domain.Accounts;
+using Lodgify.Payments.Stripe.Domain.AccountSessions;
 using Lodgify.Payments.Stripe.Infrastructure.Configurations;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +8,7 @@ namespace Lodgify.Payments.Stripe.Infrastructure;
 public class PaymentDbContext : DbContext
 {
     public DbSet<Account> Account { get; set; }
+    public DbSet<AccountSession> AccountSession { get; set; }
 
     public PaymentDbContext(DbContextOptions<PaymentDbContext> options) : base(options)
     {

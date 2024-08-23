@@ -1,6 +1,7 @@
 ﻿using Lodgify.Payments.Stripe.Infrastructure.Settings;
 using Microsoft.Extensions.Options;
 using Stripe;
+using AccountSession = Lodgify.Payments.Stripe.Domain.AccountSessions.AccountSession;
 
 namespace Lodgify.Payments.Stripe.Infrastructure.Services;
 
@@ -42,5 +43,28 @@ public class StripeClient : Lodgify.Payments.Stripe.Application.Services.IStripe
             stripeAccount.Controller.RequirementCollection,
             stripeAccount.Controller.StripeDashboard.Type
         );
+    }
+
+    public async Task<AccountSession> CreateAccountSession(string stripeAccountId, CancellationToken cancellationToken = default)
+    {
+        var options = new AccountSessionCreateOptions
+        {
+            Account = stripeAccountId,
+            Components = new AccountSessionComponentsOptions
+            {
+                AccountOnboarding = new AccountSessionComponentsAccountOnboardingOptions
+                {
+                    Enabled = true,
+                    Features = new AccountSessionComponentsAccountOnboardingFeaturesOptions
+                    {
+                        ExternalAccountCollection = true,
+                    },
+                },
+            },
+        };
+        var service = new AccountSessionService();
+        var stripeAccountSession = await service.CreateAsync(options, cancellationToken: cancellationToken);
+
+        return AccountSession.Create(stripeAccountId, stripeAccountSession.ClientSecret);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Lodgify.Payments.Stripe.Application.Transactions;
 using Lodgify.Payments.Stripe.Domain.Accounts.Contracts;
+using Lodgify.Payments.Stripe.Domain.AccountSessions.Contracts;
 using Lodgify.Payments.Stripe.Infrastructure.Migrator;
 using Lodgify.Payments.Stripe.Infrastructure.Migrator.Contracts;
 using Lodgify.Payments.Stripe.Infrastructure.Repositories;
@@ -30,6 +31,7 @@ public static class InfrastructureDependencyRegistration
         services.AddScoped<Lodgify.Payments.Stripe.Application.Services.IStripeClient, StripeClient>();
         services.AddScoped<IDatabaseMigrator, PaymentMigrator>();
         services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<IAccountSessionRepository, AccountSessionRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
