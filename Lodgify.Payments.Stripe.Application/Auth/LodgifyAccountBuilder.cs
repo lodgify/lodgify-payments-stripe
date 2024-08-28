@@ -71,20 +71,4 @@ public class LodgifyAccountBuilder
 
         return LodgifyAccountIdentity.Anonymous;
     }
-
-    protected bool SetAccount<T>(T obj, LodgifyAccount account)
-    {
-        if (obj is ILodgifyAccountIdentified identified)
-        {
-            if (account.AccountId != 0)
-            {
-                identified.Account = account;
-                return true;
-            }
-
-            return false;
-        }
-
-        return true;
-    }
 }
