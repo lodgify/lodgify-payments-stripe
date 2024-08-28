@@ -4,6 +4,7 @@ namespace Lodgify.Payments.Stripe.Domain.Accounts;
 
 public class Account : Aggregate
 {
+    public int UserId { get; init; }
     public string Email { get; init; }
     public string StripeAccountId { get; init; }
     public string Dashboard { get; init; }
@@ -21,11 +22,12 @@ public class Account : Aggregate
     {
     }
 
-    public static Account Create(string email, string stripeAccountId, string controllerType, string losses, string fees, string requirementCollection, string dashboard)
+    public static Account Create(int userId, string email, string stripeAccountId, string controllerType, string losses, string fees, string requirementCollection, string dashboard)
     {
         return new Account()
         {
             Id = Guid.NewGuid(),
+            UserId = userId,
             Email = email,
             StripeAccountId = stripeAccountId,
             ControllerType = controllerType,

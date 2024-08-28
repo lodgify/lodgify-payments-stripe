@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using Lodgify.Config.Providers;
 using Lodgify.Config.Providers.Json;
+using Lodgify.Extensions.AspNetCore;
 using Lodgify.Extensions.AspNetCore.Mvc;
 using Lodgify.Extensions.Logging.NLog;
 using Lodgify.Payments.Stripe.Application;
@@ -8,6 +9,7 @@ using Lodgify.Payments.Stripe.Infrastructure;
 using Lodgify.Payments.Stripe.Server.HealthChecks;
 using Lodgify.Payments.Stripe.Server.Middlewares;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.OpenApi.Models;
 
 namespace Lodgify.Payments.Stripe.Server.Extensions;
 
@@ -26,6 +28,11 @@ public static class HostingExtensions
         builder.Services.AddTransient<UserScopeMiddleware>();
         builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
+        builder.Services.AddLodgifyAuthentication(
+            builder.Configuration.GetValue<string>("identity:baseUrl")!,
+            builder.Configuration);
+        builder.Services.AddLodgifyAuthorization();
+
         builder.Services
             .AddHealthChecks()
             .AddCheck<MigratorHealthCheck>(nameof(MigratorHealthCheck))
@@ -37,6 +44,25 @@ public static class HostingExtensions
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(
+            opt =>
+            {
+                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Lodgify payments Stripe API", Version = "v1" });
+                opt.AddSecurityDefinition(
+                    "Bearer",
+                    new OpenApiSecurityScheme
+                    {
+                        In = ParameterLocation.Header,
+                        Description = "Please enter token",
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.Http,
+                        BearerFormat = "JWT",
+                        Scheme = "bearer"
+                    });
+
+                opt.AddSecurityRequirement(new OpenApiSecurityRequirement { { new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" } }, new string[] { } } });
+            });
+
 
         builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -50,6 +76,9 @@ public static class HostingExtensions
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         // app.UseLodgifyNLogMiddlewares();
         app.UseMiddleware<CorrelationIdMiddleware>();

@@ -10,7 +10,7 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
     {
         builder.ToTable("Account");
 
-        
+        builder.Property(p => p.UserId).IsRequired();
         builder.Property(p => p.Email).IsRequired();
         builder.Property(p => p.StripeAccountId).IsRequired();
         builder.Property(p => p.Dashboard);

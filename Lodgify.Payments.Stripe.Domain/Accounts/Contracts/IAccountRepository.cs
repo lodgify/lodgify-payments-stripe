@@ -3,4 +3,5 @@
 public interface IAccountRepository
 {
     Task AddAccountAsync(Account account, CancellationToken cancellationToken = default);
+    Task<int?> QueryAccountUserIdAsync(string stripeAccountId, CancellationToken cancellationToken = default);
 }
