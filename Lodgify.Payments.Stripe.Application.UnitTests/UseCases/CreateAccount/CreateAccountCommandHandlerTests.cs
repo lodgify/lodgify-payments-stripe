@@ -12,10 +12,10 @@ namespace Lodgify.Payments.Stripe.Application.UnitTests.UseCases.CreateAccount;
 
 public class CreateAccountCommandHandlerTests
 {
-    private IStripeClient _stripeClient;
-    private IAccountRepository _accountRepository;
-    private IUnitOfWork _unitOfWork;
-    private CreateAccountCommandHandler _handler;
+    private readonly IStripeClient _stripeClient;
+    private readonly IAccountRepository _accountRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly CreateAccountCommandHandler _handler;
 
     public CreateAccountCommandHandlerTests()
     {
@@ -28,9 +28,7 @@ public class CreateAccountCommandHandlerTests
     private (CreateAccountCommandHandler handler, CreateAccountCommand request, CancellationToken cancellationToken) CreateHandlerAndDependencies()
     {
         var request = new CreateAccountCommand("US", "test@example.com") { Account = new LodgifyAccount(1, 1) };
-        var cancellationToken = new CancellationToken();
-
-        return (_handler, request, cancellationToken);
+        return (_handler, request, CancellationToken.None);
     }
 
     [Fact]
@@ -57,7 +55,7 @@ public class CreateAccountCommandHandlerTests
     {
         // Arrange
         var (handler, request, cancellationToken) = CreateHandlerAndDependencies();
-        _stripeClient.When(s => s.CreateAccount(1, "US", "test@example.com", default))
+        _stripeClient.When(s => s.CreateAccount(1, "US", "test@example.com", CancellationToken.None))
             .Throw(new StripeException("Error"));
 
         // Act
@@ -66,7 +64,7 @@ public class CreateAccountCommandHandlerTests
             .ThrowAsync<StripeException>();
 
         // Assert
-        await _accountRepository.DidNotReceive().AddAccountAsync(default, default);
-        await _unitOfWork.DidNotReceive().CommitAsync(default);
+        await _accountRepository.DidNotReceiveWithAnyArgs().AddAccountAsync(Arg.Any<Account>(), Arg.Any<CancellationToken>());
+        await _unitOfWork.DidNotReceive().CommitAsync(Arg.Any<CancellationToken>());
     }
 }
