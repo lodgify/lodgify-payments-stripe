@@ -1,6 +1,7 @@
 ﻿using Lodgify.Payments.Stripe.Application.BuildingBlocks;
 using Lodgify.Payments.Stripe.Application.Services;
 using Lodgify.Payments.Stripe.Application.Transactions;
+using Lodgify.Payments.Stripe.Application.UseCases.CreateAccountSession.Rules;
 using Lodgify.Payments.Stripe.Domain.Accounts.Contracts;
 using Lodgify.Payments.Stripe.Domain.AccountSessions.Contracts;
 
@@ -24,11 +25,7 @@ public class CreateAccountSessionCommandHandler : ICommandHandler<CreateAccountS
 
     public async Task<CreateAccountSessionResponse> Handle(CreateAccountSessionCommand request, CancellationToken cancellationToken)
     {
-        var accountUserId = await _accountRepository.QueryAccountUserIdAsync(request.StripeAccountId, cancellationToken);
-        if (!accountUserId.HasValue || accountUserId != request.Account.UserId)
-        {
-            throw new UnauthorizedAccessException("User is not authorized to create a session for this account");
-        }
+        BusinessRule.CheckRule(new UserIdMustBeTheSameRule(request.Account.UserId, await _accountRepository.QueryAccountUserIdAsync(request.StripeAccountId, cancellationToken)));
 
         var account = await _stripeClient.CreateAccountSession(request.StripeAccountId, cancellationToken);
 
