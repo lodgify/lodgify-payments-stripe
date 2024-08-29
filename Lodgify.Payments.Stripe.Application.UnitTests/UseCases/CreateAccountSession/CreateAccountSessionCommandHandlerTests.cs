@@ -39,7 +39,7 @@ public class CreateAccountSessionCommandHandlerTests
         _accountRepository.QueryAccountUserIdAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(request.Account.UserId);
 
-        _stripeClient.CreateAccountSession(Arg.Any<string>(), Arg.Any<CancellationToken>())
+        _stripeClient.CreateAccountSessionAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(account);
 
         // Act
@@ -74,7 +74,7 @@ public class CreateAccountSessionCommandHandlerTests
         _accountRepository.QueryAccountUserIdAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(request.Account.UserId);
 
-        _stripeClient.CreateAccountSession(Arg.Any<string>(), Arg.Any<CancellationToken>())
+        _stripeClient.CreateAccountSessionAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Throws(new StripeException("Error creating account session"));
 
         // Act and Assert

@@ -12,7 +12,7 @@ public class StripeClient : Lodgify.Payments.Stripe.Application.Services.IStripe
         StripeConfiguration.ApiKey = stripeSettings.Value.ApiKey;
     }
 
-    public async Task<Lodgify.Payments.Stripe.Domain.Accounts.Account> CreateAccount(int userId, string country, string email, CancellationToken cancellationToken = default)
+    public async Task<Lodgify.Payments.Stripe.Domain.Accounts.Account> CreateAccountAsync(int userId, string country, string email, CancellationToken cancellationToken)
     {
         var options = new AccountCreateOptions
         {
@@ -46,7 +46,7 @@ public class StripeClient : Lodgify.Payments.Stripe.Application.Services.IStripe
         );
     }
 
-    public async Task<AccountSession> CreateAccountSession(string stripeAccountId, CancellationToken cancellationToken = default)
+    public async Task<AccountSession> CreateAccountSessionAsync(string stripeAccountId, CancellationToken cancellationToken)
     {
         var options = new AccountSessionCreateOptions
         {

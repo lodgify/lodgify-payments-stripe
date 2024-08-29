@@ -37,14 +37,14 @@ public class CreateAccountCommandHandlerTests
         // Arrange
         var (handler, request, cancellationToken) = CreateHandlerAndDependencies();
         var account = Account.Create(request.Account.UserId, "test@example.com", "acct_123", "application", "application", "stripe", "collection", "none");
-        _stripeClient.CreateAccount(request.Account.UserId, "US", "test@example.com", Arg.Any<CancellationToken>())
+        _stripeClient.CreateAccountAsync(request.Account.UserId, "US", "test@example.com", Arg.Any<CancellationToken>())
             .Returns(account);
 
         // Act
         var response = await handler.Handle(request, cancellationToken);
 
         // Assert
-        await _stripeClient.Received(1).CreateAccount(request.Account.UserId, request.Country, request.Email, cancellationToken);
+        await _stripeClient.Received(1).CreateAccountAsync(request.Account.UserId, request.Country, request.Email, cancellationToken);
         await _accountRepository.Received(1).AddAccountAsync(account, cancellationToken);
         await _unitOfWork.Received(1).CommitAsync(cancellationToken);
         Assert.Equal(account.StripeAccountId, response.StripeAccountId);
@@ -55,7 +55,7 @@ public class CreateAccountCommandHandlerTests
     {
         // Arrange
         var (handler, request, cancellationToken) = CreateHandlerAndDependencies();
-        _stripeClient.When(s => s.CreateAccount(1, "US", "test@example.com", CancellationToken.None))
+        _stripeClient.When(s => s.CreateAccountAsync(1, "US", "test@example.com", CancellationToken.None))
             .Throw(new StripeException("Error"));
 
         // Act

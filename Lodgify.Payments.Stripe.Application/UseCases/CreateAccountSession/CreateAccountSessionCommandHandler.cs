@@ -27,7 +27,7 @@ public class CreateAccountSessionCommandHandler : ICommandHandler<CreateAccountS
     {
         BusinessRule.CheckRule(new UserIdMustBeTheSameRule(request.Account.UserId, await _accountRepository.QueryAccountUserIdAsync(request.StripeAccountId, cancellationToken)));
 
-        var account = await _stripeClient.CreateAccountSession(request.StripeAccountId, cancellationToken);
+        var account = await _stripeClient.CreateAccountSessionAsync(request.StripeAccountId, cancellationToken);
 
         await _sessionAccountRepository.AddAccountAsync(account, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);

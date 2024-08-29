@@ -1,4 +1,5 @@
-﻿using Lodgify.Payments.Stripe.Application.UseCases.CreateAccountSession;
+﻿using Lodgify.Authentication.Constants;
+using Lodgify.Payments.Stripe.Application.UseCases.CreateAccountSession;
 using Lodgify.Payments.Stripe.Server.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -6,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lodgify.Payments.Stripe.Server.Controllers;
 
-[Authorize]
+[Authorize(nameof(LodgifyAuthPolicies.AnySubscribed))]
 [ApiController]
 [Route("api/v1/account-sessions")]
 public class AccountSessionController : ControllerBase

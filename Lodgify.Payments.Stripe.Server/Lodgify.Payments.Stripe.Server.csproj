@@ -25,8 +25,4 @@
       <ProjectReference Include="..\Lodgify.Payments.Stripe.Infrastructure\Lodgify.Payments.Stripe.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Authorization\" />
-    </ItemGroup>
-
 </Project>

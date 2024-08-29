@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lodgify.Payments.Stripe.Server.Controllers;
 
-[Authorize]
+[Authorize(nameof(LodgifyAuthPolicies.AnySubscribed))]
 [ApiController]
 [Route("api/v1/accounts")]
 public class AccountController : ControllerBase
