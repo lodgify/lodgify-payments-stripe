@@ -7,6 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="GitInfo" Version="3.3.5">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Lodgify.Architecture.AspNetCore.Sentry" Version="1.0.0" />
         <PackageReference Include="Lodgify.Config.Providers.Json" Version="8.0.0" />
         <PackageReference Include="Lodgify.Configuration.Contracts" Version="4.1.0" />
         <PackageReference Include="Lodgify.Extensions.AspNetCore" Version="8.2.0.1" />
