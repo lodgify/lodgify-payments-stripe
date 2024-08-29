@@ -14,7 +14,7 @@
         <PackageReference Include="Lodgify.Architecture.AspNetCore.Sentry" Version="1.0.0" />
         <PackageReference Include="Lodgify.Config.Providers.Json" Version="8.0.0" />
         <PackageReference Include="Lodgify.Configuration.Contracts" Version="4.1.0" />
-        <PackageReference Include="Lodgify.Extensions.AspNetCore" Version="8.2.0.1" />
+        <PackageReference Include="Lodgify.Extensions.AspNetCore" Version="8.2.0.2" />
         <PackageReference Include="Lodgify.Extensions.Logging.NLog" Version="8.0.0.2" />
         <PackageReference Include="MediatR" Version="12.4.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.3"/>

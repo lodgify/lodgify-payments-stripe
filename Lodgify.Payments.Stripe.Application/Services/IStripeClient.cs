@@ -2,6 +2,6 @@
 
 public interface IStripeClient
 {
-    Task<Domain.Accounts.Account> CreateAccount(string country, string email, CancellationToken cancellationToken = default);
-    Task<Domain.AccountSessions.AccountSession> CreateAccountSession(string stripeAccountId, CancellationToken cancellationToken = default);
+    Task<Domain.Accounts.Account> CreateAccountAsync(int userId, string country, string email, CancellationToken cancellationToken);
+    Task<Domain.AccountSessions.AccountSession> CreateAccountSessionAsync(string stripeAccountId, CancellationToken cancellationToken);
 }

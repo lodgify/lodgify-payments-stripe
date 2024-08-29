@@ -20,7 +20,7 @@ public class CreateAccountCommandHandler : ICommandHandler<CreateAccountCommand,
 
     public async Task<CreateAccountResponse> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
     {
-        var account = await _stripeClient.CreateAccount(request.Country, request.Email, cancellationToken);
+        var account = await _stripeClient.CreateAccountAsync(request.Account.UserId, request.Country, request.Email, cancellationToken);
 
         await _accountRepository.AddAccountAsync(account, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);

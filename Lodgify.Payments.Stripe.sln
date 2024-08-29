@@ -19,6 +19,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		service.datadog.yaml = service.datadog.yaml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9500657B-73F5-457F-82D9-87633451B299}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lodgify.Payments.Stripe.Application.UnitTests", "Lodgify.Payments.Stripe.Application.UnitTests\Lodgify.Payments.Stripe.Application.UnitTests.csproj", "{B137ACB3-B364-4175-B1EF-D046542ACB6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,5 +45,12 @@ Global
 		{0E64B194-B5E8-4AC1-891A-959A4D44A18A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E64B194-B5E8-4AC1-891A-959A4D44A18A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E64B194-B5E8-4AC1-891A-959A4D44A18A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B137ACB3-B364-4175-B1EF-D046542ACB6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B137ACB3-B364-4175-B1EF-D046542ACB6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B137ACB3-B364-4175-B1EF-D046542ACB6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B137ACB3-B364-4175-B1EF-D046542ACB6C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B137ACB3-B364-4175-B1EF-D046542ACB6C} = {9500657B-73F5-457F-82D9-87633451B299}
 	EndGlobalSection
 EndGlobal
