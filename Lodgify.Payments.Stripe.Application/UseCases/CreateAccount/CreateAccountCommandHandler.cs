@@ -28,7 +28,7 @@ public class CreateAccountCommandHandler : ICommandHandler<CreateAccountCommand,
         await _accountRepository.AddAccountAsync(account, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
 
-        _metrics.Count(Metrics.Metrics.AccountSessionCreated, null);
+        _metrics.Count(Metrics.Metrics.AccountCreated, null);
 
         return new CreateAccountResponse(account.StripeAccountId);
     }
