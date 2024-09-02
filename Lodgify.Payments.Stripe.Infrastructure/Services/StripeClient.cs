@@ -24,6 +24,14 @@ public class StripeClient : Lodgify.Payments.Stripe.Application.Services.IStripe
                 {
                     Type = "none",
                 },
+                Losses = new AccountControllerLossesOptions
+                {
+                    Payments = "stripe",
+                },
+                Fees = new AccountControllerFeesOptions
+                {
+                    Payer = "application",
+                },
             },
             Capabilities = new AccountCapabilitiesOptions
             {
