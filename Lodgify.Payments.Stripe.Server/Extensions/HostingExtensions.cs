@@ -1,9 +1,9 @@
 ﻿using System.Text.Json.Serialization;
+using Lodgify.Architecture.Metrics.DependencyInjection;
 using Lodgify.Config.Providers;
 using Lodgify.Config.Providers.Json;
 using Lodgify.Extensions.AspNetCore;
 using Lodgify.Extensions.AspNetCore.Mvc;
-using Lodgify.Extensions.Logging.NLog;
 using Lodgify.Payments.Stripe.Application;
 using Lodgify.Payments.Stripe.Infrastructure;
 using Lodgify.Payments.Stripe.Server.HealthChecks;
@@ -22,6 +22,10 @@ public static class HostingExtensions
         if (builder.Environment.IsDevelopment())
             builder.Configuration.AddJsonFile("appsettings.Development.json", true);
 
+        builder.Services
+            .AddMetricsClient()
+            .AddMetricsObservers();
+        
         builder.Services.AddApplication();
 
         builder.Services.AddTransient<CorrelationIdMiddleware>();
@@ -71,6 +75,8 @@ public static class HostingExtensions
 
     public static WebApplication ConfigurePipeline(this WebApplication app)
     {
+        app.Lifetime.InitialiseMetricObservers(app.Services);
+        
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
