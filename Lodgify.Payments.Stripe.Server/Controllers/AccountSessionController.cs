@@ -1,6 +1,8 @@
 ﻿using Lodgify.Authentication.Constants;
 using Lodgify.Payments.Stripe.Application.UseCases.CreateAccountSession;
 using Lodgify.Payments.Stripe.Server.Requests;
+using Lodgify.Payments.Stripe.Server.Responses;
+using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +34,6 @@ public class AccountSessionController : ControllerBase
     public async Task<ActionResult<CreateAccountSessionResponse>> CreateAccountSession(CreateAccountSessionRequest request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new CreateAccountSessionCommand(request.StripeAccountId), cancellationToken);
-        return Ok(response);
+        return Ok(response.Adapt<CreateAccountSessionResponse>());
     }
 }
