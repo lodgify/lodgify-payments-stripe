@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9500657B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lodgify.Payments.Stripe.Application.UnitTests", "Lodgify.Payments.Stripe.Application.UnitTests\Lodgify.Payments.Stripe.Application.UnitTests.csproj", "{B137ACB3-B364-4175-B1EF-D046542ACB6C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lodgify.Payments.Stripe.Metrics", "Lodgify.Payments.Stripe.Metrics\Lodgify.Payments.Stripe.Metrics.csproj", "{EA1D9949-EFCD-4A5E-A46D-5C06080DD91D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{B137ACB3-B364-4175-B1EF-D046542ACB6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B137ACB3-B364-4175-B1EF-D046542ACB6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B137ACB3-B364-4175-B1EF-D046542ACB6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA1D9949-EFCD-4A5E-A46D-5C06080DD91D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA1D9949-EFCD-4A5E-A46D-5C06080DD91D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA1D9949-EFCD-4A5E-A46D-5C06080DD91D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA1D9949-EFCD-4A5E-A46D-5C06080DD91D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B137ACB3-B364-4175-B1EF-D046542ACB6C} = {9500657B-73F5-457F-82D9-87633451B299}

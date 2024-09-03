@@ -29,7 +29,7 @@ public class CreateAccountSessionCommandHandlerTests
         _sessionAccountRepository = Substitute.For<IAccountSessionRepository>();
         _unitOfWork = Substitute.For<IUnitOfWork>();
         _metrics = Substitute.For<IMetricsClient>();
-        _handler = new CreateAccountSessionCommandHandler(_stripeClient, _accountRepository, _sessionAccountRepository, _unitOfWork, _metrics);
+        _handler = new CreateAccountSessionCommandHandler(_stripeClient, _accountRepository, _sessionAccountRepository, _unitOfWork);
     }
 
     [Fact]

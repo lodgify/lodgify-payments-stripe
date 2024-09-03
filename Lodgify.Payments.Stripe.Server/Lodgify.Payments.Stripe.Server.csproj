@@ -15,15 +15,15 @@
         <PackageReference Include="Lodgify.Config.Providers.Json" Version="8.0.0"/>
         <PackageReference Include="Lodgify.Configuration.Contracts" Version="4.1.0"/>
         <PackageReference Include="Lodgify.Extensions.Logging.NLog" Version="8.0.0.2"/>
-        <PackageReference Include="Lodgify.Architecture.Metrics" Version="10.0.2"/>
-        <PackageReference Include="Lodgify.Architecture.Metrics.DependencyInjection" Version="10.0.1"/>
-        <PackageReference Include="Lodgify.Architecture.Metrics.Prometheus" Version="10.0.0"/>
         <PackageReference Include="MediatR" Version="12.4.0"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.3"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.9.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.9.0" />
+        <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 

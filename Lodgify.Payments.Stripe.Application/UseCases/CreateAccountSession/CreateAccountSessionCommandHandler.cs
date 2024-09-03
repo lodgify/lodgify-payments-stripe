@@ -17,13 +17,12 @@ public class CreateAccountSessionCommandHandler : ICommandHandler<CreateAccountS
     private readonly IMetricsClient _metrics;
 
 
-    public CreateAccountSessionCommandHandler(IStripeClient stripeClient, IAccountRepository accountRepository, IAccountSessionRepository sessionAccountRepository, IUnitOfWork unitOfWork, IMetricsClient metrics)
+    public CreateAccountSessionCommandHandler(IStripeClient stripeClient, IAccountRepository accountRepository, IAccountSessionRepository sessionAccountRepository, IUnitOfWork unitOfWork)
     {
         _stripeClient = stripeClient ?? throw new ArgumentNullException(nameof(stripeClient));
         _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
         _sessionAccountRepository = sessionAccountRepository ?? throw new ArgumentNullException(nameof(sessionAccountRepository));
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-        _metrics = metrics ?? throw new ArgumentNullException(nameof(metrics));
     }
 
     public async Task<CreateAccountSessionResponse> Handle(CreateAccountSessionCommand request, CancellationToken cancellationToken)
@@ -34,8 +33,6 @@ public class CreateAccountSessionCommandHandler : ICommandHandler<CreateAccountS
 
         await _sessionAccountRepository.AddAccountAsync(account, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
-        
-        _metrics.Count(Metrics.Metrics.AccountSessionCreated, null);
 
         return new CreateAccountSessionResponse(account.StripeAccountId, account.ClientSecret);
     }

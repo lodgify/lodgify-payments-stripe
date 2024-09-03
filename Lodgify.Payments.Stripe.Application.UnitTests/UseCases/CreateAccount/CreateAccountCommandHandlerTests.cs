@@ -25,7 +25,7 @@ public class CreateAccountCommandHandlerTests
         _accountRepository = Substitute.For<IAccountRepository>();
         _unitOfWork = Substitute.For<IUnitOfWork>();
         _metrics = Substitute.For<IMetricsClient>();
-        _handler = new CreateAccountCommandHandler(_stripeClient, _accountRepository, _unitOfWork, _metrics);
+        _handler = new CreateAccountCommandHandler(_stripeClient, _accountRepository, _unitOfWork);
     }
 
     private (CreateAccountCommandHandler handler, CreateAccountCommand request, CancellationToken cancellationToken) CreateHandlerAndDependencies()
