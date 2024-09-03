@@ -7,7 +7,7 @@ using Lodgify.Payments.Stripe.Domain.AccountSessions.Contracts;
 
 namespace Lodgify.Payments.Stripe.Application.UseCases.CreateAccountSession;
 
-public class CreateAccountSessionCommandHandler : ICommandHandler<CreateAccountSessionCommand, CreateAccountSessionResponse>
+public class CreateAccountSessionCommandHandler : ICommandHandler<CreateAccountSessionCommand, CreateAccountSessionCommandResponse>
 {
     private readonly IStripeClient _stripeClient;
     private readonly IAccountRepository _accountRepository;
@@ -23,7 +23,7 @@ public class CreateAccountSessionCommandHandler : ICommandHandler<CreateAccountS
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<CreateAccountSessionResponse> Handle(CreateAccountSessionCommand request, CancellationToken cancellationToken)
+    public async Task<CreateAccountSessionCommandResponse> Handle(CreateAccountSessionCommand request, CancellationToken cancellationToken)
     {
         BusinessRule.CheckRule(new UserIdMustBeTheSameRule(request.Account.UserId, await _accountRepository.QueryAccountUserIdAsync(request.StripeAccountId, cancellationToken)));
 
@@ -32,6 +32,6 @@ public class CreateAccountSessionCommandHandler : ICommandHandler<CreateAccountS
         await _sessionAccountRepository.AddAccountAsync(account, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
 
-        return new CreateAccountSessionResponse(account.StripeAccountId, account.ClientSecret);
+        return new CreateAccountSessionCommandResponse(account.StripeAccountId, account.ClientSecret);
     }
 }
