@@ -1,3 +1,3 @@
 ﻿namespace Lodgify.Payments.Stripe.Server.Responses;
 
-public record GetAccountsResponse(string StripeAccountId);
+public record GetAccountsResponse(List<AccountResponse> Accounts);

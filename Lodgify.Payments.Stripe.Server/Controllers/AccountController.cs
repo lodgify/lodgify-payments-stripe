@@ -49,6 +49,6 @@ public class AccountController : ControllerBase
     public async Task<ActionResult<GetAccountsResponse>> GetAccounts(CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetAccountsQuery(), cancellationToken);
-        return Ok(response.Adapt<IReadOnlyCollection<GetAccountsResponse>>());
+        return Ok(response.Adapt<GetAccountsResponse>());
     }
 }

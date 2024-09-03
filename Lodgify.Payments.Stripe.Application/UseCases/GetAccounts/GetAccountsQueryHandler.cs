@@ -3,7 +3,7 @@ using Lodgify.Payments.Stripe.Domain.Accounts.Contracts;
 
 namespace Lodgify.Payments.Stripe.Application.UseCases.GetAccounts;
 
-public class GetAccountsQueryHandler : IQueryHandler<GetAccountsQuery, IReadOnlyCollection<GetAccountsQueryResponse>>
+public class GetAccountsQueryHandler : IQueryHandler<GetAccountsQuery, GetAccountsQueryResponse>
 {
     private readonly IAccountRepository _accountRepository;
 
@@ -12,9 +12,9 @@ public class GetAccountsQueryHandler : IQueryHandler<GetAccountsQuery, IReadOnly
         _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
     }
     
-    public async Task<IReadOnlyCollection<GetAccountsQueryResponse>> Handle(GetAccountsQuery query, CancellationToken cancellationToken)
+    public async Task<GetAccountsQueryResponse> Handle(GetAccountsQuery query, CancellationToken cancellationToken)
     {
         var accounts = await _accountRepository.QueryUserAccountsAsync(query.Account.UserId, cancellationToken);
-        return accounts.Select(account => new GetAccountsQueryResponse(account)).ToList(); 
+        return new GetAccountsQueryResponse(accounts.Select(account => new AccountQueryResponse(account)).ToList());
     }
 }

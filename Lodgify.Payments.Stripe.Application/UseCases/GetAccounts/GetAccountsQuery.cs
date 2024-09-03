@@ -3,7 +3,7 @@ using Lodgify.Payments.Stripe.Application.BuildingBlocks;
 
 namespace Lodgify.Payments.Stripe.Application.UseCases.GetAccounts;
 
-public sealed record GetAccountsQuery : IQuery<IReadOnlyCollection<GetAccountsQueryResponse>>
+public sealed record GetAccountsQuery : IQuery<GetAccountsQueryResponse>
 {
     public LodgifyAccount Account { get; set; } = null!;
 }

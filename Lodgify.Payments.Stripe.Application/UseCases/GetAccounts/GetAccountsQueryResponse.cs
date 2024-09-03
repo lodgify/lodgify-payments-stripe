@@ -1,3 +1,3 @@
 ﻿namespace Lodgify.Payments.Stripe.Application.UseCases.GetAccounts;
 
-public record GetAccountsQueryResponse(string StripeAccountId);
+public record GetAccountsQueryResponse(List<AccountQueryResponse> Accounts);
