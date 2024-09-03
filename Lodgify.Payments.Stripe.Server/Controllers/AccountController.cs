@@ -1,5 +1,6 @@
 ﻿using Lodgify.Authentication.Constants;
 using Lodgify.Payments.Stripe.Application.UseCases.CreateAccount;
+using Lodgify.Payments.Stripe.Application.UseCases.GetAccounts;
 using Lodgify.Payments.Stripe.Server.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -32,6 +33,20 @@ public class AccountController : ControllerBase
     public async Task<ActionResult<CreateAccountResponse>> CreateAccount(CreateAccountRequest request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new CreateAccountCommand(request.Country, request.Email), cancellationToken);
+        return Ok(response);
+    }
+
+    /// <summary>
+    /// Get already login user accounts
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns>List of user accounts contains active, deleted, rejected etc.</returns>
+    [HttpGet]
+    [ProducesResponseType(typeof(CreateAccountResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<GetAccountsResponse>> GetAccounts(CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetAccountsQuery(), cancellationToken);
         return Ok(response);
     }
 }
