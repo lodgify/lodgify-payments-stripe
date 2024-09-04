@@ -1,12 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lodgify.Payments.Stripe.Server", "Lodgify.Payments.Stripe.Server\Lodgify.Payments.Stripe.Server.csproj", "{3D1D2059-9D59-410B-8981-704DBB2D82D7}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35122.118
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lodgify.Payments.Stripe.Server", "Lodgify.Payments.Stripe.Server\Lodgify.Payments.Stripe.Server.csproj", "{3D1D2059-9D59-410B-8981-704DBB2D82D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lodgify.Payments.Stripe.Application", "Lodgify.Payments.Stripe.Application\Lodgify.Payments.Stripe.Application.csproj", "{404D171D-51C1-4726-8F01-0997BE67C53E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lodgify.Payments.Stripe.Application", "Lodgify.Payments.Stripe.Application\Lodgify.Payments.Stripe.Application.csproj", "{404D171D-51C1-4726-8F01-0997BE67C53E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lodgify.Payments.Stripe.Domain", "Lodgify.Payments.Stripe.Domain\Lodgify.Payments.Stripe.Domain.csproj", "{4128B1DE-9312-4BDE-AC23-A919A477288F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lodgify.Payments.Stripe.Domain", "Lodgify.Payments.Stripe.Domain\Lodgify.Payments.Stripe.Domain.csproj", "{4128B1DE-9312-4BDE-AC23-A919A477288F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lodgify.Payments.Stripe.Infrastructure", "Lodgify.Payments.Stripe.Infrastructure\Lodgify.Payments.Stripe.Infrastructure.csproj", "{0E64B194-B5E8-4AC1-891A-959A4D44A18A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lodgify.Payments.Stripe.Infrastructure", "Lodgify.Payments.Stripe.Infrastructure\Lodgify.Payments.Stripe.Infrastructure.csproj", "{0E64B194-B5E8-4AC1-891A-959A4D44A18A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A25ACD38-BDB6-4257-BE27-C4AA54EEA618}"
 	ProjectSection(SolutionItems) = preProject
@@ -21,7 +24,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9500657B-73F5-457F-82D9-87633451B299}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lodgify.Payments.Stripe.Application.UnitTests", "Lodgify.Payments.Stripe.Application.UnitTests\Lodgify.Payments.Stripe.Application.UnitTests.csproj", "{B137ACB3-B364-4175-B1EF-D046542ACB6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lodgify.Payments.Stripe.Application.UnitTests", "Lodgify.Payments.Stripe.Application.UnitTests\Lodgify.Payments.Stripe.Application.UnitTests.csproj", "{B137ACB3-B364-4175-B1EF-D046542ACB6C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".config", ".config", "{C453B5C0-573C-42B6-81A2-6E73E863E0DF}"
+	ProjectSection(SolutionItems) = preProject
+		.config\dotnet-tools.json = .config\dotnet-tools.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_build", "_build", "{BBDC7326-93C8-4BCA-8443-4EF147BBAC1F}"
+	ProjectSection(SolutionItems) = preProject
+		_build\Jenkinsfile = _build\Jenkinsfile
+		_build\SonarQube.Analysis.xml = _build\SonarQube.Analysis.xml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +63,9 @@ Global
 		{B137ACB3-B364-4175-B1EF-D046542ACB6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B137ACB3-B364-4175-B1EF-D046542ACB6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B137ACB3-B364-4175-B1EF-D046542ACB6C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B137ACB3-B364-4175-B1EF-D046542ACB6C} = {9500657B-73F5-457F-82D9-87633451B299}
