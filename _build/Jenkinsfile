@@ -1,0 +1,9 @@
+@Library('jenkins-shared') _
+
+node('linux') {        
+    env.SETTINGS_NAME = 'lodgify-payments-stripe'
+    // checkout CI tools
+    checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout'],[$class: 'RelativeTargetDirectory', relativeTargetDir: 'lodgify-ci-backend']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'Github', url: 'https://github.com/lodgify/lodgify-ci-backend']]]
+    // Runs the common CI Jenkinsfile in lodgify-ci-backend
+    load 'lodgify-ci-backend/jenkins/jenkinsfiles/common/Jenkinsfile'
+}
