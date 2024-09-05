@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Lodgify.Architecture.Metrics.Abstractions;
 using Lodgify.Extensions.Primitives.Identity;
 using Lodgify.Payments.Stripe.Application.Transactions;
 using Lodgify.Payments.Stripe.Application.UseCases.CreateAccount;

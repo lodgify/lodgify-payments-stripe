@@ -1,5 +1,4 @@
-﻿using Lodgify.Architecture.Metrics.Abstractions;
-using Lodgify.Extensions.Primitives.Identity;
+﻿using Lodgify.Extensions.Primitives.Identity;
 using Lodgify.Payments.Stripe.Application.BuildingBlocks;
 using Lodgify.Payments.Stripe.Application.Transactions;
 using Lodgify.Payments.Stripe.Application.UseCases.CreateAccountSession;
@@ -19,7 +18,6 @@ public class CreateAccountSessionCommandHandlerTests
     private readonly IAccountRepository _accountRepository;
     private readonly IAccountSessionRepository _sessionAccountRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMetricsClient _metrics;
     private readonly CreateAccountSessionCommandHandler _handler;
 
     public CreateAccountSessionCommandHandlerTests()
@@ -28,7 +26,6 @@ public class CreateAccountSessionCommandHandlerTests
         _accountRepository = Substitute.For<IAccountRepository>();
         _sessionAccountRepository = Substitute.For<IAccountSessionRepository>();
         _unitOfWork = Substitute.For<IUnitOfWork>();
-        _metrics = Substitute.For<IMetricsClient>();
         _handler = new CreateAccountSessionCommandHandler(_stripeClient, _accountRepository, _sessionAccountRepository, _unitOfWork);
     }
 
