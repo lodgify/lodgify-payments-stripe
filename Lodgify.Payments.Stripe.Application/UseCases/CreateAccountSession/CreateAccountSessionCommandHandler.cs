@@ -1,10 +1,10 @@
-﻿using Lodgify.Architecture.Metrics.Abstractions;
-using Lodgify.Payments.Stripe.Application.BuildingBlocks;
+﻿using Lodgify.Payments.Stripe.Application.BuildingBlocks;
 using Lodgify.Payments.Stripe.Application.Services;
 using Lodgify.Payments.Stripe.Application.Transactions;
 using Lodgify.Payments.Stripe.Application.UseCases.CreateAccountSession.Rules;
 using Lodgify.Payments.Stripe.Domain.Accounts.Contracts;
 using Lodgify.Payments.Stripe.Domain.AccountSessions.Contracts;
+using Lodgify.Payments.Stripe.Metrics;
 
 namespace Lodgify.Payments.Stripe.Application.UseCases.CreateAccountSession;
 
@@ -14,7 +14,6 @@ public class CreateAccountSessionCommandHandler : ICommandHandler<CreateAccountS
     private readonly IAccountRepository _accountRepository;
     private readonly IAccountSessionRepository _sessionAccountRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMetricsClient _metrics;
 
 
     public CreateAccountSessionCommandHandler(IStripeClient stripeClient, IAccountRepository accountRepository, IAccountSessionRepository sessionAccountRepository, IUnitOfWork unitOfWork)
@@ -27,13 +26,25 @@ public class CreateAccountSessionCommandHandler : ICommandHandler<CreateAccountS
 
     public async Task<CreateAccountSessionResponse> Handle(CreateAccountSessionCommand request, CancellationToken cancellationToken)
     {
-        BusinessRule.CheckRule(new UserIdMustBeTheSameRule(request.Account.UserId, await _accountRepository.QueryAccountUserIdAsync(request.StripeAccountId, cancellationToken)));
+        AppMetrics.AccountSession.Creating();
 
-        var account = await _stripeClient.CreateAccountSessionAsync(request.StripeAccountId, cancellationToken);
+        try
+        {
+            BusinessRule.CheckRule(new UserIdMustBeTheSameRule(request.Account.UserId, await _accountRepository.QueryAccountUserIdAsync(request.StripeAccountId, cancellationToken)));
 
-        await _sessionAccountRepository.AddAccountAsync(account, cancellationToken);
-        await _unitOfWork.CommitAsync(cancellationToken);
+            var account = await _stripeClient.CreateAccountSessionAsync(request.StripeAccountId, cancellationToken);
 
-        return new CreateAccountSessionResponse(account.StripeAccountId, account.ClientSecret);
+            await _sessionAccountRepository.AddAccountAsync(account, cancellationToken);
+            await _unitOfWork.CommitAsync(cancellationToken);
+
+            AppMetrics.AccountSession.Created();
+
+            return new CreateAccountSessionResponse(account.StripeAccountId, account.ClientSecret);
+        }
+        catch (Exception e)
+        {
+            AppMetrics.AccountSession.Failed();
+            throw;
+        }
     }
 }

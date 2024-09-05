@@ -1,8 +1,8 @@
-﻿using Lodgify.Architecture.Metrics.Abstractions;
-using Lodgify.Payments.Stripe.Application.BuildingBlocks;
+﻿using Lodgify.Payments.Stripe.Application.BuildingBlocks;
 using Lodgify.Payments.Stripe.Application.Services;
 using Lodgify.Payments.Stripe.Application.Transactions;
 using Lodgify.Payments.Stripe.Domain.Accounts.Contracts;
+using Lodgify.Payments.Stripe.Metrics;
 
 namespace Lodgify.Payments.Stripe.Application.UseCases.CreateAccount;
 
@@ -21,11 +21,23 @@ public class CreateAccountCommandHandler : ICommandHandler<CreateAccountCommand,
 
     public async Task<CreateAccountResponse> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
     {
-        var account = await _stripeClient.CreateAccountAsync(request.Account.UserId, request.Country, request.Email, cancellationToken);
+        AppMetrics.Account.Creating();
 
-        await _accountRepository.AddAccountAsync(account, cancellationToken);
-        await _unitOfWork.CommitAsync(cancellationToken);
+        try
+        {
+            var account = await _stripeClient.CreateAccountAsync(request.Account.UserId, request.Country, request.Email, cancellationToken);
 
-        return new CreateAccountResponse(account.StripeAccountId);
+            await _accountRepository.AddAccountAsync(account, cancellationToken);
+            await _unitOfWork.CommitAsync(cancellationToken);
+
+            AppMetrics.Account.Created();
+
+            return new CreateAccountResponse(account.StripeAccountId);
+        }
+        catch (Exception e)
+        {
+            AppMetrics.Account.Failed();
+            throw;
+        }
     }
 }

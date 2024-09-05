@@ -15,6 +15,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Lodgify.Payments.Stripe.Domain\Lodgify.Payments.Stripe.Domain.csproj" />
+      <ProjectReference Include="..\Lodgify.Payments.Stripe.Metrics\Lodgify.Payments.Stripe.Metrics.csproj" />
     </ItemGroup>
 
 </Project>
