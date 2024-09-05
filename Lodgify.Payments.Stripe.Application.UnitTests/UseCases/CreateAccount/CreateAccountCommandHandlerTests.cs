@@ -16,7 +16,6 @@ public class CreateAccountCommandHandlerTests
     private readonly IStripeClient _stripeClient;
     private readonly IAccountRepository _accountRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMetricsClient _metrics;
     private readonly CreateAccountCommandHandler _handler;
 
     public CreateAccountCommandHandlerTests()
@@ -24,7 +23,6 @@ public class CreateAccountCommandHandlerTests
         _stripeClient = Substitute.For<IStripeClient>();
         _accountRepository = Substitute.For<IAccountRepository>();
         _unitOfWork = Substitute.For<IUnitOfWork>();
-        _metrics = Substitute.For<IMetricsClient>();
         _handler = new CreateAccountCommandHandler(_stripeClient, _accountRepository, _unitOfWork);
     }
 
