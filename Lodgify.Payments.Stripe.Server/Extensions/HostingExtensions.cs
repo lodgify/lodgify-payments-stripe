@@ -3,7 +3,6 @@ using Lodgify.Config.Providers;
 using Lodgify.Config.Providers.Json;
 using Lodgify.Extensions.AspNetCore;
 using Lodgify.Extensions.AspNetCore.Mvc;
-using Lodgify.Extensions.Logging.NLog;
 using Lodgify.Payments.Stripe.Application;
 using Lodgify.Payments.Stripe.Infrastructure;
 using Lodgify.Payments.Stripe.Server.HealthChecks;
@@ -11,6 +10,9 @@ using Lodgify.Payments.Stripe.Server.Middlewares;
 using Mapster;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using Prometheus;
 
 namespace Lodgify.Payments.Stripe.Server.Extensions;
 
@@ -35,6 +37,17 @@ public static class HostingExtensions
             builder.Configuration.GetValue<string>("identity:baseUrl")!,
             builder.Configuration);
         builder.Services.AddLodgifyAuthorization();
+
+        builder.Services.AddOpenTelemetry()
+            .ConfigureResource(builder => builder.AddService("lodgify-payments-stripe"))
+            .WithTracing(builder => builder
+                .AddSource("lodgify-payments-stripe")
+                .AddAspNetCoreInstrumentation()
+                .SetErrorStatusOnException()
+                .ConfigureResource(resource =>
+                    resource.AddService(
+                        serviceName: "lodgify-payments-stripe",
+                        serviceVersion: "1")));
 
         builder.Services
             .AddHealthChecks()
@@ -82,6 +95,9 @@ public static class HostingExtensions
 
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.UseHttpMetrics();
+        app.UseMetricServer(settings => settings.EnableOpenMetrics = false);
 
         // app.UseLodgifyNLogMiddlewares();
         app.UseMiddleware<CorrelationIdMiddleware>();
