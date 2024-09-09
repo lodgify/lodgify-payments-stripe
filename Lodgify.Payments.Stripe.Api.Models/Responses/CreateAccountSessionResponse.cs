@@ -7,6 +7,7 @@ public class CreateAccountSessionResponse
         StripeAccountId = stripeAccountId;
         ClientSecret = clientSecret;
     }
-    public string StripeAccountId { get; set; }
-    public string ClientSecret { get; set; }
+
+    public string StripeAccountId { get; }
+    public string ClientSecret { get; }
 }

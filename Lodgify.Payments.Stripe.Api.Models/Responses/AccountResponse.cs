@@ -7,5 +7,5 @@ public class AccountResponse
         StripeAccountId = stripeAccountId;
     }
 
-    public string StripeAccountId { get; set; }
+    public string StripeAccountId { get; }
 }

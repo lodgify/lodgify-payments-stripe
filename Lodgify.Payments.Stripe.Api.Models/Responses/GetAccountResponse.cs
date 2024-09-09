@@ -8,5 +8,6 @@ public class GetAccountsResponse
     {
         Accounts = accounts;
     }
-    public List<AccountResponse> Accounts { get; set; }
+
+    public List<AccountResponse> Accounts { get; }
 }
