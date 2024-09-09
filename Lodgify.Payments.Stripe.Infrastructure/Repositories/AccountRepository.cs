@@ -26,4 +26,13 @@ public class AccountRepository : IAccountRepository
             .Select(account => account.UserId)
             .FirstOrDefaultAsync(cancellationToken);
     }
+
+    public async Task<List<string>> QueryUserAccountsAsync(int userId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Account
+            .AsNoTracking()
+            .Where(account => account.UserId == userId)
+            .Select(account => account.StripeAccountId)
+            .ToListAsync(cancellationToken);
+    }
 }

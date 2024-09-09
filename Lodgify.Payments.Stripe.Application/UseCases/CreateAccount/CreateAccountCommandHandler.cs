@@ -6,7 +6,7 @@ using Lodgify.Payments.Stripe.Metrics;
 
 namespace Lodgify.Payments.Stripe.Application.UseCases.CreateAccount;
 
-public class CreateAccountCommandHandler : ICommandHandler<CreateAccountCommand, CreateAccountResponse>
+public class CreateAccountCommandHandler : ICommandHandler<CreateAccountCommand, CreateAccountCommandResponse>
 {
     private readonly IStripeClient _stripeClient;
     private readonly IAccountRepository _accountRepository;
@@ -19,7 +19,7 @@ public class CreateAccountCommandHandler : ICommandHandler<CreateAccountCommand,
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<CreateAccountResponse> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
+    public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
     {
         AppMetrics.Account.Creating();
 
@@ -32,12 +32,12 @@ public class CreateAccountCommandHandler : ICommandHandler<CreateAccountCommand,
 
             AppMetrics.Account.Created();
 
-            return new CreateAccountResponse(account.StripeAccountId);
+            return new CreateAccountCommandResponse(account.StripeAccountId);
         }
         catch (Exception e)
         {
             AppMetrics.Account.Failed();
             throw;
-        }
+        }        
     }
 }

@@ -7,6 +7,7 @@ using Lodgify.Payments.Stripe.Application;
 using Lodgify.Payments.Stripe.Infrastructure;
 using Lodgify.Payments.Stripe.Server.HealthChecks;
 using Lodgify.Payments.Stripe.Server.Middlewares;
+using Mapster;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry.Resources;
@@ -24,7 +25,8 @@ public static class HostingExtensions
         if (builder.Environment.IsDevelopment())
             builder.Configuration.AddJsonFile("appsettings.Development.json", true);
 
-
+        builder.Services.AddMapster();
+        
         builder.Services.AddApplication();
 
         builder.Services.AddTransient<CorrelationIdMiddleware>();
