@@ -1,7 +1,7 @@
 ﻿using Lodgify.Authentication.Constants;
+using Lodgify.Payments.Stripe.Api.Models.Requests;
+using Lodgify.Payments.Stripe.Api.Models.Responses;
 using Lodgify.Payments.Stripe.Application.UseCases.CreateAccountSession;
-using Lodgify.Payments.Stripe.Server.Requests;
-using Lodgify.Payments.Stripe.Server.Responses;
 using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

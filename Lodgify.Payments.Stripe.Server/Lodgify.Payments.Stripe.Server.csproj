@@ -31,6 +31,7 @@
     </ItemGroup>   
 
     <ItemGroup>
+      <ProjectReference Include="..\Lodgify.Payments.Stripe.Api.Models\Lodgify.Payments.Stripe.Api.Models.csproj" />
       <ProjectReference Include="..\Lodgify.Payments.Stripe.Application\Lodgify.Payments.Stripe.Application.csproj" />
       <ProjectReference Include="..\Lodgify.Payments.Stripe.Infrastructure\Lodgify.Payments.Stripe.Infrastructure.csproj" />
     </ItemGroup>   
