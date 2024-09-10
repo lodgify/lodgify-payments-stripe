@@ -1,5 +1,8 @@
-﻿namespace Lodgify.Payments.Stripe.Client.Constans;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace Lodgify.Payments.Stripe.Client.Constans;
+
+[ExcludeFromCodeCoverage]
 public class PaymentStripeConstans
 {
     public const string HttpClientName = "LodgifyPaymentsStripe";
