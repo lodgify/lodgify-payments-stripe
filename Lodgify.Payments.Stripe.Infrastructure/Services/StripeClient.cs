@@ -50,7 +50,9 @@ public class StripeClient : Lodgify.Payments.Stripe.Application.Services.IStripe
             stripeAccount.Controller.Losses.Payments,
             stripeAccount.Controller.Fees.Payer,
             stripeAccount.Controller.RequirementCollection,
-            stripeAccount.Controller.StripeDashboard.Type
+            stripeAccount.Controller.StripeDashboard.Type,
+            stripeAccount.ChargesEnabled,
+            stripeAccount.DetailsSubmitted
         );
     }
 

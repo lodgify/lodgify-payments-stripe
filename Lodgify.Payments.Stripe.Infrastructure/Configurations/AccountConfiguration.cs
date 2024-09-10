@@ -18,5 +18,7 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
         builder.Property(p => p.Fees);
         builder.Property(p => p.Losses);
         builder.Property(p => p.ControllerType);
+        builder.Property(p => p.ChargesEnabled);
+        builder.Property(p => p.DetailsSubmitted);
     }
 }
