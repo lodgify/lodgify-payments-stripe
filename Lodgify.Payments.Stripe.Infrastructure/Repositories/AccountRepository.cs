@@ -1,10 +1,12 @@
-﻿using Lodgify.Payments.Stripe.Domain.Accounts;
+﻿using System.Diagnostics.CodeAnalysis;
+using Lodgify.Payments.Stripe.Domain.Accounts;
 using Lodgify.Payments.Stripe.Domain.Accounts.Contracts;
 using Lodgify.Payments.Stripe.Domain.Accounts.EntityViews;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lodgify.Payments.Stripe.Infrastructure.Repositories;
 
+[ExcludeFromCodeCoverage]
 public class AccountRepository : IAccountRepository
 {
     private readonly PaymentDbContext _dbContext;
