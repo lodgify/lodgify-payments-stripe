@@ -37,4 +37,9 @@ public class Account : Aggregate
             Dashboard = dashboard
         };
     }
+
+    public Task Update()
+    {
+        
+    }
 }

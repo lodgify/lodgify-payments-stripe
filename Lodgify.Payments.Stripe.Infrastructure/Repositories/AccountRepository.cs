@@ -13,6 +13,11 @@ public class AccountRepository : IAccountRepository
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
     }
 
+    public async Task<Account?> GetByStripeIdAsync(string stripeAccountId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Account.FirstOrDefaultAsync(account => account.StripeAccountId == stripeAccountId, cancellationToken);
+    }
+
     public async Task AddAccountAsync(Account account, CancellationToken cancellationToken)
     {
         await _dbContext.Account.AddAsync(account, cancellationToken);
