@@ -36,7 +36,7 @@ public class CreateAccountCommandHandlerTests
     {
         // Arrange
         var (handler, request, cancellationToken) = CreateHandlerAndDependencies();
-        var account = Account.Create(request.Account.UserId, "test@example.com", "acct_123", "application", "application", "stripe", "collection", "none");
+        var account = Account.Create(request.Account.UserId, "test@example.com", "acct_123", "application", "application", "stripe", "collection", "none", false, false);
         _stripeClient.CreateAccountAsync(request.Account.UserId, "US", "test@example.com", Arg.Any<CancellationToken>())
             .Returns(account);
 

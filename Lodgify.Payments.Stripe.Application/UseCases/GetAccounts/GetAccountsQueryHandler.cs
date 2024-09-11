@@ -11,10 +11,10 @@ public class GetAccountsQueryHandler : IQueryHandler<GetAccountsQuery, GetAccoun
     {
         _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
     }
-    
+
     public async Task<GetAccountsQueryResponse> Handle(GetAccountsQuery query, CancellationToken cancellationToken)
     {
         var accounts = await _accountRepository.QueryUserAccountsAsync(query.Account.UserId, cancellationToken);
-        return new GetAccountsQueryResponse(accounts.Select(account => new AccountQueryResponse(account)).ToList());
+        return new GetAccountsQueryResponse(accounts.Select(account => new AccountQueryResponse(account.StripeAccountId, account.ChargesEnabled, account.DetailsSubmitted)).ToList());
     }
 }

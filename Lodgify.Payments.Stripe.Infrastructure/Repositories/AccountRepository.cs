@@ -1,9 +1,12 @@
-﻿using Lodgify.Payments.Stripe.Domain.Accounts;
+﻿using System.Diagnostics.CodeAnalysis;
+using Lodgify.Payments.Stripe.Domain.Accounts;
 using Lodgify.Payments.Stripe.Domain.Accounts.Contracts;
+using Lodgify.Payments.Stripe.Domain.Accounts.EntityViews;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lodgify.Payments.Stripe.Infrastructure.Repositories;
 
+[ExcludeFromCodeCoverage]
 public class AccountRepository : IAccountRepository
 {
     private readonly PaymentDbContext _dbContext;
@@ -32,12 +35,12 @@ public class AccountRepository : IAccountRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<List<string>> QueryUserAccountsAsync(int userId, CancellationToken cancellationToken)
+    public async Task<List<AccountView>> QueryUserAccountsAsync(int userId, CancellationToken cancellationToken)
     {
         return await _dbContext.Account
             .AsNoTracking()
             .Where(account => account.UserId == userId)
-            .Select(account => account.StripeAccountId)
+            .Select(account => new AccountView(account.StripeAccountId, account.ChargesEnabled, account.DetailsSubmitted))
             .ToListAsync(cancellationToken);
     }
 }
