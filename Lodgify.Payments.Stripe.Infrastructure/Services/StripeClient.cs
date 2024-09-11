@@ -1,10 +1,12 @@
-﻿using Lodgify.Payments.Stripe.Infrastructure.Settings;
+﻿using System.Diagnostics.CodeAnalysis;
+using Lodgify.Payments.Stripe.Infrastructure.Settings;
 using Microsoft.Extensions.Options;
 using Stripe;
 using AccountSession = Lodgify.Payments.Stripe.Domain.AccountSessions.AccountSession;
 
 namespace Lodgify.Payments.Stripe.Infrastructure.Services;
 
+[ExcludeFromCodeCoverage]
 public class StripeClient : Lodgify.Payments.Stripe.Application.Services.IStripeClient
 {
     public StripeClient(IOptions<StripeSettings> stripeSettings)
