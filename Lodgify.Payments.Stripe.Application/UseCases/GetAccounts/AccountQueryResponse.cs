@@ -1,3 +1,6 @@
-﻿namespace Lodgify.Payments.Stripe.Application.UseCases.GetAccounts;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace Lodgify.Payments.Stripe.Application.UseCases.GetAccounts;
+
+[ExcludeFromCodeCoverage]
 public record AccountQueryResponse(string StripeAccountId, bool ChargesEnabled, bool DetailsSubmitted);
