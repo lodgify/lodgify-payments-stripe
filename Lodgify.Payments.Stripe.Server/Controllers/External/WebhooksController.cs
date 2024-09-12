@@ -12,12 +12,10 @@ namespace Lodgify.Payments.Stripe.Server.Controllers.External;
 public class WebhooksController : Controller
 {
     private readonly ISender _mediatorSender;
-    private readonly IEventMapper _eventMapper;
 
-    public WebhooksController(ISender mediatorSender, IEventMapper eventMapper)
+    public WebhooksController(ISender mediatorSender)
     {
         _mediatorSender = mediatorSender;
-        _eventMapper = eventMapper;
     }
 
     /// <summary>
@@ -30,32 +28,27 @@ public class WebhooksController : Controller
     public async Task<IActionResult> HandleEvent([FromBody] JsonElement body, CancellationToken cancel)
     {
         using StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8);
-        var json = await reader.ReadToEndAsync();
+        var json = await reader.ReadToEndAsync(cancel);
         if (!Request.Headers.TryGetValue("Stripe-Signature", out var stripeSignature))
             return BadRequest("Stripe-Signature Header is missing");
 
         try
         {
-            var stripeEvent = EventUtility.ConstructEvent(json,
-                Request.Headers["Stripe-Signature"], "_webhookSecret");
+            var stripeEvent = EventUtility.ConstructEvent(json, Request.Headers["Stripe-Signature"], "_webhookSecret");
             switch (stripeEvent.Type)
             {
                 case Events.AccountUpdated:
                     var account = (Account)stripeEvent.Data.Object;
-                    //to nie powinien byc event tylko command
-                    await _mediatorSender.Send(new AccountUpdatedCommand(account.Id, account.ChargesEnabled, account.DetailsSubmitted, account.Created), cancel);
+                    await _mediatorSender.Send(new AccountUpdatedCommand(account.Id, account.ChargesEnabled, account.DetailsSubmitted, json, stripeEvent.Id), cancel);
                     break;
                 default:
                     throw new NotSupportedException($"Event of type {stripeEvent.Type} not supported.");
             }
-
             return Ok();
         }
         catch (StripeException e)
         {
             return BadRequest();
-        }        
-
-        return Ok();
+        }
     }
 }

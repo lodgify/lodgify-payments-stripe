@@ -1,4 +1,5 @@
-﻿using Lodgify.Payments.Stripe.Domain.BuildingBlocks;
+﻿using Lodgify.Payments.Stripe.Domain.Accounts.Events;
+using Lodgify.Payments.Stripe.Domain.BuildingBlocks;
 
 namespace Lodgify.Payments.Stripe.Domain.Accounts;
 
@@ -12,8 +13,8 @@ public class Account : Aggregate
     public string Fees { get; init; }
     public string Losses { get; init; }
     public string ControllerType { get; init; }
-    public bool ChargesEnabled { get; init; }
-    public bool DetailsSubmitted { get; init; }
+    public bool ChargesEnabled { get; private set; }
+    public bool DetailsSubmitted { get; private set; }
 
 
     private Account()
@@ -42,8 +43,18 @@ public class Account : Aggregate
         };
     }
 
-    public Task Update()
+    public void Update(bool chargesEnabled, bool detailsSubmitted, string rawSourceEventData)
     {
+        ChargesEnabled = chargesEnabled;
+        DetailsSubmitted = detailsSubmitted;
         
+        PublishEvent(new AccountUpdatedEvent(
+            Id,
+            new List<AccountProperty>
+            {
+                new(nameof(ChargesEnabled), chargesEnabled.ToString()),
+                new(nameof(DetailsSubmitted), detailsSubmitted.ToString())
+            },
+            rawSourceEventData));
     }
 }
