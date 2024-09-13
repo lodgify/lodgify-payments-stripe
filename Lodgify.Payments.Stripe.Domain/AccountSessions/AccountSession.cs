@@ -17,9 +17,8 @@ public class AccountSession : Aggregate
 
     public static AccountSession Create(string stripeAccountId, string clientSecret)
     {
-        return new AccountSession()
+        return new AccountSession(Guid.NewGuid())
         {
-            Id = Guid.NewGuid(),
             StripeAccountId = stripeAccountId,
             ClientSecret = clientSecret
         };

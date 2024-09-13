@@ -27,9 +27,8 @@ public class Account : Aggregate
 
     public static Account Create(int userId, string email, string stripeAccountId, string controllerType, string losses, string fees, string requirementCollection, string dashboard, bool chargesEnabled, bool detailsSubmitted)
     {
-        return new Account()
+        return new Account(Guid.NewGuid())
         {
-            Id = Guid.NewGuid(),
             UserId = userId,
             Email = email,
             StripeAccountId = stripeAccountId,
@@ -43,18 +42,9 @@ public class Account : Aggregate
         };
     }
 
-    public void Update(bool chargesEnabled, bool detailsSubmitted, string rawSourceEventData)
+    public void Update(bool chargesEnabled, bool detailsSubmitted)
     {
         ChargesEnabled = chargesEnabled;
         DetailsSubmitted = detailsSubmitted;
-        
-        PublishEvent(new AccountUpdatedEvent(
-            Id,
-            new List<AccountProperty>
-            {
-                new(nameof(ChargesEnabled), chargesEnabled.ToString()),
-                new(nameof(DetailsSubmitted), detailsSubmitted.ToString())
-            },
-            rawSourceEventData));
     }
 }

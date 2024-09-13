@@ -13,10 +13,18 @@ public class AccountHistory : Aggregate
     public DateTime SetAt { get; set; }
 
     public string WebhookEventStripeId { get; set; }
-    
+
+    private AccountHistory()
+    {
+    }
+
+    internal AccountHistory(Guid id) : base(id)
+    {
+    }
+
     public static AccountHistory Create(Guid accountId, string propertyName, string propertyValue, string webhookEventStripeId)
     {
-        return new AccountHistory
+        return new AccountHistory(Guid.NewGuid())
         {
             AccountId = accountId,
             PropertyName = propertyName,

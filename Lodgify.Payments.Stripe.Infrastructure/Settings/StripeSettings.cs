@@ -2,5 +2,6 @@
 
 public record StripeSettings
 {
-    public string ApiKey { get; init; }
+    public string ApiKey { get; init; } = string.Empty;
+    public string WebhookSecret { get; init; } = string.Empty;
 }

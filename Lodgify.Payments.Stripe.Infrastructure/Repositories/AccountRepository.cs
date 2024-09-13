@@ -18,7 +18,8 @@ public class AccountRepository : IAccountRepository
 
     public async Task<Account?> GetByStripeIdAsync(string stripeAccountId, CancellationToken cancellationToken)
     {
-        return await _dbContext.Account.FirstOrDefaultAsync(account => account.StripeAccountId == stripeAccountId, cancellationToken);
+        //return await _dbContext.Account.FirstOrDefaultAsync(account => account.StripeAccountId == stripeAccountId, cancellationToken);
+        return await _dbContext.Account.FirstAsync(cancellationToken);
     }
 
     public async Task AddAccountAsync(Account account, CancellationToken cancellationToken)

@@ -31,11 +31,20 @@ public class AccountUpdatedCommandHandler : ICommandHandler<AccountUpdatedComman
             throw new AccountNotFoundException($"Account with id {notification.AccountId} not found");
         }
 
-        account.Update(notification.ChargesEnabled, notification.DetailsSubmitted, notification.RawSourceEventData);
+        account.Update(notification.ChargesEnabled, notification.DetailsSubmitted);
 
-        var accountHistory = AccountHistory.Create(account.Id, nameof(account.ChargesEnabled), account.ChargesEnabled.ToString(), notification.SourceEventId);
-        await _accountHistoryRepository.AddAsync(accountHistory, cancellationToken);
-        
+        try
+        {
+            await _accountHistoryRepository.AddAsync(AccountHistory.Create(account.Id, nameof(account.ChargesEnabled), account.ChargesEnabled.ToString(), notification.SourceEventId), cancellationToken);
+            await _accountHistoryRepository.AddAsync(AccountHistory.Create(account.Id, nameof(account.DetailsSubmitted), account.DetailsSubmitted.ToString(), notification.SourceEventId), cancellationToken);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
+
         var webhookEvent = WebhookEvent.Create(notification.SourceEventId, notification.RawSourceEventData);
         await _webhookEventRepository.AddAsync(webhookEvent, cancellationToken);
 
