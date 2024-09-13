@@ -1,9 +1,11 @@
-﻿using Lodgify.Payments.Stripe.Domain.Accounts;
+﻿using System.Diagnostics.CodeAnalysis;
+using Lodgify.Payments.Stripe.Domain.Accounts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Lodgify.Payments.Stripe.Infrastructure.Configurations;
 
+[ExcludeFromCodeCoverage]
 public class AccountConfiguration : IEntityTypeConfiguration<Account>
 {
     public void Configure(EntityTypeBuilder<Account> builder)
@@ -18,5 +20,7 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
         builder.Property(p => p.Fees);
         builder.Property(p => p.Losses);
         builder.Property(p => p.ControllerType);
+        builder.Property(p => p.ChargesEnabled);
+        builder.Property(p => p.DetailsSubmitted);
     }
 }

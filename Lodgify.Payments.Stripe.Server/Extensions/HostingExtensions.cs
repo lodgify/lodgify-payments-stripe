@@ -26,7 +26,7 @@ public static class HostingExtensions
             builder.Configuration.AddJsonFile("appsettings.Development.json", true);
 
         builder.Services.AddMapster();
-        
+
         builder.Services.AddApplication();
 
         builder.Services.AddTransient<CorrelationIdMiddleware>();
@@ -87,11 +87,8 @@ public static class HostingExtensions
 
     public static WebApplication ConfigurePipeline(this WebApplication app)
     {
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         app.UseAuthentication();
         app.UseAuthorization();

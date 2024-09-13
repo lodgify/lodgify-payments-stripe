@@ -12,6 +12,8 @@ public class Account : Aggregate
     public string Fees { get; init; }
     public string Losses { get; init; }
     public string ControllerType { get; init; }
+    public bool ChargesEnabled { get; init; }
+    public bool DetailsSubmitted { get; init; }
 
 
     private Account()
@@ -22,7 +24,7 @@ public class Account : Aggregate
     {
     }
 
-    public static Account Create(int userId, string email, string stripeAccountId, string controllerType, string losses, string fees, string requirementCollection, string dashboard)
+    public static Account Create(int userId, string email, string stripeAccountId, string controllerType, string losses, string fees, string requirementCollection, string dashboard, bool chargesEnabled, bool detailsSubmitted)
     {
         return new Account()
         {
@@ -34,7 +36,9 @@ public class Account : Aggregate
             Losses = losses,
             Fees = fees,
             RequirementCollection = requirementCollection,
-            Dashboard = dashboard
+            Dashboard = dashboard,
+            ChargesEnabled = chargesEnabled,
+            DetailsSubmitted = detailsSubmitted
         };
     }
 }
