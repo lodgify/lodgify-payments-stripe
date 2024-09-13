@@ -7,13 +7,12 @@
         <IncludeSymbols>True</IncludeSymbols>
         <DebugType>embedded</DebugType>
         <Nullable>enable</Nullable>
-        <Version>1.1.0</Version>
     </PropertyGroup>
 
     <PropertyGroup>
         <IsPackable>true</IsPackable>
         <PackageId>Lodgify.Payments.Stripe.Api.Models</PackageId>
-        <VersionPrefix>1.0.0</VersionPrefix>
+        <VersionPrefix>1.1.0</VersionPrefix>
         <VersionSuffix>$(VersionSuffix)</VersionSuffix>
         <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
         <FileVersion>$(VersionPrefix)</FileVersion>
