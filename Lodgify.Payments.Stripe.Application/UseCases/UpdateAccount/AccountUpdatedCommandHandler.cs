@@ -25,28 +25,33 @@ public class AccountUpdatedCommandHandler : ICommandHandler<AccountUpdatedComman
 
     public async Task Handle(AccountUpdatedCommand notification, CancellationToken cancellationToken)
     {
+        var eventAlreadyProcessed = await _webhookEventRepository.Exists(notification.SourceEventId, cancellationToken);
+        if (eventAlreadyProcessed)
+            return;
+
         var account = await _accountRepository.GetByStripeIdAsync(notification.AccountId, cancellationToken);
         if (account == null)
         {
             throw new AccountNotFoundException($"Account with id {notification.AccountId} not found");
         }
 
-        account.Update(notification.ChargesEnabled, notification.DetailsSubmitted);
+        var chargesEnabledChanged = account.SetChargesEnabled(notification.ChargesEnabled, notification.CreatedAt);
+        var detailsSubmittedChanged = account.SetDetailsSubmitted(notification.DetailsSubmitted, notification.CreatedAt);
 
-        try
+        if (chargesEnabledChanged)
         {
             await _accountHistoryRepository.AddAsync(AccountHistory.Create(account.Id, nameof(account.ChargesEnabled), account.ChargesEnabled.ToString(), notification.SourceEventId), cancellationToken);
+        }
+
+        if (detailsSubmittedChanged)
+        {
             await _accountHistoryRepository.AddAsync(AccountHistory.Create(account.Id, nameof(account.DetailsSubmitted), account.DetailsSubmitted.ToString(), notification.SourceEventId), cancellationToken);
         }
-        catch (Exception e)
+
+        if (chargesEnabledChanged || detailsSubmittedChanged)
         {
-            Console.WriteLine(e);
-            throw;
+            await _webhookEventRepository.AddAsync(WebhookEvent.Create(notification.SourceEventId, notification.RawSourceEventData), cancellationToken);
         }
-
-
-        var webhookEvent = WebhookEvent.Create(notification.SourceEventId, notification.RawSourceEventData);
-        await _webhookEventRepository.AddAsync(webhookEvent, cancellationToken);
 
         await _unitOfWork.CommitAsync(cancellationToken);
     }

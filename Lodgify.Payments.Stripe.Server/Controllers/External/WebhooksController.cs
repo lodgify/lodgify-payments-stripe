@@ -29,13 +29,13 @@ public class WebhooksController : Controller
     [Route("")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> HandleEvent([FromBody] JsonElement body, CancellationToken cancel)
+    public async Task<IActionResult> HandleEvent(CancellationToken cancel)
     {
-        // using StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8);
-        // var json = await reader.ReadToEndAsync(cancel);
+        using StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8);
+        var json = await reader.ReadToEndAsync(cancel);
         
          //var json = await new StreamReader(body.GetRawText()).ReadToEndAsync(cancel);
-         var json = body.GetRawText();
+         //var json = body.GetRawText();
         
         if (!Request.Headers.TryGetValue("Stripe-Signature", out var stripeSignature))
             return BadRequest("Stripe-Signature Header is missing");
@@ -48,7 +48,7 @@ public class WebhooksController : Controller
             {
                 case Events.AccountUpdated:
                     var account = (Account)stripeEvent.Data.Object;
-                    await _mediatorSender.Send(new AccountUpdatedCommand(account.Id, account.ChargesEnabled, account.DetailsSubmitted, json, stripeEvent.Id), cancel);
+                    await _mediatorSender.Send(new AccountUpdatedCommand(account.Id, account.ChargesEnabled, account.DetailsSubmitted, json, stripeEvent.Id, stripeEvent.Created), cancel);
                     break;
                 default:
                     throw new NotSupportedException($"Event of type {stripeEvent.Type} not supported.");

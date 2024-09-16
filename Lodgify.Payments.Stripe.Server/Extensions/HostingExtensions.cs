@@ -105,20 +105,20 @@ public static class HostingExtensions
         app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         app.UseLodgifyHealthchecks();
-        app.MapHealthChecks("/api/status/startup",
+        app.MapHealthChecks("/status/startup",
             new HealthCheckOptions
             {
                 Predicate = x =>
                     x.Name == nameof(MigratorHealthCheck)
             });
 
-        app.MapHealthChecks("/api/status/liveness",
+        app.MapHealthChecks("/status/liveness",
             new HealthCheckOptions
             {
                 Predicate = x =>
                     x.Name == nameof(OkHealthCheck)
             });
-        app.MapHealthChecks("/api/status/readiness",
+        app.MapHealthChecks("/status/readiness",
             new HealthCheckOptions
             {
                 Predicate = x =>

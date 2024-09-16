@@ -1,4 +1,5 @@
-﻿using Lodgify.Payments.Stripe.Domain.BuildingBlocks;
+﻿using System;
+using Lodgify.Payments.Stripe.Domain.BuildingBlocks;
 
 namespace Lodgify.Payments.Stripe.Domain.AccountHistories;
 
