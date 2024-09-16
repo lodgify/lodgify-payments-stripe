@@ -31,11 +31,8 @@ public class WebhooksController : Controller
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> HandleEvent(CancellationToken cancel)
     {
-        using StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8);
+        using var reader = new StreamReader(Request.Body, Encoding.UTF8);
         var json = await reader.ReadToEndAsync(cancel);
-        
-         //var json = await new StreamReader(body.GetRawText()).ReadToEndAsync(cancel);
-         //var json = body.GetRawText();
         
         if (!Request.Headers.TryGetValue("Stripe-Signature", out var stripeSignature))
             return BadRequest("Stripe-Signature Header is missing");
