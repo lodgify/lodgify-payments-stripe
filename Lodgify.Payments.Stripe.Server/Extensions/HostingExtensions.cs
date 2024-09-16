@@ -37,6 +37,8 @@ public static class HostingExtensions
             builder.Configuration.GetValue<string>("identity:baseUrl")!,
             builder.Configuration);
         builder.Services.AddLodgifyAuthorization();
+        //needed to properly resolve PropertyOwnerId and SubOwnerId from the impersonated request (request from backend client)
+        builder.Services.AddLodgifyImpersonation();
 
         builder.Services.AddOpenTelemetry()
             .ConfigureResource(builder => builder.AddService("lodgify-payments-stripe"))
@@ -102,20 +104,20 @@ public static class HostingExtensions
         app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         app.UseLodgifyHealthchecks();
-        app.MapHealthChecks("/api/status/startup",
+        app.MapHealthChecks("/status/startup",
             new HealthCheckOptions
             {
                 Predicate = x =>
                     x.Name == nameof(MigratorHealthCheck)
             });
 
-        app.MapHealthChecks("/api/status/liveness",
+        app.MapHealthChecks("/status/liveness",
             new HealthCheckOptions
             {
                 Predicate = x =>
                     x.Name == nameof(OkHealthCheck)
             });
-        app.MapHealthChecks("/api/status/readiness",
+        app.MapHealthChecks("/status/readiness",
             new HealthCheckOptions
             {
                 Predicate = x =>
