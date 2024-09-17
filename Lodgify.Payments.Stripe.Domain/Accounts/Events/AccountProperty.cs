@@ -1,5 +1,8 @@
-﻿namespace Lodgify.Payments.Stripe.Domain.Accounts.Events;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace Lodgify.Payments.Stripe.Domain.Accounts.Events;
+
+[ExcludeFromCodeCoverage]
 public class AccountProperty
 {
     public string Name { get; }

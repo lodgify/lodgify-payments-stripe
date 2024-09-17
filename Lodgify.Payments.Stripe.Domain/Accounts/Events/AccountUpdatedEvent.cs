@@ -1,7 +1,9 @@
-﻿using Lodgify.Payments.Stripe.Domain.BuildingBlocks;
+﻿using System.Diagnostics.CodeAnalysis;
+using Lodgify.Payments.Stripe.Domain.BuildingBlocks;
 
 namespace Lodgify.Payments.Stripe.Domain.Accounts.Events;
 
+[ExcludeFromCodeCoverage]
 public sealed class AccountUpdatedEvent : IDomainEvent
 {
     public Guid Id { get; }

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using Lodgify.Payments.Stripe.Domain.BuildingBlocks;
 
 namespace Lodgify.Payments.Stripe.Domain.WebhookEvents;
 
+[ExcludeFromCodeCoverage]
 public class WebhookEvent : Aggregate
 {
     public string WebhookEventStripeId { get; init; }

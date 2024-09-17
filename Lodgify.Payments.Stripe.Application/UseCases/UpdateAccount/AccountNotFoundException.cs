@@ -1,5 +1,8 @@
-﻿namespace Lodgify.Payments.Stripe.Application.UseCases.UpdateAccount;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace Lodgify.Payments.Stripe.Application.UseCases.UpdateAccount;
+
+[ExcludeFromCodeCoverage]
 public class AccountNotFoundException : Exception
 {
     public AccountNotFoundException()

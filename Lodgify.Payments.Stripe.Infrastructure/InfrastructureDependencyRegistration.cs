@@ -1,4 +1,5 @@
-﻿using Lodgify.Payments.Stripe.Application.Transactions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Lodgify.Payments.Stripe.Application.Transactions;
 using Lodgify.Payments.Stripe.Domain.AccountHistories.Contracts;
 using Lodgify.Payments.Stripe.Domain.Accounts.Contracts;
 using Lodgify.Payments.Stripe.Domain.AccountSessions.Contracts;
@@ -14,6 +15,7 @@ using StripeClient = Lodgify.Payments.Stripe.Infrastructure.Services.StripeClien
 
 namespace Lodgify.Payments.Stripe.Infrastructure;
 
+[ExcludeFromCodeCoverage]
 public static class InfrastructureDependencyRegistration
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)

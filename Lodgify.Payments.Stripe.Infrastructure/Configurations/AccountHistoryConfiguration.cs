@@ -1,9 +1,11 @@
-﻿using Lodgify.Payments.Stripe.Domain.AccountHistories;
+﻿using System.Diagnostics.CodeAnalysis;
+using Lodgify.Payments.Stripe.Domain.AccountHistories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Lodgify.Payments.Stripe.Infrastructure.Configurations;
 
+[ExcludeFromCodeCoverage]
 public class AccountHistoryConfiguration : IEntityTypeConfiguration<AccountHistory>
 {
     public void Configure(EntityTypeBuilder<AccountHistory> builder)
