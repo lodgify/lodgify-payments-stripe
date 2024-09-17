@@ -39,8 +39,7 @@ public class WebhooksController : Controller
 
         try
         {
-            //var stripeEvent = EventUtility.ConstructEvent(json, Request.Headers["Stripe-Signature"], _stripeSettings.WebhookSecret);
-            var stripeEvent = EventUtility.ConstructEvent(json, Request.Headers["Stripe-Signature"], "whsec_7815ae28957738fb54c1d2ee6cd5de847fdba1bd2818dc0b7003ef003015808a");
+            var stripeEvent = EventUtility.ConstructEvent(json, Request.Headers["Stripe-Signature"], _stripeSettings.WebhookSecret);
             switch (stripeEvent.Type)
             {
                 case Events.AccountUpdated:
