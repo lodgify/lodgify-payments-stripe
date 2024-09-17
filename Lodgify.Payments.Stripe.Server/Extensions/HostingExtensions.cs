@@ -26,7 +26,7 @@ public static class HostingExtensions
             builder.Configuration.AddJsonFile("appsettings.Development.json", true);
 
         builder.Services.AddMapster();
-        
+
         builder.Services.AddApplication();
 
         builder.Services.AddTransient<CorrelationIdMiddleware>();
@@ -37,6 +37,8 @@ public static class HostingExtensions
             builder.Configuration.GetValue<string>("identity:baseUrl")!,
             builder.Configuration);
         builder.Services.AddLodgifyAuthorization();
+        //needed to properly resolve PropertyOwnerId and SubOwnerId from the impersonated request (request from backend client)
+        builder.Services.AddLodgifyImpersonation();
 
         builder.Services.AddOpenTelemetry()
             .ConfigureResource(builder => builder.AddService("lodgify-payments-stripe"))
@@ -87,11 +89,8 @@ public static class HostingExtensions
 
     public static WebApplication ConfigurePipeline(this WebApplication app)
     {
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         app.UseAuthentication();
         app.UseAuthorization();
