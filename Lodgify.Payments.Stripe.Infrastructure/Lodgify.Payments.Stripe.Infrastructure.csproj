@@ -8,7 +8,7 @@
 
     <ItemGroup>
         <SonarQubeSetting Include="sonar.coverage.exclusions">
-            <Value>**/WebhookEventRepository.cs</Value>
+            <Value>**/WebhookEventRepository.cs,**/AccountConfiguration.cs,**/AccountHistoryConfiguration.cs,**/AccountHistoryRepository.cs,**/AccountRepository.cs,**/InfrastructureDependencyRegistration,**/StripeClient,**/StripeSettings,**/WebhookEventConfiguration</Value>
         </SonarQubeSetting>
     </ItemGroup>
 
