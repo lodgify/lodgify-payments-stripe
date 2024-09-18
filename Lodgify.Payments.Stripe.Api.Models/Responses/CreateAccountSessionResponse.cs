@@ -2,7 +2,6 @@
 
 namespace Lodgify.Payments.Stripe.Api.Models.Responses;
 
-[ExcludeFromCodeCoverage]
 public class CreateAccountSessionResponse
 {
     public CreateAccountSessionResponse(string stripeAccountId, string clientSecret)

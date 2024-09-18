@@ -25,7 +25,7 @@ public class AccountUpdatedCommandHandler : ICommandHandler<AccountUpdatedComman
 
     public async Task Handle(AccountUpdatedCommand notification, CancellationToken cancellationToken)
     {
-        var eventAlreadyProcessed = await _webhookEventRepository.Exists(notification.SourceEventId, cancellationToken);
+        var eventAlreadyProcessed = await _webhookEventRepository.ExistsAsync(notification.SourceEventId, cancellationToken);
         if (eventAlreadyProcessed)
             return;
 
@@ -40,18 +40,15 @@ public class AccountUpdatedCommandHandler : ICommandHandler<AccountUpdatedComman
 
         if (chargesEnabledChanged)
         {
-            await _accountHistoryRepository.AddAsync(AccountHistory.Create(account.Id, nameof(account.ChargesEnabled), account.ChargesEnabled.ToString(), notification.SourceEventId), cancellationToken);
+            await _accountHistoryRepository.AddAsync(AccountHistory.Create(account.Id, nameof(account.ChargesEnabled), account.ChargesEnabled.ToString(), notification.SourceEventId, notification.CreatedAt), cancellationToken);
         }
 
         if (detailsSubmittedChanged)
         {
-            await _accountHistoryRepository.AddAsync(AccountHistory.Create(account.Id, nameof(account.DetailsSubmitted), account.DetailsSubmitted.ToString(), notification.SourceEventId), cancellationToken);
+            await _accountHistoryRepository.AddAsync(AccountHistory.Create(account.Id, nameof(account.DetailsSubmitted), account.DetailsSubmitted.ToString(), notification.SourceEventId, notification.CreatedAt), cancellationToken);
         }
 
-        if (chargesEnabledChanged || detailsSubmittedChanged)
-        {
-            await _webhookEventRepository.AddAsync(WebhookEvent.Create(notification.SourceEventId, notification.RawSourceEventData), cancellationToken);
-        }
+        await _webhookEventRepository.AddAsync(WebhookEvent.Create(notification.SourceEventId, notification.RawSourceEventData), cancellationToken);
 
         await _unitOfWork.CommitAsync(cancellationToken);
     }

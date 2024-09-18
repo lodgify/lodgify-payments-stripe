@@ -1,4 +1,5 @@
 ﻿using Lodgify.Payments.Stripe.Domain.BuildingBlocks;
+using UUIDNext;
 
 namespace Lodgify.Payments.Stripe.Domain.AccountSessions;
 
@@ -17,7 +18,7 @@ public class AccountSession : Aggregate
 
     public static AccountSession Create(string stripeAccountId, string clientSecret)
     {
-        return new AccountSession(Guid.NewGuid())
+        return new AccountSession(Uuid.NewDatabaseFriendly(Database.PostgreSql))
         {
             StripeAccountId = stripeAccountId,
             ClientSecret = clientSecret

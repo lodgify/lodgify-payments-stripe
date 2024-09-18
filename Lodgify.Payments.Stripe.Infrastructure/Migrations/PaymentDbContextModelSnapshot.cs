@@ -43,7 +43,6 @@ namespace Lodgify.Payments.Stripe.Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("WebhookEventStripeId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -79,12 +78,15 @@ namespace Lodgify.Payments.Stripe.Infrastructure.Migrations
                     b.Property<bool>("ChargesEnabled")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("ChargesEnabledAt")
+                    b.Property<DateTime>("ChargesEnabledSetAt")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ControllerType")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Dashboard")
                         .IsRequired()
@@ -93,7 +95,7 @@ namespace Lodgify.Payments.Stripe.Infrastructure.Migrations
                     b.Property<bool>("DetailsSubmitted")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("DetailsSubmittedAt")
+                    b.Property<DateTime>("DetailsSubmittedSetAt")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Email")
@@ -141,6 +143,8 @@ namespace Lodgify.Payments.Stripe.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("WebhookEventStripeId");
 
                     b.ToTable("WebhookEvent", (string)null);
                 });

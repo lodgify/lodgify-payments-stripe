@@ -1,5 +1,6 @@
 ﻿using System;
 using Lodgify.Payments.Stripe.Domain.BuildingBlocks;
+using UUIDNext;
 
 namespace Lodgify.Payments.Stripe.Domain.AccountHistories;
 
@@ -13,7 +14,7 @@ public class AccountHistory : Aggregate
 
     public DateTime SetAt { get; set; }
 
-    public string WebhookEventStripeId { get; set; }
+    public string? WebhookEventStripeId { get; set; }
 
     private AccountHistory()
     {
@@ -23,14 +24,25 @@ public class AccountHistory : Aggregate
     {
     }
 
-    public static AccountHistory Create(Guid accountId, string propertyName, string propertyValue, string webhookEventStripeId)
+    public static AccountHistory CreateInitialHistory(Guid accountId, string propertyName, string propertyValue, DateTime createdAt)
     {
-        return new AccountHistory(Guid.NewGuid())
+        return new AccountHistory(Uuid.NewDatabaseFriendly(Database.PostgreSql))
         {
             AccountId = accountId,
             PropertyName = propertyName,
             PropertyValue = propertyValue,
-            SetAt = DateTime.UtcNow,
+            SetAt = createdAt
+        };
+    }
+
+    public static AccountHistory Create(Guid accountId, string propertyName, string propertyValue, string webhookEventStripeId, DateTime createdAt)
+    {
+        return new AccountHistory(Uuid.NewDatabaseFriendly(Database.PostgreSql))
+        {
+            AccountId = accountId,
+            PropertyName = propertyName,
+            PropertyValue = propertyValue,
+            SetAt = createdAt,
             WebhookEventStripeId = webhookEventStripeId
         };
     }

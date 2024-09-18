@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Lodgify.Payments.Stripe.Infrastructure.Repositories;
 
-[ExcludeFromCodeCoverage]
 public class AccountRepository : IAccountRepository
 {
     private readonly PaymentDbContext _dbContext;

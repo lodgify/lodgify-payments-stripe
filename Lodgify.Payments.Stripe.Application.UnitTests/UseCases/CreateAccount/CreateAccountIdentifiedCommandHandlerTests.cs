@@ -2,6 +2,8 @@
 using Lodgify.Extensions.Primitives.Identity;
 using Lodgify.Payments.Stripe.Application.Transactions;
 using Lodgify.Payments.Stripe.Application.UseCases.CreateAccount;
+using Lodgify.Payments.Stripe.Domain.AccountHistories;
+using Lodgify.Payments.Stripe.Domain.AccountHistories.Contracts;
 using Lodgify.Payments.Stripe.Domain.Accounts.Contracts;
 using NSubstitute;
 using Stripe;
@@ -10,24 +12,26 @@ using IStripeClient = Lodgify.Payments.Stripe.Application.Services.IStripeClient
 
 namespace Lodgify.Payments.Stripe.Application.UnitTests.UseCases.CreateAccount;
 
-public class CreateAccountCommandHandlerTests
+public class CreateAccountIdentifiedCommandHandlerTests
 {
     private readonly IStripeClient _stripeClient;
     private readonly IAccountRepository _accountRepository;
+    private readonly IAccountHistoryRepository _accountHistoryRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly CreateAccountCommandHandler _handler;
+    private readonly CreateAccountIdentifiedCommandHandler _handler;
 
-    public CreateAccountCommandHandlerTests()
+    public CreateAccountIdentifiedCommandHandlerTests()
     {
         _stripeClient = Substitute.For<IStripeClient>();
         _accountRepository = Substitute.For<IAccountRepository>();
+        _accountHistoryRepository = Substitute.For<IAccountHistoryRepository>();
         _unitOfWork = Substitute.For<IUnitOfWork>();
-        _handler = new CreateAccountCommandHandler(_stripeClient, _accountRepository, _unitOfWork);
+        _handler = new CreateAccountIdentifiedCommandHandler(_stripeClient, _accountRepository, _accountHistoryRepository, _unitOfWork);
     }
 
-    private (CreateAccountCommandHandler handler, CreateAccountCommand request, CancellationToken cancellationToken) CreateHandlerAndDependencies()
+    private (CreateAccountIdentifiedCommandHandler handler, CreateAccountIdentifiedCommand request, CancellationToken cancellationToken) CreateHandlerAndDependencies()
     {
-        var request = new CreateAccountCommand("US", "test@example.com") { Account = new LodgifyAccount(1, 1) };
+        var request = new CreateAccountIdentifiedCommand("US", "test@example.com") { Account = new LodgifyAccount(1, 1) };
         return (_handler, request, CancellationToken.None);
     }
 
@@ -35,8 +39,9 @@ public class CreateAccountCommandHandlerTests
     public async Task Handle_ShouldCreateAccountAndCommit_WhenRequestIsValid()
     {
         // Arrange
+        var accountCreatedAt = DateTime.UtcNow;
         var (handler, request, cancellationToken) = CreateHandlerAndDependencies();
-        var account = Account.Create(request.Account.UserId, "test@example.com", "acct_123", "application", "application", "stripe", "collection", "none", false, false);
+        var account = Account.Create(request.Account.UserId, "test@example.com", "acct_123", "application", "application", "stripe", "collection", "none", false, false, accountCreatedAt);
         _stripeClient.CreateAccountAsync(request.Account.UserId, "US", "test@example.com", Arg.Any<CancellationToken>())
             .Returns(account);
 
@@ -46,6 +51,7 @@ public class CreateAccountCommandHandlerTests
         // Assert
         await _stripeClient.Received(1).CreateAccountAsync(request.Account.UserId, request.Country, request.Email, cancellationToken);
         await _accountRepository.Received(1).AddAccountAsync(account, cancellationToken);
+        await _accountHistoryRepository.Received(2).AddAsync(Arg.Any<AccountHistory>(), cancellationToken);
         await _unitOfWork.Received(1).CommitAsync(cancellationToken);
         Assert.Equal(account.StripeAccountId, response.StripeAccountId);
     }

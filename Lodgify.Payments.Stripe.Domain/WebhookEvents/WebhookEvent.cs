@@ -2,10 +2,10 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using Lodgify.Payments.Stripe.Domain.BuildingBlocks;
+using UUIDNext;
 
 namespace Lodgify.Payments.Stripe.Domain.WebhookEvents;
 
-[ExcludeFromCodeCoverage]
 public class WebhookEvent : Aggregate
 {
     public string WebhookEventStripeId { get; init; }
@@ -22,7 +22,7 @@ public class WebhookEvent : Aggregate
 
     public static WebhookEvent Create(string webhookEventStripeId, string rawEventData)
     {
-        return new WebhookEvent(Guid.NewGuid())
+        return new WebhookEvent(Uuid.NewDatabaseFriendly(Database.PostgreSql))
         {
             WebhookEventStripeId = webhookEventStripeId,
             RawEventData = JsonDocument.Parse(rawEventData),

@@ -34,7 +34,7 @@ public class AccountController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<CreateAccountResponse>> CreateAccount(CreateAccountRequest request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new CreateAccountCommand(request.Country, request.Email), cancellationToken);
+        var response = await _mediator.Send(new CreateAccountIdentifiedCommand(request.Country, request.Email), cancellationToken);
         return Ok(response.Adapt<CreateAccountResponse>());
     }
 

@@ -8,7 +8,7 @@ using Lodgify.Payments.Stripe.Metrics;
 
 namespace Lodgify.Payments.Stripe.Application.UseCases.CreateAccountSession;
 
-public class CreateAccountSessionCommandHandler : ICommandHandler<CreateAccountSessionCommand, CreateAccountSessionCommandResponse>
+public class CreateAccountSessionIdentifiedCommandHandler : IIdentifiedCommandHandler<CreateAccountSessionIdentifiedCommand, CreateAccountSessionCommandResponse>
 {
     private readonly IStripeClient _stripeClient;
     private readonly IAccountRepository _accountRepository;
@@ -16,7 +16,7 @@ public class CreateAccountSessionCommandHandler : ICommandHandler<CreateAccountS
     private readonly IUnitOfWork _unitOfWork;
 
 
-    public CreateAccountSessionCommandHandler(IStripeClient stripeClient, IAccountRepository accountRepository, IAccountSessionRepository sessionAccountRepository, IUnitOfWork unitOfWork)
+    public CreateAccountSessionIdentifiedCommandHandler(IStripeClient stripeClient, IAccountRepository accountRepository, IAccountSessionRepository sessionAccountRepository, IUnitOfWork unitOfWork)
     {
         _stripeClient = stripeClient ?? throw new ArgumentNullException(nameof(stripeClient));
         _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
@@ -24,7 +24,7 @@ public class CreateAccountSessionCommandHandler : ICommandHandler<CreateAccountS
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<CreateAccountSessionCommandResponse> Handle(CreateAccountSessionCommand request, CancellationToken cancellationToken)
+    public async Task<CreateAccountSessionCommandResponse> Handle(CreateAccountSessionIdentifiedCommand request, CancellationToken cancellationToken)
     {
         AppMetrics.AccountSession.Creating();
 

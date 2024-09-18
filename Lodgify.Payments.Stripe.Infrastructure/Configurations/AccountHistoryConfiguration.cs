@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Lodgify.Payments.Stripe.Infrastructure.Configurations;
 
-[ExcludeFromCodeCoverage]
 public class AccountHistoryConfiguration : IEntityTypeConfiguration<AccountHistory>
 {
     public void Configure(EntityTypeBuilder<AccountHistory> builder)
@@ -18,6 +17,6 @@ public class AccountHistoryConfiguration : IEntityTypeConfiguration<AccountHisto
         builder.Property(p => p.PropertyName).IsRequired();
         builder.Property(p => p.PropertyValue).IsRequired();
         builder.Property(p => p.SetAt).IsRequired();
-        builder.Property(p => p.WebhookEventStripeId).IsRequired();
+        builder.Property(p => p.WebhookEventStripeId);
     }
 }

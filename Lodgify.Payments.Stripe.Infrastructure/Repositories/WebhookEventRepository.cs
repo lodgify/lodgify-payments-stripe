@@ -18,7 +18,7 @@ public class WebhookEventRepository : IWebhookEventRepository
         await _dbContext.WebhookEvent.AddAsync(webhookEvent, cancellationToken);
     }
 
-    public async Task<bool> Exists(string stripeEventId, CancellationToken cancellationToken)
+    public async Task<bool> ExistsAsync(string stripeEventId, CancellationToken cancellationToken)
     {
         return await _dbContext.WebhookEvent.AnyAsync(webhookEvent => webhookEvent.WebhookEventStripeId == stripeEventId, cancellationToken);
     }

@@ -34,16 +34,15 @@ public class AccountUpdatedCommandHandlerTests
         // Arrange
         var stripeAccountId = "acc_123";
         var stripeRawEvent = "{\"id\":\"evt_123\",\"object\":\"event\"}";
-        var account = Account.Create(1, "testuser@example.com", stripeAccountId, "stripe", "stripe", "stripe", "stripe", "none", false, false);
+        var accountCreatedAt = DateTime.UtcNow;
+        var account = Account.Create(1, "testuser@example.com", stripeAccountId, "stripe", "stripe", "stripe", "stripe", "none", false, false, accountCreatedAt);
 
-        webhookEventRepository.Exists(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(false);
+        webhookEventRepository.ExistsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(false);
 
         accountRepository.GetByStripeIdAsync(stripeAccountId, Arg.Any<CancellationToken>()).Returns(account);
 
-        var command = new AccountUpdatedCommand(stripeAccountId, true, true, stripeRawEvent, "sourceEventId", DateTime.Now)
-        {
-            Account = new LodgifyAccount(1, 1)
-        };
+        var updateAccountEventCreatedAt = DateTime.UtcNow;
+        var command = new AccountUpdatedCommand(stripeAccountId, true, true, stripeRawEvent, "sourceEventId", updateAccountEventCreatedAt);
 
         sut = new AccountUpdatedCommandHandler(accountRepository, accountHistoryRepository, webhookEventRepository, unitOfWork);
 
@@ -52,9 +51,9 @@ public class AccountUpdatedCommandHandlerTests
 
         // Assert
         account.ChargesEnabled.Should().BeTrue();
-        account.ChargesEnabledAt.Should().NotBeNull();
+        account.ChargesEnabledSetAt.Should().Be(updateAccountEventCreatedAt);
         account.DetailsSubmitted.Should().BeTrue();
-        account.DetailsSubmittedAt.Should().NotBeNull();
+        account.DetailsSubmittedSetAt.Should().Be(updateAccountEventCreatedAt);
         
         await accountRepository.Received(1).GetByStripeIdAsync(stripeAccountId, Arg.Any<CancellationToken>());
         await accountHistoryRepository.Received(2).AddAsync(Arg.Any<AccountHistory>(), Arg.Any<CancellationToken>());
@@ -68,16 +67,15 @@ public class AccountUpdatedCommandHandlerTests
         // Arrange
         var stripeAccountId = "acc_123";
         var stripeRawEvent = "{\"id\":\"evt_123\",\"object\":\"event\"}";
-        var account = Account.Create(1, "testuser@example.com", stripeAccountId, "stripe", "stripe", "stripe", "stripe", "none", false, false);
+        var accountCreatedAt = DateTime.UtcNow;
+        var account = Account.Create(1, "testuser@example.com", stripeAccountId, "stripe", "stripe", "stripe", "stripe", "none", false, false, accountCreatedAt);
 
-        webhookEventRepository.Exists(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(false);
+        webhookEventRepository.ExistsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(false);
 
         accountRepository.GetByStripeIdAsync(stripeAccountId, Arg.Any<CancellationToken>()).Returns(account);
 
-        var command = new AccountUpdatedCommand(stripeAccountId, true, false, stripeRawEvent, "sourceEventId", DateTime.Now)
-        {
-            Account = new LodgifyAccount(1, 1)
-        };
+        var updateAccountEventCreatedAt = DateTime.UtcNow;
+        var command = new AccountUpdatedCommand(stripeAccountId, true, false, stripeRawEvent, "sourceEventId", updateAccountEventCreatedAt);
 
         sut = new AccountUpdatedCommandHandler(accountRepository, accountHistoryRepository, webhookEventRepository, unitOfWork);
 
@@ -86,9 +84,9 @@ public class AccountUpdatedCommandHandlerTests
 
         // Assert
         account.ChargesEnabled.Should().BeTrue();
-        account.ChargesEnabledAt.Should().NotBeNull();
+        account.ChargesEnabledSetAt.Should().Be(updateAccountEventCreatedAt);
         account.DetailsSubmitted.Should().BeFalse();
-        account.DetailsSubmittedAt.Should().BeNull();
+        account.DetailsSubmittedSetAt.Should().NotBe(updateAccountEventCreatedAt);
         
         await accountRepository.Received(1).GetByStripeIdAsync(stripeAccountId, Arg.Any<CancellationToken>());
         await accountHistoryRepository.Received(1).AddAsync(Arg.Any<AccountHistory>(), Arg.Any<CancellationToken>());
@@ -102,16 +100,15 @@ public class AccountUpdatedCommandHandlerTests
         // Arrange
         var stripeAccountId = "acc_123";
         var stripeRawEvent = "{\"id\":\"evt_123\",\"object\":\"event\"}";
-        var account = Account.Create(1, "testuser@example.com", stripeAccountId, "stripe", "stripe", "stripe", "stripe", "none", false, false);
+        var accountCreatedAt = DateTime.UtcNow;
+        var account = Account.Create(1, "testuser@example.com", stripeAccountId, "stripe", "stripe", "stripe", "stripe", "none", false, false, accountCreatedAt);
 
-        webhookEventRepository.Exists(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(false);
+        webhookEventRepository.ExistsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(false);
 
         accountRepository.GetByStripeIdAsync(stripeAccountId, Arg.Any<CancellationToken>()).Returns(account);
 
-        var command = new AccountUpdatedCommand(stripeAccountId, false, true, stripeRawEvent, "sourceEventId", DateTime.Now)
-        {
-            Account = new LodgifyAccount(1, 1)
-        };
+        var updateAccountEventCreatedAt = DateTime.UtcNow;
+        var command = new AccountUpdatedCommand(stripeAccountId, false, true, stripeRawEvent, "sourceEventId", updateAccountEventCreatedAt);
 
         sut = new AccountUpdatedCommandHandler(accountRepository, accountHistoryRepository, webhookEventRepository, unitOfWork);
 
@@ -120,9 +117,9 @@ public class AccountUpdatedCommandHandlerTests
 
         // Assert
         account.ChargesEnabled.Should().BeFalse();
-        account.ChargesEnabledAt.Should().BeNull();
+        account.ChargesEnabledSetAt.Should().NotBe(updateAccountEventCreatedAt);
         account.DetailsSubmitted.Should().BeTrue();
-        account.DetailsSubmittedAt.Should().NotBeNull();
+        account.DetailsSubmittedSetAt.Should().Be(updateAccountEventCreatedAt);
         
         await accountRepository.Received(1).GetByStripeIdAsync(stripeAccountId, Arg.Any<CancellationToken>());
         await accountHistoryRepository.Received(1).AddAsync(Arg.Any<AccountHistory>(), Arg.Any<CancellationToken>());
@@ -136,16 +133,15 @@ public class AccountUpdatedCommandHandlerTests
         // Arrange
         var stripeAccountId = "acc_123";
         var stripeRawEvent = "{\"id\":\"evt_123\",\"object\":\"event\"}";
-        var account = Account.Create(1, "testuser@example.com", stripeAccountId, "stripe", "stripe", "stripe", "stripe", "none", true, true);
+        var accountCreatedAt = DateTime.UtcNow;
+        var account = Account.Create(1, "testuser@example.com", stripeAccountId, "stripe", "stripe", "stripe", "stripe", "none", true, true, accountCreatedAt);
 
-        webhookEventRepository.Exists(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(false);
+        webhookEventRepository.ExistsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(false);
 
         accountRepository.GetByStripeIdAsync(stripeAccountId, Arg.Any<CancellationToken>()).Returns(account);
 
-        var command = new AccountUpdatedCommand(stripeAccountId, true, true, stripeRawEvent, "sourceEventId", DateTime.Now)
-        {
-            Account = new LodgifyAccount(1, 1)
-        };
+        var updateAccountEventCreatedAt = DateTime.UtcNow;
+        var command = new AccountUpdatedCommand(stripeAccountId, true, true, stripeRawEvent, "sourceEventId", updateAccountEventCreatedAt);
 
         sut = new AccountUpdatedCommandHandler(accountRepository, accountHistoryRepository, webhookEventRepository, unitOfWork);
 
@@ -154,13 +150,13 @@ public class AccountUpdatedCommandHandlerTests
 
         // Assert
         account.ChargesEnabled.Should().BeTrue();
-        account.ChargesEnabledAt.Should().NotBeNull();
+        account.ChargesEnabledSetAt.Should().NotBe(updateAccountEventCreatedAt);
         account.DetailsSubmitted.Should().BeTrue();
-        account.DetailsSubmittedAt.Should().NotBeNull();
+        account.DetailsSubmittedSetAt.Should().NotBe(updateAccountEventCreatedAt);
         
         await accountRepository.Received(1).GetByStripeIdAsync(stripeAccountId, Arg.Any<CancellationToken>());
         await accountHistoryRepository.DidNotReceive().AddAsync(Arg.Any<AccountHistory>(), Arg.Any<CancellationToken>());
-        await webhookEventRepository.DidNotReceive().AddAsync(Arg.Any<WebhookEvent>(), Arg.Any<CancellationToken>());
+        await webhookEventRepository.Received(1).AddAsync(Arg.Any<WebhookEvent>(), Arg.Any<CancellationToken>());
         await unitOfWork.Received(1).CommitAsync(Arg.Any<CancellationToken>());
     }
 
@@ -171,19 +167,17 @@ public class AccountUpdatedCommandHandlerTests
         var stripeAccountId = "acc_123";
         var stripeRawEvent = "{\"id\":\"evt_123\",\"object\":\"event\"}";
         
-        webhookEventRepository.Exists(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(true);
+        webhookEventRepository.ExistsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(true);
 
-        var command = new AccountUpdatedCommand(stripeAccountId, true, true, stripeRawEvent, "sourceEventId", DateTime.Now)
-        {
-            Account = new LodgifyAccount(1, 1)
-        };
+        var command = new AccountUpdatedCommand(stripeAccountId, true, true, stripeRawEvent, "sourceEventId", DateTime.Now);
+        
         sut = new AccountUpdatedCommandHandler(accountRepository, accountHistoryRepository, webhookEventRepository, unitOfWork);
 
         //Act
         await sut.Handle(command, CancellationToken.None);
         
         // Assert
-        await webhookEventRepository.Received(1).Exists(Arg.Any<string>(), Arg.Any<CancellationToken>());
+        await webhookEventRepository.Received(1).ExistsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>());
         await webhookEventRepository.DidNotReceive().AddAsync(Arg.Any<WebhookEvent>(), Arg.Any<CancellationToken>());
         await unitOfWork.DidNotReceive().CommitAsync(Arg.Any<CancellationToken>());
         await accountHistoryRepository.DidNotReceive().AddAsync(Arg.Any<AccountHistory>(), Arg.Any<CancellationToken>());

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Runtime.InteropServices.JavaScript;
 using Lodgify.Payments.Stripe.Domain.BuildingBlocks;
+using UUIDNext;
 
 namespace Lodgify.Payments.Stripe.Domain.Accounts;
 
@@ -14,9 +16,10 @@ public class Account : Aggregate
     public string Losses { get; init; }
     public string ControllerType { get; init; }
     public bool ChargesEnabled { get; private set; }
-    public DateTime? ChargesEnabledAt { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public DateTime ChargesEnabledSetAt { get; private set; }
     public bool DetailsSubmitted { get; private set; }
-    public DateTime? DetailsSubmittedAt { get; private set; }
+    public DateTime DetailsSubmittedSetAt { get; private set; }
 
 
     private Account()
@@ -27,9 +30,9 @@ public class Account : Aggregate
     {
     }
 
-    public static Account Create(int userId, string email, string stripeAccountId, string controllerType, string losses, string fees, string requirementCollection, string dashboard, bool chargesEnabled, bool detailsSubmitted)
+    public static Account Create(int userId, string email, string stripeAccountId, string controllerType, string losses, string fees, string requirementCollection, string dashboard, bool chargesEnabled, bool detailsSubmitted, DateTime createdAt)
     {
-        var account = new Account(Guid.NewGuid())
+        return new Account(Uuid.NewDatabaseFriendly(Database.PostgreSql))
         {
             UserId = userId,
             Email = email,
@@ -38,29 +41,21 @@ public class Account : Aggregate
             Losses = losses,
             Fees = fees,
             RequirementCollection = requirementCollection,
-            Dashboard = dashboard
+            Dashboard = dashboard,
+            ChargesEnabled = chargesEnabled,
+            ChargesEnabledSetAt = createdAt,
+            DetailsSubmitted = detailsSubmitted,
+            DetailsSubmittedSetAt = createdAt,
+            CreatedAt = createdAt
         };
-
-        //verify this flag in case if stripe set chargesEnabled = true and detailsSubmitted = true direct after create account
-        if (chargesEnabled)
-        {
-            account.SetChargesEnabled(chargesEnabled, DateTime.UtcNow);
-        }
-
-        if (detailsSubmitted)
-        {
-            account.SetDetailsSubmitted(detailsSubmitted, DateTime.UtcNow);
-        }
-
-        return account;
     }
 
     public bool SetChargesEnabled(bool chargesEnabled, DateTime changeRequestedAt)
     {
-        if ((!ChargesEnabledAt.HasValue || ChargesEnabledAt.Value < changeRequestedAt) && ChargesEnabled != chargesEnabled)
+        if (ChargesEnabledSetAt < changeRequestedAt && ChargesEnabled != chargesEnabled)
         {
             ChargesEnabled = chargesEnabled;
-            ChargesEnabledAt = changeRequestedAt;
+            ChargesEnabledSetAt = changeRequestedAt;
             return true;
         }
         
@@ -69,10 +64,10 @@ public class Account : Aggregate
     
     public bool SetDetailsSubmitted(bool detailsSubmitted, DateTime changeRequestedAt)
     {
-        if ((!DetailsSubmittedAt.HasValue || DetailsSubmittedAt.Value < changeRequestedAt) && DetailsSubmitted != detailsSubmitted)
+        if (DetailsSubmittedSetAt < changeRequestedAt && DetailsSubmitted != detailsSubmitted)
         {
             DetailsSubmitted = detailsSubmitted;
-            DetailsSubmittedAt = changeRequestedAt;
+            DetailsSubmittedSetAt = changeRequestedAt;
             return true;
         }
 

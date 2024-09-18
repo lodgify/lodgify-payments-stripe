@@ -15,7 +15,6 @@ using StripeClient = Lodgify.Payments.Stripe.Infrastructure.Services.StripeClien
 
 namespace Lodgify.Payments.Stripe.Infrastructure;
 
-[ExcludeFromCodeCoverage]
 public static class InfrastructureDependencyRegistration
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)

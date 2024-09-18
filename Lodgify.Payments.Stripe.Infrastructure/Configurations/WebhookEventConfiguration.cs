@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Lodgify.Payments.Stripe.Infrastructure.Configurations;
 
-[ExcludeFromCodeCoverage]
 public class WebhookEventConfiguration : IEntityTypeConfiguration<WebhookEvent>
 {
     public void Configure(EntityTypeBuilder<WebhookEvent> builder)
@@ -17,5 +16,7 @@ public class WebhookEventConfiguration : IEntityTypeConfiguration<WebhookEvent>
         builder.Property(p => p.WebhookEventStripeId).IsRequired();
         builder.Property(p => p.RawEventData).HasColumnType("jsonb").IsRequired();
         builder.Property(p => p.CreatedAt).IsRequired();
+
+        builder.HasIndex(p => p.WebhookEventStripeId);
     }
 }
