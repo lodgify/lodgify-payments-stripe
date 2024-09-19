@@ -5,8 +5,8 @@ namespace Lodgify.Payments.Stripe.Domain.AccountSessions;
 
 public class AccountSession : Aggregate
 {
-    public string StripeAccountId { get; init; }
-    public string ClientSecret { get; init; }
+    public string StripeAccountId { get; init; } = null!;
+    public string ClientSecret { get; init; } = null!;
 
     private AccountSession()
     {

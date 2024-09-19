@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Lodgify.Payments.Stripe.Domain.BuildingBlocks;
 using UUIDNext;
 
@@ -8,8 +6,8 @@ namespace Lodgify.Payments.Stripe.Domain.WebhookEvents;
 
 public class WebhookEvent : Aggregate
 {
-    public string WebhookEventStripeId { get; init; }
-    public JsonDocument RawEventData { get; init; }
+    public string WebhookEventStripeId { get; init; } = null!;
+    public JsonDocument RawEventData { get; init; } = null!;
     public DateTime CreatedAt { get; init; }
 
     private WebhookEvent()

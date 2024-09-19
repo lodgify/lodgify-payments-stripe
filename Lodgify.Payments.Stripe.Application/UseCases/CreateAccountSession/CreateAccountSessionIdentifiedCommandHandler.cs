@@ -41,7 +41,7 @@ public class CreateAccountSessionIdentifiedCommandHandler : IIdentifiedCommandHa
 
             return new CreateAccountSessionCommandResponse(account.StripeAccountId, account.ClientSecret);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             AppMetrics.AccountSession.Failed();
             throw;

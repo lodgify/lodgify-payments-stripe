@@ -1,6 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices.JavaScript;
-using Lodgify.Payments.Stripe.Domain.BuildingBlocks;
+﻿using Lodgify.Payments.Stripe.Domain.BuildingBlocks;
 using UUIDNext;
 
 namespace Lodgify.Payments.Stripe.Domain.Accounts;
@@ -8,13 +6,13 @@ namespace Lodgify.Payments.Stripe.Domain.Accounts;
 public class Account : Aggregate
 {
     public int UserId { get; init; }
-    public string Email { get; init; }
-    public string StripeAccountId { get; init; }
-    public string Dashboard { get; init; }
-    public string RequirementCollection { get; init; }
-    public string Fees { get; init; }
-    public string Losses { get; init; }
-    public string ControllerType { get; init; }
+    public string Email { get; init; } = null!;
+    public string StripeAccountId { get; init; } = null!;
+    public string Dashboard { get; init; } = null!;
+    public string RequirementCollection { get; init; } = null!;
+    public string Fees { get; init; } = null!;
+    public string Losses { get; init; } = null!;
+    public string ControllerType { get; init; } = null!;
     public bool ChargesEnabled { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime ChargesEnabledSetAt { get; private set; }

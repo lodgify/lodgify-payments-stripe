@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using System.Text.Json;
 using Lodgify.Payments.Stripe.Application.UseCases.UpdateAccount;
 using Lodgify.Payments.Stripe.Infrastructure.Settings;
 using MediatR;
@@ -51,7 +50,7 @@ public class WebhooksController : Controller
             }
             return Ok();
         }
-        catch (StripeException e)
+        catch (StripeException)
         {
             return BadRequest();
         }
