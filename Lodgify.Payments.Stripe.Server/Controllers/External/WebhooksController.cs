@@ -14,10 +14,12 @@ namespace Lodgify.Payments.Stripe.Server.Controllers.External;
 public class WebhooksController : Controller
 {
     private readonly ISender _mediatorSender;
+    private readonly ILogger<WebhooksController> _logger;
     private readonly StripeSettings _stripeSettings;
 
-    public WebhooksController(ISender mediatorSender, IOptions<StripeSettings> stripeSettings)
+    public WebhooksController(ISender mediatorSender, IOptions<StripeSettings> stripeSettings, ILogger<WebhooksController> logger)
     {
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _mediatorSender = mediatorSender ?? throw new ArgumentNullException(nameof(mediatorSender));
         _stripeSettings = stripeSettings.Value ?? throw new ArgumentNullException(nameof(stripeSettings));
     }
@@ -53,6 +55,7 @@ public class WebhooksController : Controller
         }
         catch (StripeException e)
         {
+            _logger.LogError(e, "Error handling Stripe event");
             return BadRequest();
         }
     }
