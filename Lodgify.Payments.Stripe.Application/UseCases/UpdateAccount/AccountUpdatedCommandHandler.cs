@@ -30,7 +30,7 @@ public class AccountUpdatedCommandHandler : ICommandHandler<AccountUpdatedComman
             return;
 
         var account = await _accountRepository.GetByStripeIdAsync(notification.AccountId, cancellationToken);
-        if (account == null)
+        if (account is null)
         {
             throw new AccountNotFoundException($"Account with id {notification.AccountId} not found");
         }

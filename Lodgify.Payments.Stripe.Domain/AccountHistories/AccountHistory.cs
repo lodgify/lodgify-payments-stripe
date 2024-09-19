@@ -1,5 +1,4 @@
-﻿using System;
-using Lodgify.Payments.Stripe.Domain.BuildingBlocks;
+﻿using Lodgify.Payments.Stripe.Domain.BuildingBlocks;
 using UUIDNext;
 
 namespace Lodgify.Payments.Stripe.Domain.AccountHistories;
@@ -8,13 +7,13 @@ public class AccountHistory : Aggregate
 {
     public Guid AccountId { get; init; }
 
-    public string PropertyName { get; init; }
+    public string PropertyName { get; init; } = null!;
 
-    public string PropertyValue { get; init; }
+    public string PropertyValue { get; init; } = null!;
 
-    public DateTime SetAt { get; set; }
+    public DateTime SetAt { get; private set; }
 
-    public string? WebhookEventStripeId { get; set; }
+    public string? WebhookEventStripeId { get; private set; }
 
     private AccountHistory()
     {

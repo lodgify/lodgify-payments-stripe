@@ -42,7 +42,7 @@ public class CreateAccountIdentifiedCommandHandler : IIdentifiedCommandHandler<C
 
             return new CreateAccountCommandResponse(account.StripeAccountId);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             AppMetrics.Account.Failed();
             throw;

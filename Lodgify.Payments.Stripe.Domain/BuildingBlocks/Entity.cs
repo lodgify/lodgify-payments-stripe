@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Lodgify.Payments.Stripe.Domain.BuildingBlocks;
+﻿namespace Lodgify.Payments.Stripe.Domain.BuildingBlocks;
 
 public abstract class Entity : IEquatable<Entity>
 {
@@ -17,19 +15,19 @@ public abstract class Entity : IEquatable<Entity>
 
     public override string ToString() => $"{GetType().Name}#[Identity={Id}]";
 
-    public bool Equals(Entity other)
+    public bool Equals(Entity? other)
     {
         return other is not null && (ReferenceEquals(this, other) || Equals(Id, other.Id));
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         return obj is not null && (ReferenceEquals(this, obj) || (obj.GetType() == GetType() && Equals((Entity)obj)));
     }
 
     public string GetId() => Id.ToString();
 
-    public static bool operator ==(Entity a, Entity b)
+    public static bool operator ==(Entity? a, Entity? b)
     {
         return (a is null && b is null) || (a is not null && b is not null && a.Equals(b));
     }

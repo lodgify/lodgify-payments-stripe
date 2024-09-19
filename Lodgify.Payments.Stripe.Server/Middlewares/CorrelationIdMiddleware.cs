@@ -37,7 +37,7 @@ public sealed class CorrelationIdMiddleware : IMiddleware
 
         context.Response.OnStarting(() =>
         {
-            context.Response.Headers.Add(CorrelationKeys.CorrelationIdForHeader, correlationId);
+            context.Response.Headers.Append(CorrelationKeys.CorrelationIdForHeader, correlationId);
             return Task.CompletedTask;
         });
 

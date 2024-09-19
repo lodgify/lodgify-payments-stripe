@@ -18,7 +18,7 @@ public class AccountUpdatedCommandHandlerTests
     private IAccountHistoryRepository accountHistoryRepository;
     private IWebhookEventRepository webhookEventRepository;
     private IUnitOfWork unitOfWork;
-    private AccountUpdatedCommandHandler sut;
+    private AccountUpdatedCommandHandler sut = null!;
 
     public AccountUpdatedCommandHandlerTests()
     {
