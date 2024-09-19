@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Lodgify.Payments.Stripe.Infrastructure.Repositories;
 
-[ExcludeFromCodeCoverage]
 public class AccountRepository : IAccountRepository
 {
     private readonly PaymentDbContext _dbContext;
@@ -14,6 +13,11 @@ public class AccountRepository : IAccountRepository
     public AccountRepository(PaymentDbContext dbContext)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+    }
+
+    public async Task<Account?> GetByStripeIdAsync(string stripeAccountId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Account.FirstOrDefaultAsync(account => account.StripeAccountId == stripeAccountId, cancellationToken);
     }
 
     public async Task AddAccountAsync(Account account, CancellationToken cancellationToken)

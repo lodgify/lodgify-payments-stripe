@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Lodgify.Payments.Stripe.Infrastructure.Configurations;
 
-[ExcludeFromCodeCoverage]
 public class AccountConfiguration : IEntityTypeConfiguration<Account>
 {
     public void Configure(EntityTypeBuilder<Account> builder)
@@ -14,6 +13,7 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
 
         builder.Property(p => p.UserId).IsRequired();
         builder.Property(p => p.Email).IsRequired();
+        builder.Property(p => p.CreatedAt).IsRequired();
         builder.Property(p => p.StripeAccountId).IsRequired();
         builder.Property(p => p.Dashboard);
         builder.Property(p => p.RequirementCollection);

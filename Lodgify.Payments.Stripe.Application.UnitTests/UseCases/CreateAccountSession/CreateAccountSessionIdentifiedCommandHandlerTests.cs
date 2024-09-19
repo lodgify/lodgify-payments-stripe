@@ -12,28 +12,28 @@ using IStripeClient = Lodgify.Payments.Stripe.Application.Services.IStripeClient
 
 namespace Lodgify.Payments.Stripe.Application.UnitTests.UseCases.CreateAccountSession;
 
-public class CreateAccountSessionCommandHandlerTests
+public class CreateAccountSessionIdentifiedCommandHandlerTests
 {
     private readonly IStripeClient _stripeClient;
     private readonly IAccountRepository _accountRepository;
     private readonly IAccountSessionRepository _sessionAccountRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly CreateAccountSessionCommandHandler _handler;
+    private readonly CreateAccountSessionIdentifiedCommandHandler _handler;
 
-    public CreateAccountSessionCommandHandlerTests()
+    public CreateAccountSessionIdentifiedCommandHandlerTests()
     {
         _stripeClient = Substitute.For<IStripeClient>();
         _accountRepository = Substitute.For<IAccountRepository>();
         _sessionAccountRepository = Substitute.For<IAccountSessionRepository>();
         _unitOfWork = Substitute.For<IUnitOfWork>();
-        _handler = new CreateAccountSessionCommandHandler(_stripeClient, _accountRepository, _sessionAccountRepository, _unitOfWork);
+        _handler = new CreateAccountSessionIdentifiedCommandHandler(_stripeClient, _accountRepository, _sessionAccountRepository, _unitOfWork);
     }
 
     [Fact]
     public async Task Handle_ValidRequest_ReturnsCreateAccountSessionResponse()
     {
         // Arrange
-        var request = new CreateAccountSessionCommand("stripeAccountId") { Account = new LodgifyAccount(1, 1) };
+        var request = new CreateAccountSessionIdentifiedCommand("stripeAccountId") { Account = new LodgifyAccount(1, 1) };
         var account = AccountSession.Create("stripeAccountId", "clientSecret");
 
         _accountRepository.QueryAccountUserIdAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
@@ -55,7 +55,7 @@ public class CreateAccountSessionCommandHandlerTests
     public async Task Handle_BusinessRuleViolation_ThrowsBusinessRuleException()
     {
         // Arrange
-        var request = new CreateAccountSessionCommand("stripeAccountId") { Account = new LodgifyAccount(1, 1) };
+        var request = new CreateAccountSessionIdentifiedCommand("stripeAccountId") { Account = new LodgifyAccount(1, 1) };
 
         _accountRepository.QueryAccountUserIdAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(request.Account.UserId + 1);
@@ -69,7 +69,7 @@ public class CreateAccountSessionCommandHandlerTests
     public async Task Handle_StripeClientThrowsException_ThrowsException()
     {
         // Arrange
-        var request = new CreateAccountSessionCommand("stripeAccountId") { Account = new LodgifyAccount(1, 1) };
+        var request = new CreateAccountSessionIdentifiedCommand("stripeAccountId") { Account = new LodgifyAccount(1, 1) };
 
         _accountRepository.QueryAccountUserIdAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(request.Account.UserId);

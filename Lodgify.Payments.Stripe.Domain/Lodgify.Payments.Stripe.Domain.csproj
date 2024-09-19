@@ -6,4 +6,14 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <SonarQubeSetting Include="sonar.coverage.exclusions">
+            <Value>**/AccountProperty.cs,**/AccountUpdatedEvent.cs</Value>
+        </SonarQubeSetting>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="UUIDNext" Version="3.0.0" />
+    </ItemGroup>
+
 </Project>

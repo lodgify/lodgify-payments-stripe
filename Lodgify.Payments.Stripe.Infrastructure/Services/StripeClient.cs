@@ -6,7 +6,6 @@ using AccountSession = Lodgify.Payments.Stripe.Domain.AccountSessions.AccountSes
 
 namespace Lodgify.Payments.Stripe.Infrastructure.Services;
 
-[ExcludeFromCodeCoverage]
 public class StripeClient : Lodgify.Payments.Stripe.Application.Services.IStripeClient
 {
     public StripeClient(IOptions<StripeSettings> stripeSettings)
@@ -43,7 +42,7 @@ public class StripeClient : Lodgify.Payments.Stripe.Application.Services.IStripe
         };
         var service = new AccountService();
         var stripeAccount = await service.CreateAsync(options, cancellationToken: cancellationToken);
-
+        
         return Domain.Accounts.Account.Create(
             userId,
             email,
@@ -54,7 +53,8 @@ public class StripeClient : Lodgify.Payments.Stripe.Application.Services.IStripe
             stripeAccount.Controller.RequirementCollection,
             stripeAccount.Controller.StripeDashboard.Type,
             stripeAccount.ChargesEnabled,
-            stripeAccount.DetailsSubmitted
+            stripeAccount.DetailsSubmitted,
+            stripeAccount.Created
         );
     }
 

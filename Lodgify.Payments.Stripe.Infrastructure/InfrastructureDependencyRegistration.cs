@@ -1,6 +1,9 @@
-﻿using Lodgify.Payments.Stripe.Application.Transactions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Lodgify.Payments.Stripe.Application.Transactions;
+using Lodgify.Payments.Stripe.Domain.AccountHistories.Contracts;
 using Lodgify.Payments.Stripe.Domain.Accounts.Contracts;
 using Lodgify.Payments.Stripe.Domain.AccountSessions.Contracts;
+using Lodgify.Payments.Stripe.Domain.WebhookEvents.Contracts;
 using Lodgify.Payments.Stripe.Infrastructure.Migrator;
 using Lodgify.Payments.Stripe.Infrastructure.Migrator.Contracts;
 using Lodgify.Payments.Stripe.Infrastructure.Repositories;
@@ -32,6 +35,8 @@ public static class InfrastructureDependencyRegistration
         services.AddScoped<IDatabaseMigrator, PaymentMigrator>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IAccountSessionRepository, AccountSessionRepository>();
+        services.AddScoped<IAccountHistoryRepository, AccountHistoryRepository>();
+        services.AddScoped<IWebhookEventRepository, WebhookEventRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

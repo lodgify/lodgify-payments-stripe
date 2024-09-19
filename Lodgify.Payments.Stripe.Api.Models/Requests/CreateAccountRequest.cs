@@ -2,7 +2,6 @@
 
 namespace Lodgify.Payments.Stripe.Api.Models.Requests;
 
-[ExcludeFromCodeCoverage]
 public class CreateAccountRequest
 {
     public CreateAccountRequest(string country, string email)

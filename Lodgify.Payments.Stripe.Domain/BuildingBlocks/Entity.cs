@@ -1,4 +1,6 @@
-﻿namespace Lodgify.Payments.Stripe.Domain.BuildingBlocks;
+﻿using System;
+
+namespace Lodgify.Payments.Stripe.Domain.BuildingBlocks;
 
 public abstract class Entity : IEquatable<Entity>
 {

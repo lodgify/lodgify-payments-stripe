@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lodgify.Payments.Stripe.Api
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lodgify.Payments.Stripe.Metrics", "Lodgify.Payments.Stripe.Metrics\Lodgify.Payments.Stripe.Metrics.csproj", "{EA1D9949-EFCD-4A5E-A46D-5C06080DD91D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lodgify.Payments.Stripe.Domain.UnitTests", "Lodgify.Payments.Stripe.Domain.UnitTests\Lodgify.Payments.Stripe.Domain.UnitTests.csproj", "{8477C719-E184-47E9-BCFF-DF3014459F2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,11 +84,16 @@ Global
 		{EA1D9949-EFCD-4A5E-A46D-5C06080DD91D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA1D9949-EFCD-4A5E-A46D-5C06080DD91D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA1D9949-EFCD-4A5E-A46D-5C06080DD91D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8477C719-E184-47E9-BCFF-DF3014459F2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8477C719-E184-47E9-BCFF-DF3014459F2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8477C719-E184-47E9-BCFF-DF3014459F2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8477C719-E184-47E9-BCFF-DF3014459F2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B137ACB3-B364-4175-B1EF-D046542ACB6C} = {9500657B-73F5-457F-82D9-87633451B299}
+		{8477C719-E184-47E9-BCFF-DF3014459F2A} = {9500657B-73F5-457F-82D9-87633451B299}
 	EndGlobalSection
 EndGlobal

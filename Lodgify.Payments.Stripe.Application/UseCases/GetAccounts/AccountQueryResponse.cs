@@ -2,5 +2,4 @@
 
 namespace Lodgify.Payments.Stripe.Application.UseCases.GetAccounts;
 
-[ExcludeFromCodeCoverage]
 public record AccountQueryResponse(string StripeAccountId, bool ChargesEnabled, bool DetailsSubmitted);

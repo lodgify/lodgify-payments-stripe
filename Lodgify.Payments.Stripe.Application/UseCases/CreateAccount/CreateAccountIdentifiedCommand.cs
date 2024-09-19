@@ -3,7 +3,7 @@ using Lodgify.Payments.Stripe.Application.BuildingBlocks;
 
 namespace Lodgify.Payments.Stripe.Application.UseCases.CreateAccount;
 
-public sealed record CreateAccountCommand(string Country, string Email) : ICommand<CreateAccountCommandResponse>
+public sealed record CreateAccountIdentifiedCommand(string Country, string Email) : IIdentifiedCommand<CreateAccountCommandResponse>
 {
     public LodgifyAccount Account { get; set; } = null!;
 }
