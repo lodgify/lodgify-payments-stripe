@@ -52,7 +52,7 @@ public class WebhooksController : Controller
             }
             return Ok();
         }
-        catch (StripeException)
+        catch (StripeException e)
         {
             _logger.LogError(e, "Error handling Stripe event");
             return BadRequest();
