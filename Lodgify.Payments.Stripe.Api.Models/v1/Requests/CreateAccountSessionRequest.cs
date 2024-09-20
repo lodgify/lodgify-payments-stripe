@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Lodgify.Payments.Stripe.Api.Models.Requests;
+﻿namespace Lodgify.Payments.Stripe.Api.Models.v1.Requests;
 
 public class CreateAccountSessionRequest
 {

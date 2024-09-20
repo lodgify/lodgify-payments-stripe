@@ -1,6 +1,6 @@
 ﻿using Lodgify.Authentication.Constants;
-using Lodgify.Payments.Stripe.Api.Models.Requests;
-using Lodgify.Payments.Stripe.Api.Models.Responses;
+using Lodgify.Payments.Stripe.Api.Models.v1.Requests;
+using Lodgify.Payments.Stripe.Api.Models.v1.Responses;
 using Lodgify.Payments.Stripe.Application.UseCases.CreateAccount;
 using Lodgify.Payments.Stripe.Application.UseCases.GetAccounts;
 using Mapster;
@@ -8,7 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Lodgify.Payments.Stripe.Server.Controllers;
+namespace Lodgify.Payments.Stripe.Server.Controllers.v1;
 
 [Authorize(nameof(LodgifyAuthPolicies.AnySubscribed))]
 [ApiController]

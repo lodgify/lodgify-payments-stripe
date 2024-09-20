@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using System.Text.Json;
 using Lodgify.Payments.Stripe.Application.UseCases.UpdateAccount;
 using Lodgify.Payments.Stripe.Infrastructure.Settings;
 using MediatR;
@@ -7,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Stripe;
 
-namespace Lodgify.Payments.Stripe.Server.Controllers.External;
+namespace Lodgify.Payments.Stripe.Server.Controllers.v1.External;
 
 [ApiController]
-[Route("external/webhooks/stripe")]
+[Route("api/v1/external/webhooks/stripe")]
 public class WebhooksController : Controller
 {
     private readonly ISender _mediatorSender;

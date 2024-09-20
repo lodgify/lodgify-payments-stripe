@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Lodgify.Architecture.HttpClient.Attributes;
-using Lodgify.Payments.Stripe.Api.Models.Requests;
-using Lodgify.Payments.Stripe.Api.Models.Responses;
+using Lodgify.Payments.Stripe.Api.Models.v1.Requests;
+using Lodgify.Payments.Stripe.Api.Models.v1.Responses;
 using Lodgify.Payments.Stripe.Client.Constans;
 
 namespace Lodgify.Payments.Stripe.Client;
