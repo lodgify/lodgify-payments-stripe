@@ -12,7 +12,7 @@
     <PropertyGroup>
         <IsPackable>true</IsPackable>
         <PackageId>Lodgify.Payments.Stripe.Api.Models</PackageId>
-        <VersionPrefix>1.1.0</VersionPrefix>
+        <VersionPrefix>1.2.0</VersionPrefix>
         <VersionSuffix>$(VersionSuffix)</VersionSuffix>
         <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
         <FileVersion>$(VersionPrefix)</FileVersion>
@@ -32,6 +32,10 @@
 
     <ItemGroup>
         <None Include="..\lodgify-icon.png" Pack="true" Visible="false" PackagePath="\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="v1\" />
     </ItemGroup>
 
 </Project>

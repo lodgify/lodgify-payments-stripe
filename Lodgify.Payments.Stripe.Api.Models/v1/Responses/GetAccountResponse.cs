@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
-namespace Lodgify.Payments.Stripe.Api.Models.Responses;
+namespace Lodgify.Payments.Stripe.Api.Models.v1.Responses;
 
 public class GetAccountsResponse
 {
