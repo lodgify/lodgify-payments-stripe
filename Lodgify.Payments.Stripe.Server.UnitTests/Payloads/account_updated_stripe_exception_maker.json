@@ -1,0 +1,200 @@
+﻿{
+  "id": "evt_1Q3m8eFVr5qq4aSNLqbNZOXq",
+  "object": "event",
+  "account": "",
+  "api_version": "",
+  "created": 1727474148,
+  "data": {
+    "object": {
+      "id": "",
+      "object": "account",
+      "business_profile": {
+        "annual_revenue": null,
+        "estimated_worker_count": null,
+        "mcc": "5734",
+        "name": null,
+        "support_address": null,
+        "support_email": null,
+        "support_phone": "+34612323232",
+        "support_url": null,
+        "url": "www.lod.com"
+      },
+      "capabilities": {
+        "bancontact_payments": "active",
+        "card_payments": "active",
+        "eps_payments": "active",
+        "giropay_payments": "inactive",
+        "transfers": "active"
+      },
+      "charges_enabled": true,
+      "controller": {
+        "type": "application",
+        "fees": {
+          "payer": "application"
+        },
+        "is_controller": true,
+        "losses": {
+          "payments": "stripe"
+        },
+        "requirement_collection": "stripe",
+        "stripe_dashboard": {
+          "type": "none"
+        }
+      },
+      "country": "ES",
+      "default_currency": "eur",
+      "details_submitted": true,
+      "email": "milosh.sjeklokja+pay1@lodgify.com",
+      "payouts_enabled": true,
+      "settings": {
+        "bacs_debit_payments": {
+          "display_name": null,
+          "service_user_number": null
+        },
+        "branding": {
+          "icon": null,
+          "logo": null,
+          "primary_color": null,
+          "secondary_color": null
+        },
+        "card_issuing": {
+          "tos_acceptance": {
+            "date": null,
+            "ip": null
+          }
+        },
+        "card_payments": {
+          "statement_descriptor_prefix": null,
+          "statement_descriptor_prefix_kanji": null,
+          "statement_descriptor_prefix_kana": null,
+          "decline_on": {
+            "avs_failure": false,
+            "cvc_failure": false
+          }
+        },
+        "dashboard": {
+          "display_name": "Lod",
+          "timezone": "Etc/UTC"
+        },
+        "invoices": {
+          "default_account_tax_ids": null
+        },
+        "payments": {
+          "statement_descriptor": "WWW.LOD.COM",
+          "statement_descriptor_kana": null,
+          "statement_descriptor_kanji": null
+        },
+        "sepa_debit_payments": {
+        },
+        "payouts": {
+          "debit_negative_balances": true,
+          "schedule": {
+            "delay_days": 7,
+            "interval": "daily"
+          },
+          "statement_descriptor": null
+        }
+      },
+      "type": "none",
+      "created": 1727446970,
+      "external_accounts": {
+        "object": "list",
+        "data": [
+          {
+            "id": "ba_1Q3fDbFVr5qq4aSNDaPrx4ip",
+            "object": "bank_account",
+            "account": "acct_1Q3f4IFVr5qq4aSN",
+            "account_holder_name": null,
+            "account_holder_type": null,
+            "account_type": null,
+            "available_payout_methods": [
+              "standard"
+            ],
+            "bank_name": "STRIPE TEST BANK",
+            "country": "ES",
+            "currency": "eur",
+            "default_for_currency": true,
+            "fingerprint": "AXvRraCqVi6LcR0V",
+            "future_requirements": {
+              "currently_due": [
+              ],
+              "errors": [
+              ],
+              "past_due": [
+              ],
+              "pending_verification": [
+              ]
+            },
+            "last4": "7890",
+            "metadata": {
+            },
+            "requirements": {
+              "currently_due": [
+              ],
+              "errors": [
+              ],
+              "past_due": [
+              ],
+              "pending_verification": [
+              ]
+            },
+            "routing_number": "110000000",
+            "status": "new"
+          }
+        ],
+        "has_more": false,
+        "total_count": 1,
+        "url": "/v1/accounts/acct_1Q3f4IFVr5qq4aSN/external_accounts"
+      },
+      "future_requirements": {
+        "alternatives": [
+        ],
+        "current_deadline": null,
+        "currently_due": [
+        ],
+        "disabled_reason": null,
+        "errors": [
+        ],
+        "eventually_due": [
+        ],
+        "past_due": [
+        ],
+        "pending_verification": [
+        ]
+      },
+      "metadata": {
+      },
+      "requirements": {
+        "alternatives": [
+        ],
+        "current_deadline": null,
+        "currently_due": [
+        ],
+        "disabled_reason": null,
+        "errors": [
+        ],
+        "eventually_due": [
+        ],
+        "past_due": [
+        ],
+        "pending_verification": [
+        ]
+      },
+      "tos_acceptance": {
+        "date": 1727447583
+      }
+    },
+    "previous_attributes": {
+      "capabilities": {
+        "giropay_payments": null
+      }
+    }
+  },
+  "livemode": false,
+  "pending_webhooks": 2,
+  "request": {
+    "id": null,
+    "idempotency_key": null
+  },
+  "type": "account.updated"
+}
