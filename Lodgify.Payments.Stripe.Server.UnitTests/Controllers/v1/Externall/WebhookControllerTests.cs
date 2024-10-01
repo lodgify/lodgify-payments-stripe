@@ -112,6 +112,7 @@ public class WebhookControllerTests
         };
 
         // Act && Assert
-        await Assert.ThrowsAsync<NotSupportedException>(() => _controller.HandleEvent(CancellationToken.None));
+        Func<Task> act = async () => await _controller.HandleEvent(CancellationToken.None);
+        await act.Should().ThrowAsync<NotSupportedException>();
     }
 }
