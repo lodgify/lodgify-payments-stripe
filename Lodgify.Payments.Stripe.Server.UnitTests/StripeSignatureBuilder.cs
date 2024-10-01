@@ -1,4 +1,4 @@
-﻿namespace Lodgify.Payments.Stripe.Shared;
+﻿namespace Lodgify.Payments.Stripe.Server.UnitTests;
 
 public static class StripeSignatureBuilder
 {

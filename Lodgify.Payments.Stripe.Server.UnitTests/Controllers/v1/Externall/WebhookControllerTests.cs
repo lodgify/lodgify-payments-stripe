@@ -1,9 +1,9 @@
 using System.Text;
+using FluentAssertions;
 using Lodgify.Payments.Stripe.Application.UseCases.UpdateAccount;
 using Lodgify.Payments.Stripe.Infrastructure.Settings;
 using Lodgify.Payments.Stripe.Server.Controllers.v1.External;
 using Lodgify.Payments.Stripe.Server.UnitTests.Payloads;
-using Lodgify.Payments.Stripe.Shared;
 using Lodgify.Payments.Stripe.Shared.Payloads;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -11,10 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NSubstitute;
-
-namespace Lodgify.Payments.Stripe.Server.UnitTests;
-
 using Xunit;
+
+namespace Lodgify.Payments.Stripe.Server.UnitTests.Controllers.v1.Externall;
 
 public class WebhookControllerTests
 {
@@ -45,8 +44,9 @@ public class WebhookControllerTests
         var result = await _controller.HandleEvent(CancellationToken.None);
 
         // Assert
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal("Stripe-Signature Header is missing", badRequestResult.Value);
+        result.Should().BeAssignableTo<BadRequestObjectResult>();
+        var badRequestResult = (BadRequestObjectResult)result;
+        badRequestResult.Value.Should().Be("Stripe-Signature Header is missing");
     }
 
     [Fact]
@@ -68,7 +68,7 @@ public class WebhookControllerTests
         var result = await _controller.HandleEvent(CancellationToken.None);
 
         // Assert
-        Assert.IsType<OkResult>(result);
+        result.Should().BeAssignableTo<OkResult>();
         await _mediatorSenderMock.Received(1).Send(Arg.Any<AccountUpdatedCommand>(), Arg.Any<CancellationToken>());
     }
 
@@ -92,7 +92,7 @@ public class WebhookControllerTests
 
 
         // Assert
-        Assert.IsType<BadRequestResult>(result);
+        result.Should().BeAssignableTo<BadRequestResult>();
         await _mediatorSenderMock.DidNotReceive().Send(Arg.Any<AccountUpdatedCommand>(), Arg.Any<CancellationToken>());
     }
 

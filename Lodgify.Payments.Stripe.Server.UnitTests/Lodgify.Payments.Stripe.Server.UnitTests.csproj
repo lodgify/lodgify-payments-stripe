@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="6.12.1" />
         <PackageReference Include="MediatR" Version="12.4.1" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
@@ -29,7 +30,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Lodgify.Payments.Stripe.Server\Lodgify.Payments.Stripe.Server.csproj" />
-      <ProjectReference Include="..\Lodgify.Payments.Stripe.Shared\Lodgify.Payments.Stripe.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
