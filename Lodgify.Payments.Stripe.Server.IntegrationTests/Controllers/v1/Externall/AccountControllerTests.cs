@@ -24,12 +24,12 @@ public class AccountControllerTests : BaseIntegrationTest
     public async Task Get_ShouldReturnOk_WhenAccountsAvailable()
     {
         //Arrange
-        const int userId = 1;
-        var account = PredefinedMocks.AccountMock.Create(userId);
+        const int accountId = 1;
+        var account = PredefinedMocks.AccountMock.Create(accountId);
         await Insert(account);
 
         //Act
-        var response = await GetAsync(1, RequestBaseUrl);
+        var response = await GetAsync(accountId, RequestBaseUrl);
 
         // Assert
         response.IsSuccessStatusCode.Should().BeTrue();
@@ -39,10 +39,11 @@ public class AccountControllerTests : BaseIntegrationTest
     public async Task Post_ShouldReturnOk_And_HistoryShouldBeCreated_WhenAccountsWasCreated()
     {
         //Arrange
+        const int accountId = 1;
         await UseMockMapping(WiremockMappings.StripeMappings.CreateAccount);
 
         //Act
-        var response = await PostAsync(1, RequestBaseUrl, new CreateAccountRequest(PredefinedMocks.CountryMock.Us, PredefinedMocks.EmailMock.User1));
+        var response = await PostAsync(accountId, RequestBaseUrl, new CreateAccountRequest(PredefinedMocks.CountryMock.Us, PredefinedMocks.EmailMock.User1));
 
         // Assert
         response.IsSuccessStatusCode.Should().BeTrue();
