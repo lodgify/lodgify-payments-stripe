@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Lodgify.Payments.Stripe.Application.Transactions;
+﻿using Lodgify.Payments.Stripe.Application.Transactions;
 using Lodgify.Payments.Stripe.Domain.AccountHistories.Contracts;
 using Lodgify.Payments.Stripe.Domain.Accounts.Contracts;
 using Lodgify.Payments.Stripe.Domain.AccountSessions.Contracts;
@@ -7,11 +6,11 @@ using Lodgify.Payments.Stripe.Domain.WebhookEvents.Contracts;
 using Lodgify.Payments.Stripe.Infrastructure.Migrator;
 using Lodgify.Payments.Stripe.Infrastructure.Migrator.Contracts;
 using Lodgify.Payments.Stripe.Infrastructure.Repositories;
+using Lodgify.Payments.Stripe.Infrastructure.Services;
 using Lodgify.Payments.Stripe.Infrastructure.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using StripeClient = Lodgify.Payments.Stripe.Infrastructure.Services.StripeClient;
 
 namespace Lodgify.Payments.Stripe.Infrastructure;
 
@@ -31,7 +30,7 @@ public static class InfrastructureDependencyRegistration
         
         services.Configure<StripeSettings>(options => config.GetSection("StripeSettings").Bind(options));
 
-        services.AddScoped<Lodgify.Payments.Stripe.Application.Services.IStripeClient, StripeClient>();
+        services.AddScoped<Lodgify.Payments.Stripe.Application.Services.IStripeGatewayClient, StripeGatewayClient>();
         services.AddScoped<IDatabaseMigrator, PaymentMigrator>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IAccountSessionRepository, AccountSessionRepository>();

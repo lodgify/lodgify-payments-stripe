@@ -31,3 +31,8 @@ finally
 {
     LogManager.Shutdown();
 }
+
+namespace Lodgify.Payments.Stripe.Server
+{
+    public partial class Program { }
+}

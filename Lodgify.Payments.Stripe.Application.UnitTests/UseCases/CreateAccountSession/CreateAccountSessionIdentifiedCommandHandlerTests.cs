@@ -1,5 +1,6 @@
 ﻿using Lodgify.Extensions.Primitives.Identity;
 using Lodgify.Payments.Stripe.Application.BuildingBlocks;
+using Lodgify.Payments.Stripe.Application.Services;
 using Lodgify.Payments.Stripe.Application.Transactions;
 using Lodgify.Payments.Stripe.Application.UseCases.CreateAccountSession;
 using Lodgify.Payments.Stripe.Domain.Accounts.Contracts;
@@ -8,13 +9,12 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Stripe;
 using AccountSession = Lodgify.Payments.Stripe.Domain.AccountSessions.AccountSession;
-using IStripeClient = Lodgify.Payments.Stripe.Application.Services.IStripeClient;
 
 namespace Lodgify.Payments.Stripe.Application.UnitTests.UseCases.CreateAccountSession;
 
 public class CreateAccountSessionIdentifiedCommandHandlerTests
 {
-    private readonly IStripeClient _stripeClient;
+    private readonly IStripeGatewayClient _stripeGatewayClient;
     private readonly IAccountRepository _accountRepository;
     private readonly IAccountSessionRepository _sessionAccountRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -22,11 +22,11 @@ public class CreateAccountSessionIdentifiedCommandHandlerTests
 
     public CreateAccountSessionIdentifiedCommandHandlerTests()
     {
-        _stripeClient = Substitute.For<IStripeClient>();
+        _stripeGatewayClient = Substitute.For<IStripeGatewayClient>();
         _accountRepository = Substitute.For<IAccountRepository>();
         _sessionAccountRepository = Substitute.For<IAccountSessionRepository>();
         _unitOfWork = Substitute.For<IUnitOfWork>();
-        _handler = new CreateAccountSessionIdentifiedCommandHandler(_stripeClient, _accountRepository, _sessionAccountRepository, _unitOfWork);
+        _handler = new CreateAccountSessionIdentifiedCommandHandler(_stripeGatewayClient, _accountRepository, _sessionAccountRepository, _unitOfWork);
     }
 
     [Fact]
@@ -39,7 +39,7 @@ public class CreateAccountSessionIdentifiedCommandHandlerTests
         _accountRepository.QueryAccountUserIdAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(request.Account.UserId);
 
-        _stripeClient.CreateAccountSessionAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+        _stripeGatewayClient.CreateAccountSessionAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(account);
 
         // Act
@@ -74,7 +74,7 @@ public class CreateAccountSessionIdentifiedCommandHandlerTests
         _accountRepository.QueryAccountUserIdAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(request.Account.UserId);
 
-        _stripeClient.CreateAccountSessionAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+        _stripeGatewayClient.CreateAccountSessionAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Throws(new StripeException("Error creating account session"));
 
         // Act and Assert

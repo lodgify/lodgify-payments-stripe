@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Lodgify.Payments.Stripe.Domain.AccountHistories;
+﻿using Lodgify.Payments.Stripe.Domain.AccountHistories;
 using Lodgify.Payments.Stripe.Domain.AccountHistories.Contracts;
 
 namespace Lodgify.Payments.Stripe.Infrastructure.Repositories;

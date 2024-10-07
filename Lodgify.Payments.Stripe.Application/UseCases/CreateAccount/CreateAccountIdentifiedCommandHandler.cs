@@ -10,15 +10,15 @@ namespace Lodgify.Payments.Stripe.Application.UseCases.CreateAccount;
 
 public class CreateAccountIdentifiedCommandHandler : IIdentifiedCommandHandler<CreateAccountIdentifiedCommand, CreateAccountCommandResponse>
 {
-    private readonly IStripeClient _stripeClient;
+    private readonly IStripeGatewayClient _stripeGatewayClient;
     private readonly IAccountRepository _accountRepository;
     private readonly IAccountHistoryRepository _accountHistoryRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateAccountIdentifiedCommandHandler(IStripeClient stripeClient, IAccountRepository accountRepository, IAccountHistoryRepository accountHistoryRepository, IUnitOfWork unitOfWork)
+    public CreateAccountIdentifiedCommandHandler(IStripeGatewayClient stripeGatewayClient, IAccountRepository accountRepository, IAccountHistoryRepository accountHistoryRepository, IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-        _stripeClient = stripeClient ?? throw new ArgumentNullException(nameof(stripeClient));
+        _stripeGatewayClient = stripeGatewayClient ?? throw new ArgumentNullException(nameof(stripeGatewayClient));
         _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
         _accountHistoryRepository = accountHistoryRepository ?? throw new ArgumentNullException(nameof(accountHistoryRepository));
     }
@@ -29,7 +29,7 @@ public class CreateAccountIdentifiedCommandHandler : IIdentifiedCommandHandler<C
 
         try
         {
-            var account = await _stripeClient.CreateAccountAsync(request.Account.UserId, request.Country, request.Email, cancellationToken);
+            var account = await _stripeGatewayClient.CreateAccountAsync(request.Account.UserId, request.Country, request.Email, cancellationToken);
 
             await _accountRepository.AddAccountAsync(account, cancellationToken);
             

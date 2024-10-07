@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Lodgify.Extensions.Primitives.Identity;
+using Lodgify.Payments.Stripe.Application.Services;
 using Lodgify.Payments.Stripe.Application.Transactions;
 using Lodgify.Payments.Stripe.Application.UseCases.CreateAccount;
 using Lodgify.Payments.Stripe.Domain.AccountHistories;
@@ -8,13 +9,12 @@ using Lodgify.Payments.Stripe.Domain.Accounts.Contracts;
 using NSubstitute;
 using Stripe;
 using Account = Lodgify.Payments.Stripe.Domain.Accounts.Account;
-using IStripeClient = Lodgify.Payments.Stripe.Application.Services.IStripeClient;
 
 namespace Lodgify.Payments.Stripe.Application.UnitTests.UseCases.CreateAccount;
 
 public class CreateAccountIdentifiedCommandHandlerTests
 {
-    private readonly IStripeClient _stripeClient;
+    private readonly IStripeGatewayClient _stripeGatewayClient;
     private readonly IAccountRepository _accountRepository;
     private readonly IAccountHistoryRepository _accountHistoryRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -22,11 +22,11 @@ public class CreateAccountIdentifiedCommandHandlerTests
 
     public CreateAccountIdentifiedCommandHandlerTests()
     {
-        _stripeClient = Substitute.For<IStripeClient>();
+        _stripeGatewayClient = Substitute.For<IStripeGatewayClient>();
         _accountRepository = Substitute.For<IAccountRepository>();
         _accountHistoryRepository = Substitute.For<IAccountHistoryRepository>();
         _unitOfWork = Substitute.For<IUnitOfWork>();
-        _handler = new CreateAccountIdentifiedCommandHandler(_stripeClient, _accountRepository, _accountHistoryRepository, _unitOfWork);
+        _handler = new CreateAccountIdentifiedCommandHandler(_stripeGatewayClient, _accountRepository, _accountHistoryRepository, _unitOfWork);
     }
 
     private (CreateAccountIdentifiedCommandHandler handler, CreateAccountIdentifiedCommand request, CancellationToken cancellationToken) CreateHandlerAndDependencies()
@@ -42,14 +42,14 @@ public class CreateAccountIdentifiedCommandHandlerTests
         var accountCreatedAt = DateTime.UtcNow;
         var (handler, request, cancellationToken) = CreateHandlerAndDependencies();
         var account = Account.Create(request.Account.UserId, "test@example.com", "acct_123", "application", "application", "stripe", "collection", "none", false, false, accountCreatedAt);
-        _stripeClient.CreateAccountAsync(request.Account.UserId, "US", "test@example.com", Arg.Any<CancellationToken>())
+        _stripeGatewayClient.CreateAccountAsync(request.Account.UserId, "US", "test@example.com", Arg.Any<CancellationToken>())
             .Returns(account);
 
         // Act
         var response = await handler.Handle(request, cancellationToken);
 
         // Assert
-        await _stripeClient.Received(1).CreateAccountAsync(request.Account.UserId, request.Country, request.Email, cancellationToken);
+        await _stripeGatewayClient.Received(1).CreateAccountAsync(request.Account.UserId, request.Country, request.Email, cancellationToken);
         await _accountRepository.Received(1).AddAccountAsync(account, cancellationToken);
         await _accountHistoryRepository.Received(2).AddAsync(Arg.Any<AccountHistory>(), cancellationToken);
         await _unitOfWork.Received(1).CommitAsync(cancellationToken);
@@ -61,7 +61,7 @@ public class CreateAccountIdentifiedCommandHandlerTests
     {
         // Arrange
         var (handler, request, cancellationToken) = CreateHandlerAndDependencies();
-        _stripeClient.When(s => s.CreateAccountAsync(1, "US", "test@example.com", CancellationToken.None))
+        _stripeGatewayClient.When(s => s.CreateAccountAsync(1, "US", "test@example.com", CancellationToken.None))
             .Throw(new StripeException("Error"));
 
         // Act
