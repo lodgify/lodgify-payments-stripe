@@ -20,7 +20,11 @@ public static class HostingExtensions
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder, IHostEnvironment hostEnvironment)
     {
-        builder.Configuration.AddJsonLodgifyConfiguration(ConfigurationFileType.Json);
+        if (!builder.Environment.IsEnvironment("Tests"))
+        {
+            builder.Configuration.AddJsonLodgifyConfiguration(ConfigurationFileType.Json);
+        }
+       
         builder.Configuration.AddJsonFile("appsettings.json");
         if (builder.Environment.IsDevelopment())
             builder.Configuration.AddJsonFile("appsettings.Development.json", true);
@@ -33,9 +37,14 @@ public static class HostingExtensions
         builder.Services.AddTransient<UserScopeMiddleware>();
         builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
-        builder.Services.AddLodgifyAuthentication(
-            builder.Configuration.GetValue<string>("identity:baseUrl")!,
-            builder.Configuration);
+        if (!builder.Environment.IsEnvironment("Tests"))
+        {
+            builder.Services.AddLodgifyAuthentication(
+                builder.Configuration.GetValue<string>("identity:baseUrl")!,
+                builder.Configuration);
+        }
+
+
         builder.Services.AddLodgifyAuthorization();
         //needed to properly resolve PropertyOwnerId and SubOwnerId from the impersonated request (request from backend client)
         builder.Services.AddLodgifyImpersonation();

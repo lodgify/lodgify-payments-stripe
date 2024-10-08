@@ -10,15 +10,15 @@ namespace Lodgify.Payments.Stripe.Application.UseCases.CreateAccountSession;
 
 public class CreateAccountSessionIdentifiedCommandHandler : IIdentifiedCommandHandler<CreateAccountSessionIdentifiedCommand, CreateAccountSessionCommandResponse>
 {
-    private readonly IStripeClient _stripeClient;
+    private readonly IStripeGatewayClient _stripeGatewayClient;
     private readonly IAccountRepository _accountRepository;
     private readonly IAccountSessionRepository _sessionAccountRepository;
     private readonly IUnitOfWork _unitOfWork;
 
 
-    public CreateAccountSessionIdentifiedCommandHandler(IStripeClient stripeClient, IAccountRepository accountRepository, IAccountSessionRepository sessionAccountRepository, IUnitOfWork unitOfWork)
+    public CreateAccountSessionIdentifiedCommandHandler(IStripeGatewayClient stripeGatewayClient, IAccountRepository accountRepository, IAccountSessionRepository sessionAccountRepository, IUnitOfWork unitOfWork)
     {
-        _stripeClient = stripeClient ?? throw new ArgumentNullException(nameof(stripeClient));
+        _stripeGatewayClient = stripeGatewayClient ?? throw new ArgumentNullException(nameof(stripeGatewayClient));
         _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
         _sessionAccountRepository = sessionAccountRepository ?? throw new ArgumentNullException(nameof(sessionAccountRepository));
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
@@ -32,7 +32,7 @@ public class CreateAccountSessionIdentifiedCommandHandler : IIdentifiedCommandHa
         {
             BusinessRule.CheckRule(new UserIdMustBeTheSameRule(request.Account.UserId, await _accountRepository.QueryAccountUserIdAsync(request.StripeAccountId, cancellationToken)));
 
-            var account = await _stripeClient.CreateAccountSessionAsync(request.StripeAccountId, cancellationToken);
+            var account = await _stripeGatewayClient.CreateAccountSessionAsync(request.StripeAccountId, cancellationToken);
 
             await _sessionAccountRepository.AddAccountAsync(account, cancellationToken);
             await _unitOfWork.CommitAsync(cancellationToken);

@@ -1,16 +1,15 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Lodgify.Payments.Stripe.Infrastructure.Settings;
+﻿using Lodgify.Payments.Stripe.Infrastructure.Settings;
 using Microsoft.Extensions.Options;
 using Stripe;
 using AccountSession = Lodgify.Payments.Stripe.Domain.AccountSessions.AccountSession;
 
 namespace Lodgify.Payments.Stripe.Infrastructure.Services;
 
-public class StripeClient : Lodgify.Payments.Stripe.Application.Services.IStripeClient
+public class StripeGatewayClient : Lodgify.Payments.Stripe.Application.Services.IStripeGatewayClient
 {
-    public StripeClient(IOptions<StripeSettings> stripeSettings)
+    public StripeGatewayClient(IOptions<StripeSettings> stripeSettings)
     {
-        StripeConfiguration.ApiKey = stripeSettings.Value.ApiKey;
+        StripeConfiguration.StripeClient = new StripeClient(apiBase: stripeSettings.Value.ApiBase, apiKey: stripeSettings.Value.ApiKey);
     }
 
     public async Task<Lodgify.Payments.Stripe.Domain.Accounts.Account> CreateAccountAsync(int userId, string country, string email, CancellationToken cancellationToken)
@@ -40,9 +39,11 @@ public class StripeClient : Lodgify.Payments.Stripe.Application.Services.IStripe
                 Transfers = new AccountCapabilitiesTransfersOptions { Requested = true }
             }
         };
+
+
         var service = new AccountService();
         var stripeAccount = await service.CreateAsync(options, cancellationToken: cancellationToken);
-        
+
         return Domain.Accounts.Account.Create(
             userId,
             email,
