@@ -1,0 +1,84 @@
+﻿{
+  "object": "account_session",
+  "account": "acct_1Q0hEfFaeO1hhNHt",
+  "client_secret": "accs_secret__Q******************************************zLKn",
+  "components": {
+    "account_management": {
+      "enabled": false,
+      "features": {
+        "external_account_collection": true
+      }
+    },
+    "account_onboarding": {
+      "enabled": true,
+      "features": {
+        "external_account_collection": true
+      }
+    },
+    "balances": {
+      "enabled": false,
+      "features": {
+        "edit_payout_schedule": false,
+        "external_account_collection": false,
+        "instant_payouts": false,
+        "standard_payouts": false
+      }
+    },
+    "documents": {
+      "enabled": false,
+      "features": {
+      }
+    },
+    "notification_banner": {
+      "enabled": false,
+      "features": {
+        "external_account_collection": true
+      }
+    },
+    "payment_details": {
+      "enabled": false,
+      "features": {
+        "capture_payments": true,
+        "destination_on_behalf_of_charge_management": false,
+        "dispute_management": true,
+        "refund_management": true
+      }
+    },
+    "payments": {
+      "enabled": false,
+      "features": {
+        "capture_payments": true,
+        "destination_on_behalf_of_charge_management": false,
+        "dispute_management": true,
+        "refund_management": true
+      }
+    },
+    "payouts": {
+      "enabled": false,
+      "features": {
+        "edit_payout_schedule": false,
+        "external_account_collection": false,
+        "instant_payouts": false,
+        "standard_payouts": false
+      }
+    },
+    "payouts_list": {
+      "enabled": false,
+      "features": {
+      }
+    },
+    "tax_registrations": {
+      "enabled": false,
+      "features": {
+      }
+    },
+    "tax_settings": {
+      "enabled": false,
+      "features": {
+      }
+    }
+  },
+  "expires_at": 1726740512,
+  "livemode": false,
+  "read_only": false
+}

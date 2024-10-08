@@ -42,6 +42,8 @@
     <ItemGroup>
       <None Remove="WireMock\Payloads\stripe_create_account_response.json" />
       <EmbeddedResource Include="WireMock\Payloads\stripe_create_account_response.json" />
+      <None Remove="WireMock\Payloads\stripe_create_account_session_response.json" />
+      <EmbeddedResource Include="WireMock\Payloads\stripe_create_account_session_response.json" />
     </ItemGroup>
 
 </Project>
