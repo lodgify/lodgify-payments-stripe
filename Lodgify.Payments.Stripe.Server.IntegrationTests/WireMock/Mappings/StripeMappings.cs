@@ -20,5 +20,20 @@ public static partial class WiremockMappings
                 Body = MockFileReader.ReadFile("stripe_create_account_response.json")
             }
         };
+        
+        public static readonly MappingModel CreateAccountSession = new()
+        {
+            Guid = Guid.NewGuid(),
+            Request = new RequestModel
+            {
+                Methods = new[] { "POST" },
+                Path = "//v1/account_sessions",
+            },
+            Response = new ResponseModel
+            {
+                StatusCode = 200,
+                Body = MockFileReader.ReadFile("stripe_create_account_session_response.json")
+            }
+        };
     }
 }
