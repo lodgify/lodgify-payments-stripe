@@ -1,7 +1,4 @@
 ﻿using System.Reflection;
-using Lodgify.Payments.Stripe.Domain.AccountHistories.Contracts;
-using Lodgify.Payments.Stripe.Domain.Accounts.Contracts;
-using Lodgify.Payments.Stripe.Domain.AccountSessions.Contracts;
 using Lodgify.Payments.Stripe.Infrastructure;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -36,7 +33,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         .Build();
 
     public IWireMockAdminApi WiremockClient { get; private set; }
-    internal PaymentDbContext DbContext => Services.GetRequiredService<PaymentDbContext>();
+
+    private IServiceScope _scope;
+    internal PaymentDbContext DbContext => _scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -69,10 +68,11 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
     {
         await _postgresContainer.StartAsync();
         await _wireMockContainer.StartAsync();
+        _scope = Services.CreateScope();
 
         WiremockClient = _wireMockContainer.CreateWireMockAdminClient();
 
-        await MigrateDatabaseAsync(typeof(PaymentDbContext));
+        await MigrateDatabaseAsync<PaymentDbContext>();
 
         await SeedDatabaseAsync();
     }
@@ -81,6 +81,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
     {
         await _postgresContainer.DisposeAsync();
         await _wireMockContainer.DisposeAsync();
+        _scope.Dispose();
     }
 
     private IConfiguration GetConfiguration()
@@ -99,10 +100,10 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         return integrationConfig;
     }
 
-    private async Task MigrateDatabaseAsync(Type dbContextType)
+    private async Task MigrateDatabaseAsync<TDbContext>() where TDbContext : DbContext
     {
         using var scope = Services.CreateScope();
-        var dbContext = (scope.ServiceProvider.GetRequiredService(dbContextType) as DbContext)!;
+        var dbContext = (scope.ServiceProvider.GetService(typeof(TDbContext)) as DbContext)!;
 
         var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync(CancellationToken.None);
 
