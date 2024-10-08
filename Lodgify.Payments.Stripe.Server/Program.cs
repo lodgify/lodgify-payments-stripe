@@ -3,6 +3,8 @@ using Lodgify.Extensions.Logging.NLog;
 using Lodgify.Payments.Stripe.Server.Extensions;
 using NLog;
 
+Console.WriteLine("Starting Application");
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging
@@ -20,12 +22,13 @@ try
     var app = builder
         .ConfigureServices(builder.Environment)
         .ConfigurePipeline();
-
-    app.Run();
+    
+    await app.RunAsync();
 }
 catch (Exception ex)
 {
-    logger.Fatal(ex, "Api host terminated unexpectedly");
+    Console.WriteLine($"Api host terminated unexpectedly: {ex}");
+    logger?.Fatal(ex, "Api host terminated unexpectedly");
 }
 finally
 {
