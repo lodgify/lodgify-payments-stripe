@@ -3,6 +3,8 @@ using Lodgify.Payments.Stripe.Api.Models.v1.Requests;
 using Lodgify.Payments.Stripe.Api.Models.v1.Responses;
 using Lodgify.Payments.Stripe.Domain.AccountHistories;
 using Lodgify.Payments.Stripe.Domain.Accounts;
+using Lodgify.Payments.Stripe.Server.IntegrationTests.Collections;
+using Lodgify.Payments.Stripe.Server.IntegrationTests.Configurations;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Factories;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Mocks;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
@@ -10,13 +12,14 @@ using Lodgify.Payments.Stripe.Server.IntegrationTests.WireMock.Mappings;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Controllers.v1.Externall;
+namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Controllers.v1;
 
-public class AccountControllerTests : BaseIntegrationTest
+[Collection(nameof(WireMockCollection))]
+public class WireMockAccountControllerTests : WireMockIntegration
 {
     private const string RequestBaseUrl = "api/v1/accounts";
 
-    public AccountControllerTests(CustomWebApplicationFactory factory) : base(factory)
+    public WireMockAccountControllerTests(CustomWebApplicationFactory<WireMockTestConfiguration> factory) : base(factory)
     {
     }
 

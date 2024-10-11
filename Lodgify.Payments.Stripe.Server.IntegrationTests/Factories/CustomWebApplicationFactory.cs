@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using Lodgify.Payments.Stripe.Infrastructure;
+﻿using Lodgify.Payments.Stripe.Infrastructure;
+using Lodgify.Payments.Stripe.Server.IntegrationTests.Configurations;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
@@ -19,7 +19,8 @@ using Xunit;
 
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Factories;
 
-public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
+public class CustomWebApplicationFactory<T> : WebApplicationFactory<Program>, IAsyncLifetime
+    where T : TestConfiguration
 {
     private readonly PostgreSqlContainer _postgresContainer = new PostgreSqlBuilder()
         .WithImage("postgres:12")
@@ -37,20 +38,30 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
     private IServiceScope _scope;
     internal PaymentDbContext DbContext => _scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
 
+    internal IConfiguration? Configuration;
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Tests");
         builder.ConfigureLogging(logging => { logging.ClearProviders(); });
 
-        builder.UseConfiguration(GetConfiguration());
+        var cs = _postgresContainer.GetConnectionString();
+        var wireMockUrl = _wireMockContainer.GetPublicUrl();
+
+        Configuration = typeof(T) switch
+        {
+            _ when typeof(T) == typeof(WireMockTestConfiguration) => ConfigurationFactory.GetWireMockConfiguration(cs, wireMockUrl),
+            _ => ConfigurationFactory.GetConfiguration(cs)
+        };
+        
+        builder.UseConfiguration(Configuration);
 
         builder.ConfigureTestServices(services =>
         {
             services.RemoveAll(typeof(DbContextOptions<PaymentDbContext>));
 
-            var dbConnectionString = _postgresContainer.GetConnectionString();
             services.AddDbContext<PaymentDbContext>(
-                options => options.UseNpgsql(dbConnectionString),
+                options => options.UseNpgsql(cs),
                 contextLifetime: ServiceLifetime.Scoped,
                 optionsLifetime: ServiceLifetime.Scoped);
 
@@ -63,7 +74,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         });
     }
 
-
     public async Task InitializeAsync()
     {
         await _postgresContainer.StartAsync();
@@ -73,31 +83,14 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         WiremockClient = _wireMockContainer.CreateWireMockAdminClient();
 
         await MigrateDatabaseAsync<PaymentDbContext>();
-
         await SeedDatabaseAsync();
     }
 
-    public async Task DisposeAsync()
+    public new async Task DisposeAsync()
     {
         await _postgresContainer.DisposeAsync();
         await _wireMockContainer.DisposeAsync();
         _scope.Dispose();
-    }
-
-    private IConfiguration GetConfiguration()
-    {
-        var integrationConfig = new ConfigurationBuilder()
-            .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!)
-            .AddJsonFile("appsettings.Tests.json")
-            .Build();
-
-        integrationConfig["ConnectionStrings:Postgres"] = _postgresContainer.GetConnectionString();
-
-        var wireMockUrl = _wireMockContainer.GetPublicUrl();
-        integrationConfig["Identity:BaseUrl"] = wireMockUrl;
-        integrationConfig["StripeSettings:ApiBase"] = wireMockUrl;
-
-        return integrationConfig;
     }
 
     private async Task MigrateDatabaseAsync<TDbContext>() where TDbContext : DbContext
