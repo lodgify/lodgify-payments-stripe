@@ -1,5 +1,6 @@
 ﻿using Lodgify.Payments.Stripe.Application.BuildingBlocks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Stripe;
 
 namespace Lodgify.Payments.Stripe.Server.Middlewares;
@@ -45,6 +46,22 @@ public class ExceptionHandlingMiddleware : IMiddleware
             {
                 Status = StatusCodes.Status400BadRequest,
                 Title = "Business rule validation error",
+                Detail = ex.Message,
+                Instance = context.Request.Path,
+                Extensions = new Dictionary<string, object?>()
+                {
+                    { "StackTrace", ex.StackTrace }
+                }
+            };
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            _logger.LogError(ex, "Concurrency error");
+
+            problemDetails = new ProblemDetails
+            {
+                Status = StatusCodes.Status409Conflict,
+                Title = "Concurrency error",
                 Detail = ex.Message,
                 Instance = context.Request.Path,
                 Extensions = new Dictionary<string, object?>()

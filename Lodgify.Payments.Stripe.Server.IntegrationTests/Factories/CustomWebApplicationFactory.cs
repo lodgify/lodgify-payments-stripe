@@ -33,8 +33,10 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         .Build();
 
     public IWireMockAdminApi WiremockClient { get; private set; }
-
+    
+    
     private IServiceScope _scope;
+    internal string DatabaseConnectionString;
     internal PaymentDbContext DbContext => _scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -48,9 +50,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         {
             services.RemoveAll(typeof(DbContextOptions<PaymentDbContext>));
 
-            var dbConnectionString = _postgresContainer.GetConnectionString();
+            DatabaseConnectionString = _postgresContainer.GetConnectionString();
             services.AddDbContext<PaymentDbContext>(
-                options => options.UseNpgsql(dbConnectionString),
+                options => options.UseNpgsql(DatabaseConnectionString),
                 contextLifetime: ServiceLifetime.Scoped,
                 optionsLifetime: ServiceLifetime.Scoped);
 

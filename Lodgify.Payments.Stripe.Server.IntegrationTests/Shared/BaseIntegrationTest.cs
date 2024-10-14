@@ -29,6 +29,7 @@ public abstract class BaseIntegrationTest
     private readonly IWireMockAdminApi _wireMockClient;
     private readonly CustomWebApplicationFactory _factory;
     protected DbContext DbContext => _factory.DbContext;
+    protected string DatabaseConnectionString => _factory.DatabaseConnectionString;
 
     protected BaseIntegrationTest(CustomWebApplicationFactory factory)
     {

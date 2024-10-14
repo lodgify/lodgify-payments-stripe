@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Lodgify.Payments.Stripe.Domain.Accounts;
+﻿using Lodgify.Payments.Stripe.Domain.Accounts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -22,5 +21,6 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
         builder.Property(p => p.ControllerType);
         builder.Property(p => p.ChargesEnabled);
         builder.Property(p => p.DetailsSubmitted);
+        builder.Property(p => p.Version).IsRowVersion();
     }
 }
