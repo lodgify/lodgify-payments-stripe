@@ -20,6 +20,7 @@ public class Account : Aggregate
     public DateTime ChargesEnabledSetAt { get; private set; }
     public bool DetailsSubmitted { get; private set; }
     public DateTime DetailsSubmittedSetAt { get; private set; }
+    public uint Version { get; private set; }
 
 
     private Account()
@@ -58,10 +59,10 @@ public class Account : Aggregate
             ChargesEnabledSetAt = changeRequestedAt;
             return true;
         }
-        
+
         return false;
     }
-    
+
     public bool SetDetailsSubmitted(bool detailsSubmitted, DateTime changeRequestedAt)
     {
         if (DetailsSubmittedSetAt < changeRequestedAt && DetailsSubmitted != detailsSubmitted)

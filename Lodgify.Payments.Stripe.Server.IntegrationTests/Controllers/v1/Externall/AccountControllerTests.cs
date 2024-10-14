@@ -3,11 +3,13 @@ using Lodgify.Payments.Stripe.Api.Models.v1.Requests;
 using Lodgify.Payments.Stripe.Api.Models.v1.Responses;
 using Lodgify.Payments.Stripe.Domain.AccountHistories;
 using Lodgify.Payments.Stripe.Domain.Accounts;
+using Lodgify.Payments.Stripe.Infrastructure;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Factories;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Mocks;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.WireMock.Mappings;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Controllers.v1.Externall;
@@ -53,6 +55,36 @@ public class AccountControllerTests : BaseIntegrationTest
         accountResponse.StripeAccountId.Should().NotBeNullOrEmpty();
 
         await AssertAccountHistoryCreated(accountResponse.StripeAccountId);
+    }
+
+    [Fact]
+    public async Task Should_Throw_DbUpdateConcurrencyException_On_Conflict()
+    {
+        //Arrange
+        const int accountId = 5;
+        var account = PredefinedMocks.AccountMock.Create(accountId);
+        await Insert(account);
+
+        var _dbContextOptions = new DbContextOptionsBuilder<PaymentDbContext>()
+            .UseNpgsql(DatabaseConnectionString)
+            .Options;
+
+
+        using (var context1 = new PaymentDbContext(_dbContextOptions))
+        using (var context2 = new PaymentDbContext(_dbContextOptions))
+        {
+            var account1 = await context1.Account.FirstAsync(p => p.UserId == accountId);
+            var account2 = await context2.Account.FirstAsync(p => p.UserId == accountId);
+
+            account1.SetChargesEnabled(true, DateTime.UtcNow);
+            await context1.SaveChangesAsync();
+
+            account2.SetDetailsSubmitted(true, DateTime.UtcNow);
+
+            await context2.Invoking(s => s.SaveChangesAsync())
+                .Should()
+                .ThrowAsync<DbUpdateConcurrencyException>();
+        }
     }
 
     private async Task AssertAccountHistoryCreated(string stripeAccountId)

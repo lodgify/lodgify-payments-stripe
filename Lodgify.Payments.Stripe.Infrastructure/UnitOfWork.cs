@@ -10,9 +10,9 @@ internal class UnitOfWork : IUnitOfWork
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
     }
-    
+
     public async Task CommitAsync(CancellationToken cancel)
     {
-        await _dbContext.SaveChangesAsync(cancel); 
+        await _dbContext.SaveChangesAsync(cancel);
     }
 }
