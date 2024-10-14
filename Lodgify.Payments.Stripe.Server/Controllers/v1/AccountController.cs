@@ -32,6 +32,7 @@ public class AccountController : ControllerBase
     [ProducesResponseType(typeof(CreateAccountResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
     public async Task<ActionResult<CreateAccountResponse>> CreateAccount(CreateAccountRequest request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new CreateAccountIdentifiedCommand(request.Country, request.Email), cancellationToken);
