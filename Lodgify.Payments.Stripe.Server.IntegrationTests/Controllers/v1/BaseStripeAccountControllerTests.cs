@@ -15,11 +15,11 @@ using Account = Lodgify.Payments.Stripe.Domain.Accounts.Account;
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Controllers.v1;
 
 [Collection(nameof(StripeCollection))]
-public class StripeAccountControllerTests : StripeIntegration
+public class BaseStripeAccountControllerTests : BaseStripeIntegrationTest
 {
     private const string RequestBaseUrl = "api/v1/accounts";
 
-    public StripeAccountControllerTests(CustomWebApplicationFactory<StripeTestConfiguration> factory) : base(factory)
+    public BaseStripeAccountControllerTests(TestWebApplicationFactory<StripeTestConfiguration> factory) : base(factory)
     {
     }
 
@@ -55,13 +55,13 @@ public class StripeAccountControllerTests : StripeIntegration
 
     private async Task AssertAccountCreated(string stripeAccountId)
     {
-        var account = await DbContext.Set<Account>().Where(x => x.StripeAccountId == stripeAccountId).FirstOrDefaultAsync();
+        var account = await DbContext.Set<Account>().SingleOrDefaultAsync(x => x.StripeAccountId == stripeAccountId);
         account.Should().NotBeNull();
     }
 
     private async Task AssertAccountHistoryCreated(string stripeAccountId)
     {
-        var account = await DbContext.Set<Account>().Where(x => x.StripeAccountId == stripeAccountId).FirstOrDefaultAsync();
+        var account = await DbContext.Set<Account>().SingleOrDefaultAsync(x => x.StripeAccountId == stripeAccountId);
         account.Should().NotBeNull();
 
         var accountHistories = await DbContext.Set<AccountHistory>().Where(x => x.AccountId == account.Id).ToListAsync();

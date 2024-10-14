@@ -7,11 +7,12 @@ namespace Lodgify.Payments.Stripe.Infrastructure.Services;
 
 public class StripeGatewayClient : Lodgify.Payments.Stripe.Application.Services.IStripeGatewayClient
 {
-    private readonly StripeSettings _stripeSettings;
-    public StripeGatewayClient(IOptions<StripeSettings> stripeSettings)
-    {
-        _stripeSettings = stripeSettings.Value ?? throw new ArgumentNullException(nameof(stripeSettings));
-    }
+    private readonly StripeClient _stripeClient;
+   public StripeGatewayClient(IOptions<StripeSettings> stripeSettings)
+{
+    var settings = stripeSettings?.Value ?? throw new ArgumentNullException(nameof(stripeSettings));
+    _stripeClient = new StripeClient(apiBase: settings.ApiBase, apiKey: settings.ApiKey);
+}
 
     public async Task<Lodgify.Payments.Stripe.Domain.Accounts.Account> CreateAccountAsync(int userId, string country, string email, CancellationToken cancellationToken)
     {
@@ -42,7 +43,7 @@ public class StripeGatewayClient : Lodgify.Payments.Stripe.Application.Services.
         };
 
 
-        var service = new AccountService(new StripeClient(apiBase: _stripeSettings.ApiBase, apiKey: _stripeSettings.ApiKey));
+        var service = new AccountService(_stripeClient);
         var stripeAccount = await service.CreateAsync(options, cancellationToken: cancellationToken);
 
         return Domain.Accounts.Account.Create(
@@ -77,7 +78,7 @@ public class StripeGatewayClient : Lodgify.Payments.Stripe.Application.Services.
                 },
             },
         };
-        var service = new AccountSessionService(new StripeClient(apiBase: _stripeSettings.ApiBase, apiKey: _stripeSettings.ApiKey));
+        var service = new AccountSessionService(_stripeClient);
         var stripeAccountSession = await service.CreateAsync(options, cancellationToken: cancellationToken);
 
         return AccountSession.Create(stripeAccountId, stripeAccountSession.ClientSecret);

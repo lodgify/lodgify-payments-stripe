@@ -15,11 +15,11 @@ using Xunit;
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Controllers.v1;
 
 [Collection(nameof(WireMockCollection))]
-public class WireMockAccountControllerTests : WireMockIntegration
+public class BaseWireMockAccountControllerTests : BaseWireMockIntegrationTest
 {
     private const string RequestBaseUrl = "api/v1/accounts";
 
-    public WireMockAccountControllerTests(CustomWebApplicationFactory<WireMockTestConfiguration> factory) : base(factory)
+    public BaseWireMockAccountControllerTests(TestWebApplicationFactory<WireMockTestConfiguration> factory) : base(factory)
     {
     }
 

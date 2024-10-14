@@ -5,4 +5,4 @@ using Xunit;
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Collections;
 
 [CollectionDefinition(nameof(StripeCollection))]
-public class StripeCollection : ICollectionFixture<CustomWebApplicationFactory<StripeTestConfiguration>>;
+public class StripeCollection : ICollectionFixture<TestWebApplicationFactory<StripeTestConfiguration>>;

@@ -13,11 +13,11 @@ using Xunit;
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Controllers.v1;
 
 [Collection(nameof(StripeCollection))]
-public class StripeAccountSessionControllerTests : StripeIntegration
+public class BaseStripeAccountSessionControllerTests : BaseStripeIntegrationTest
 {
     private const string RequestBaseUrl = "api/v1/account-sessions";
 
-    public StripeAccountSessionControllerTests(CustomWebApplicationFactory<StripeTestConfiguration> factory) : base(factory)
+    public BaseStripeAccountSessionControllerTests(TestWebApplicationFactory<StripeTestConfiguration> factory) : base(factory)
     {
     }
 
@@ -58,7 +58,7 @@ public class StripeAccountSessionControllerTests : StripeIntegration
 
     private async Task AssertSessionAccountCreated(string stripeAccountId, string clientSecret)
     {
-        var accountSession = await DbContext.Set<Lodgify.Payments.Stripe.Domain.AccountSessions.AccountSession>().Where(x => x.StripeAccountId == stripeAccountId && x.ClientSecret == clientSecret).SingleAsync();
+        var accountSession = await DbContext.Set<Lodgify.Payments.Stripe.Domain.AccountSessions.AccountSession>().SingleOrDefaultAsync(x => x.StripeAccountId == stripeAccountId && x.ClientSecret == clientSecret);
         accountSession.Should().NotBeNull();
     }
 }

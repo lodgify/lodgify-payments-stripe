@@ -5,11 +5,11 @@ using WireMock.Client;
 
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
 
-public abstract class WireMockIntegration : BaseIntegrationTest<WireMockTestConfiguration>
+public abstract class BaseWireMockIntegrationTest : BaseIntegrationTest<WireMockTestConfiguration>
 {
     private readonly IWireMockAdminApi _wireMockClient;
 
-    public WireMockIntegration(CustomWebApplicationFactory<WireMockTestConfiguration> factory) : base(factory)
+    public BaseWireMockIntegrationTest(TestWebApplicationFactory<WireMockTestConfiguration> factory) : base(factory)
     {
         _wireMockClient = factory.WiremockClient;
     }

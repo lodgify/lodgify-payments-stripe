@@ -20,11 +20,11 @@ public abstract class BaseIntegrationTest<T> where T : TestConfiguration
     };
 
     private readonly HttpClient _httpClient;
-    protected readonly CustomWebApplicationFactory<T> _factory;
+    protected readonly TestWebApplicationFactory<T> _factory;
     protected DbContext DbContext => _factory.DbContext;
     protected IConfiguration? Configuration => _factory.Configuration;
 
-    protected BaseIntegrationTest(CustomWebApplicationFactory<T> factory)
+    protected BaseIntegrationTest(TestWebApplicationFactory<T> factory)
     {
         _factory = factory;
         _httpClient = factory.CreateClient();

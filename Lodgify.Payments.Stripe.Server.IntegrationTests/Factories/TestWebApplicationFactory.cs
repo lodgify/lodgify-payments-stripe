@@ -19,7 +19,7 @@ using Xunit;
 
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Factories;
 
-public class CustomWebApplicationFactory<T> : WebApplicationFactory<Program>, IAsyncLifetime
+public class TestWebApplicationFactory<T> : WebApplicationFactory<Program>, IAsyncLifetime
     where T : TestConfiguration
 {
     private readonly PostgreSqlContainer _postgresContainer = new PostgreSqlBuilder()
