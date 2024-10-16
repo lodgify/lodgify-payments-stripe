@@ -1,18 +1,15 @@
-﻿using Lodgify.Payments.Stripe.Server.IntegrationTests.Configurations;
-using Lodgify.Payments.Stripe.Server.IntegrationTests.Factories;
+﻿using Lodgify.Payments.Stripe.Server.IntegrationTests.Collections;
+using Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
 using WireMock.Admin.Mappings;
 using WireMock.Client;
+using Xunit;
 
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
 
-public abstract class BaseWireMockIntegrationTest : BaseIntegrationTest<WireMockTestConfiguration>
+[Collection(nameof(WireMockCollection))]
+public abstract class BaseWireMockIntegrationTest(BaseFixture fixture) : BaseIntegrationTest(fixture)
 {
-    private readonly IWireMockAdminApi _wireMockClient;
-
-    public BaseWireMockIntegrationTest(TestWebApplicationFactory<WireMockTestConfiguration> factory) : base(factory)
-    {
-        _wireMockClient = factory.WiremockClient;
-    }
+    private readonly IWireMockAdminApi _wireMockClient = fixture.WiremockClient;
 
     protected async Task UseMockMapping(MappingModel mappingModel)
     {

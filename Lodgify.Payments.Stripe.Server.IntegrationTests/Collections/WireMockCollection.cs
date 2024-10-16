@@ -1,8 +1,7 @@
-﻿using Lodgify.Payments.Stripe.Server.IntegrationTests.Configurations;
-using Lodgify.Payments.Stripe.Server.IntegrationTests.Factories;
+﻿using Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
 using Xunit;
 
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Collections;
 
 [CollectionDefinition(nameof(WireMockCollection))]
-public class WireMockCollection : ICollectionFixture<TestWebApplicationFactory<WireMockTestConfiguration>>;
+public class WireMockCollection : ICollectionFixture<WireMockFixture>;

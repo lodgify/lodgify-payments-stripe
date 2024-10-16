@@ -3,8 +3,7 @@ using Lodgify.Payments.Stripe.Api.Models.v1.Requests;
 using Lodgify.Payments.Stripe.Api.Models.v1.Responses;
 using Lodgify.Payments.Stripe.Domain.AccountHistories;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Collections;
-using Lodgify.Payments.Stripe.Server.IntegrationTests.Configurations;
-using Lodgify.Payments.Stripe.Server.IntegrationTests.Factories;
+using Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Mocks;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +14,11 @@ using Account = Lodgify.Payments.Stripe.Domain.Accounts.Account;
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Controllers.v1;
 
 [Collection(nameof(StripeCollection))]
-public class BaseStripeAccountControllerTests : BaseStripeIntegrationTest
+public class StripeAccountControllerTests : BaseStripeIntegrationTest
 {
     private const string RequestBaseUrl = "api/v1/accounts";
 
-    public BaseStripeAccountControllerTests(TestWebApplicationFactory<StripeTestConfiguration> factory) : base(factory)
+    public StripeAccountControllerTests(StripeFixture fixture) : base(fixture)
     {
     }
 
@@ -46,7 +45,7 @@ public class BaseStripeAccountControllerTests : BaseStripeIntegrationTest
 
     private async Task AssertAccountExistsInStripe(string stripeAccountId)
     {
-        var service = new AccountService(new StripeClient(apiBase: Configuration["StripeSettings:ApiBase"], apiKey: Configuration["StripeSettings:ApiKey"]));
+        var service = new AccountService(new StripeClient(apiBase: StripeApiBase, apiKey: StripeApiKey));
         var account = await service.GetAsync(stripeAccountId);
         account.Should().NotBeNull();
 

@@ -2,15 +2,13 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Lodgify.Payments.Stripe.Server.IntegrationTests.Configurations;
-using Lodgify.Payments.Stripe.Server.IntegrationTests.Factories;
+using Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Helpers;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
 
-public abstract class BaseIntegrationTest<T> where T : TestConfiguration
+public abstract class BaseIntegrationTest
 {
     private readonly JsonSerializerOptions _jsonSerializerOptions = new()
     {
@@ -20,11 +18,10 @@ public abstract class BaseIntegrationTest<T> where T : TestConfiguration
     };
 
     private readonly HttpClient _httpClient;
-    protected readonly TestWebApplicationFactory<T> _factory;
+    private readonly BaseFixture _factory;
     protected DbContext DbContext => _factory.DbContext;
-    protected IConfiguration? Configuration => _factory.Configuration;
 
-    protected BaseIntegrationTest(TestWebApplicationFactory<T> factory)
+    protected BaseIntegrationTest(BaseFixture factory)
     {
         _factory = factory;
         _httpClient = factory.CreateClient();

@@ -1,11 +1,11 @@
-﻿namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Factories;
-
+﻿using System.Reflection;
 using Microsoft.Extensions.Configuration;
-using System.Reflection;
+
+namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Configurations;
 
 public class ConfigurationFactory
 {
-    public static IConfiguration GetConfiguration(string postgresConnectionString)
+    public static IConfiguration GetDefaultConfiguration(string postgresConnectionString)
     {
         var integrationConfig = new ConfigurationBuilder()
             .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!)

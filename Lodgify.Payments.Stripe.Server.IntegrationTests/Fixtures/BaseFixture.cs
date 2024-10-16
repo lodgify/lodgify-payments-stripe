@@ -17,10 +17,9 @@ using WireMock.Client;
 using WireMock.Net.Testcontainers;
 using Xunit;
 
-namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Factories;
+namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
 
-public class TestWebApplicationFactory<T> : WebApplicationFactory<Program>, IAsyncLifetime
-    where T : TestConfiguration
+public abstract class BaseFixture : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly PostgreSqlContainer _postgresContainer = new PostgreSqlBuilder()
         .WithImage("postgres:12")
@@ -38,22 +37,20 @@ public class TestWebApplicationFactory<T> : WebApplicationFactory<Program>, IAsy
     private IServiceScope _scope;
     internal PaymentDbContext DbContext => _scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
 
-    internal IConfiguration? Configuration;
+    internal IConfiguration Configuration;
+
+     protected IConfiguration LoadStripeConfiguration() =>
+        Configuration = ConfigurationFactory.GetDefaultConfiguration(_postgresContainer.GetConnectionString());
+
+    protected IConfiguration LoadWireMockConfiguration() =>
+        Configuration = ConfigurationFactory.GetWireMockConfiguration(_postgresContainer.GetConnectionString(), _wireMockContainer.GetPublicUrl());
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Tests");
         builder.ConfigureLogging(logging => { logging.ClearProviders(); });
 
-        var cs = _postgresContainer.GetConnectionString();
-        var wireMockUrl = _wireMockContainer.GetPublicUrl();
-
-        Configuration = typeof(T) switch
-        {
-            _ when typeof(T) == typeof(WireMockTestConfiguration) => ConfigurationFactory.GetWireMockConfiguration(cs, wireMockUrl),
-            _ => ConfigurationFactory.GetConfiguration(cs)
-        };
-        
+        Configuration = ConfigurationFactory.GetDefaultConfiguration(_postgresContainer.GetConnectionString());
         builder.UseConfiguration(Configuration);
 
         builder.ConfigureTestServices(services =>
@@ -61,7 +58,7 @@ public class TestWebApplicationFactory<T> : WebApplicationFactory<Program>, IAsy
             services.RemoveAll(typeof(DbContextOptions<PaymentDbContext>));
 
             services.AddDbContext<PaymentDbContext>(
-                options => options.UseNpgsql(cs),
+                options => options.UseNpgsql(_postgresContainer.GetConnectionString()),
                 contextLifetime: ServiceLifetime.Scoped,
                 optionsLifetime: ServiceLifetime.Scoped);
 

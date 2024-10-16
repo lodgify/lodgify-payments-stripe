@@ -2,8 +2,7 @@
 using Lodgify.Payments.Stripe.Api.Models.v1.Requests;
 using Lodgify.Payments.Stripe.Api.Models.v1.Responses;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Collections;
-using Lodgify.Payments.Stripe.Server.IntegrationTests.Configurations;
-using Lodgify.Payments.Stripe.Server.IntegrationTests.Factories;
+using Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Mocks;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +12,11 @@ using Xunit;
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Controllers.v1;
 
 [Collection(nameof(StripeCollection))]
-public class BaseStripeAccountSessionControllerTests : BaseStripeIntegrationTest
+public class StripeAccountSessionControllerTests : BaseStripeIntegrationTest
 {
     private const string RequestBaseUrl = "api/v1/account-sessions";
 
-    public BaseStripeAccountSessionControllerTests(TestWebApplicationFactory<StripeTestConfiguration> factory) : base(factory)
+    public StripeAccountSessionControllerTests(StripeFixture fixture) : base(fixture)
     {
     }
 
@@ -45,7 +44,7 @@ public class BaseStripeAccountSessionControllerTests : BaseStripeIntegrationTest
 
     private async Task RemoveAccountFromStripe(string stripeAccountId)
     {
-        var service = new AccountService(new StripeClient(apiBase: Configuration["StripeSettings:ApiBase"], apiKey: Configuration["StripeSettings:ApiKey"]));
+        var service = new AccountService(new StripeClient(apiBase: StripeApiBase, apiKey: StripeApiKey));
         await service.DeleteAsync(stripeAccountId);
     }
 
