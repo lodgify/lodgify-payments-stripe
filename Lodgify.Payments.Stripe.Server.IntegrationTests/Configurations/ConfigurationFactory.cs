@@ -5,6 +5,11 @@ namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Configurations;
 
 public class ConfigurationFactory
 {
+    internal const string ApiKey = "StripeSettings:ApiKey";
+    internal const string ApiBase = "StripeSettings:ApiBase";
+    internal const string IdentityBaseUrl = "Identity:BaseUrl";
+    internal const string PostgresConnectionString = "ConnectionStrings:Postgres";
+    
     public static IConfiguration GetDefaultConfiguration(string postgresConnectionString)
     {
         var integrationConfig = new ConfigurationBuilder()
@@ -12,8 +17,8 @@ public class ConfigurationFactory
             .AddJsonFile("appsettings.Tests.json")
             .Build();
 
-        integrationConfig["ConnectionStrings:Postgres"] = postgresConnectionString;
-        integrationConfig["StripeSettings:ApiBase"] = "https://api.stripe.com";
+        integrationConfig[PostgresConnectionString] = postgresConnectionString;
+        integrationConfig[ApiBase] = "https://api.stripe.com";
 
         return integrationConfig;
     }
@@ -25,9 +30,9 @@ public class ConfigurationFactory
             .AddJsonFile("appsettings.Tests.json")
             .Build();
 
-        integrationConfig["ConnectionStrings:Postgres"] = postgresConnectionString;
-        integrationConfig["Identity:BaseUrl"] = wireMockPublicUrl;
-        integrationConfig["StripeSettings:ApiBase"] = wireMockPublicUrl;
+        integrationConfig[PostgresConnectionString] = postgresConnectionString;
+        integrationConfig[IdentityBaseUrl] = wireMockPublicUrl;
+        integrationConfig[ApiBase] = wireMockPublicUrl;
 
         return integrationConfig;
     }

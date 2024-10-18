@@ -7,7 +7,7 @@ using Xunit;
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
 
 [Collection(nameof(WireMockCollection))]
-public abstract class BaseWireMockIntegrationTest(BaseFixture fixture) : BaseIntegrationTest(fixture)
+public abstract class BaseWireMockIntegrationTest(WireMockFixture fixture) : BaseIntegrationTest(fixture)
 {
     private readonly IWireMockAdminApi _wireMockClient = fixture.WiremockClient;
 

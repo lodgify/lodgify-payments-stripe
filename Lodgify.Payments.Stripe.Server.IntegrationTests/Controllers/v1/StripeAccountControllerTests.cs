@@ -2,7 +2,6 @@
 using Lodgify.Payments.Stripe.Api.Models.v1.Requests;
 using Lodgify.Payments.Stripe.Api.Models.v1.Responses;
 using Lodgify.Payments.Stripe.Domain.AccountHistories;
-using Lodgify.Payments.Stripe.Server.IntegrationTests.Collections;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Mocks;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
@@ -13,7 +12,7 @@ using Account = Lodgify.Payments.Stripe.Domain.Accounts.Account;
 
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Controllers.v1;
 
-[Collection(nameof(StripeCollection))]
+
 public class StripeAccountControllerTests : BaseStripeIntegrationTest
 {
     private const string RequestBaseUrl = "api/v1/accounts";

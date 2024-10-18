@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Lodgify.Payments.Stripe.Api.Models.v1.Requests;
 using Lodgify.Payments.Stripe.Api.Models.v1.Responses;
-using Lodgify.Payments.Stripe.Server.IntegrationTests.Collections;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Mocks;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
@@ -11,7 +10,6 @@ using Xunit;
 
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Controllers.v1;
 
-[Collection(nameof(StripeCollection))]
 public class StripeAccountSessionControllerTests : BaseStripeIntegrationTest
 {
     private const string RequestBaseUrl = "api/v1/account-sessions";

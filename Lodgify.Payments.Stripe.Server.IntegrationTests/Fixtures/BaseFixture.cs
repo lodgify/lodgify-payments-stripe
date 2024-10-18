@@ -13,8 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Testcontainers.PostgreSql;
-using WireMock.Client;
-using WireMock.Net.Testcontainers;
 using Xunit;
 
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
@@ -29,21 +27,9 @@ public abstract class BaseFixture : WebApplicationFactory<Program>, IAsyncLifeti
         .WithPortBinding(8999, true)
         .Build();
 
-    private readonly WireMockContainer _wireMockContainer = new WireMockContainerBuilder()
-        .Build();
-
-    public IWireMockAdminApi WiremockClient { get; private set; }
-
     private IServiceScope _scope;
-    internal PaymentDbContext DbContext => _scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
-
     internal IConfiguration Configuration;
-
-     protected IConfiguration LoadStripeConfiguration() =>
-        Configuration = ConfigurationFactory.GetDefaultConfiguration(_postgresContainer.GetConnectionString());
-
-    protected IConfiguration LoadWireMockConfiguration() =>
-        Configuration = ConfigurationFactory.GetWireMockConfiguration(_postgresContainer.GetConnectionString(), _wireMockContainer.GetPublicUrl());
+    internal PaymentDbContext DbContext => _scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -71,22 +57,18 @@ public abstract class BaseFixture : WebApplicationFactory<Program>, IAsyncLifeti
         });
     }
 
-    public async Task InitializeAsync()
+    public virtual async Task InitializeAsync()
     {
         await _postgresContainer.StartAsync();
-        await _wireMockContainer.StartAsync();
         _scope = Services.CreateScope();
-
-        WiremockClient = _wireMockContainer.CreateWireMockAdminClient();
 
         await MigrateDatabaseAsync<PaymentDbContext>();
         await SeedDatabaseAsync();
     }
 
-    public new async Task DisposeAsync()
+    public new virtual async Task DisposeAsync()
     {
         await _postgresContainer.DisposeAsync();
-        await _wireMockContainer.DisposeAsync();
         _scope.Dispose();
     }
 
