@@ -2,7 +2,8 @@
 using Lodgify.Payments.Stripe.Api.Models.v1.Requests;
 using Lodgify.Payments.Stripe.Api.Models.v1.Responses;
 using Lodgify.Payments.Stripe.Domain.AccountSessions;
-using Lodgify.Payments.Stripe.Server.IntegrationTests.Factories;
+using Lodgify.Payments.Stripe.Server.IntegrationTests.Collections;
+using Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Mocks;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.WireMock.Mappings;
@@ -11,11 +12,12 @@ using Xunit;
 
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Controllers.v1;
 
-public class AccountSessionControllerTests : BaseIntegrationTest
+[Collection(nameof(WireMockCollection))]
+public class AccountSessionControllerTests : BaseWireMockIntegrationTest
 {
     private const string RequestBaseUrl = "api/v1/account-sessions";
 
-    public AccountSessionControllerTests(CustomWebApplicationFactory factory) : base(factory)
+    public AccountSessionControllerTests(WireMockFixture fixture) : base(fixture)
     {
     }
 

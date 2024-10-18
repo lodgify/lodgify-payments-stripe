@@ -11,7 +11,6 @@ public class PaymentDbContext : DbContext
 {
     public DbSet<Account> Account { get; set; }
     public DbSet<AccountSession> AccountSession { get; set; }
-
     public DbSet<WebhookEvent> WebhookEvent { get; set; }
     public DbSet<AccountHistory> AccountHistory { get; set; }
 

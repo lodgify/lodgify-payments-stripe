@@ -3,20 +3,21 @@ using Lodgify.Payments.Stripe.Api.Models.v1.Requests;
 using Lodgify.Payments.Stripe.Api.Models.v1.Responses;
 using Lodgify.Payments.Stripe.Domain.AccountHistories;
 using Lodgify.Payments.Stripe.Domain.Accounts;
-using Lodgify.Payments.Stripe.Server.IntegrationTests.Factories;
+using Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Mocks;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.WireMock.Mappings;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Controllers.v1.Externall;
+namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Controllers.v1;
 
-public class AccountControllerTests : BaseIntegrationTest
+
+public class AccountControllerTests : BaseWireMockIntegrationTest
 {
     private const string RequestBaseUrl = "api/v1/accounts";
 
-    public AccountControllerTests(CustomWebApplicationFactory factory) : base(factory)
+    public AccountControllerTests(WireMockFixture fixture) : base(fixture)
     {
     }
 

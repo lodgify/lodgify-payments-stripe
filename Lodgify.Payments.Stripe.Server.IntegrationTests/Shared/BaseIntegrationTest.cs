@@ -2,20 +2,12 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using CacheCow.Client;
-using Lodgify.Payments.Stripe.Server.IntegrationTests.Factories;
+using Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Helpers;
 using Microsoft.EntityFrameworkCore;
-using WireMock.Admin.Mappings;
-using WireMock.Client;
-using Xunit;
 
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
 
-[CollectionDefinition(nameof(PaymentsCollection))]
-public class PaymentsCollection : ICollectionFixture<CustomWebApplicationFactory>;
-
-[Collection(nameof(PaymentsCollection))]
 public abstract class BaseIntegrationTest
 {
     private readonly JsonSerializerOptions _jsonSerializerOptions = new()
@@ -26,15 +18,13 @@ public abstract class BaseIntegrationTest
     };
 
     private readonly HttpClient _httpClient;
-    private readonly IWireMockAdminApi _wireMockClient;
-    private readonly CustomWebApplicationFactory _factory;
+    private readonly BaseFixture _factory;
     protected DbContext DbContext => _factory.DbContext;
 
-    protected BaseIntegrationTest(CustomWebApplicationFactory factory)
+    protected BaseIntegrationTest(BaseFixture factory)
     {
-        _httpClient = factory.CreateDefaultClient(new CachingHandler() { });
-        _wireMockClient = factory.WiremockClient;
         _factory = factory;
+        _httpClient = factory.CreateClient();
     }
 
     private void SetAuthHeader(int accountId)
@@ -53,21 +43,16 @@ public abstract class BaseIntegrationTest
         return _httpClient.GetAsync(requestUrl);
     }
 
-    protected async Task<T?> DeserializeResponse<T>(HttpResponseMessage response)
-        where T : class
+    protected async Task<TResponse?> DeserializeResponse<TResponse>(HttpResponseMessage response)
+        where TResponse : class
     {
         var content = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<T>(content, _jsonSerializerOptions);
+        return JsonSerializer.Deserialize<TResponse>(content, _jsonSerializerOptions);
     }
 
-    protected async Task Insert<T>(T entity) where T : class
+    protected async Task Insert<TEntity>(TEntity entity) where TEntity : class
     {
         await _factory.DbContext.AddAsync(entity);
         await _factory.DbContext.SaveChangesAsync();
-    }
-
-    protected async Task UseMockMapping(MappingModel mappingModel)
-    {
-        await _wireMockClient.PostMappingAsync(mappingModel);
     }
 }

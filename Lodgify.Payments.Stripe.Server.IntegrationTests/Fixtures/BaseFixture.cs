@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using Lodgify.Payments.Stripe.Infrastructure;
+﻿using Lodgify.Payments.Stripe.Infrastructure;
+using Lodgify.Payments.Stripe.Server.IntegrationTests.Configurations;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
@@ -13,13 +13,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Testcontainers.PostgreSql;
-using WireMock.Client;
-using WireMock.Net.Testcontainers;
 using Xunit;
 
-namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Factories;
+namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
 
-public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
+public abstract class BaseFixture : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly PostgreSqlContainer _postgresContainer = new PostgreSqlBuilder()
         .WithImage("postgres:12")
@@ -29,12 +27,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         .WithPortBinding(8999, true)
         .Build();
 
-    private readonly WireMockContainer _wireMockContainer = new WireMockContainerBuilder()
-        .Build();
-
-    public IWireMockAdminApi WiremockClient { get; private set; }
-
     private IServiceScope _scope;
+    internal IConfiguration Configuration;
     internal PaymentDbContext DbContext => _scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -42,15 +36,15 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         builder.UseEnvironment("Tests");
         builder.ConfigureLogging(logging => { logging.ClearProviders(); });
 
-        builder.UseConfiguration(GetConfiguration());
+        Configuration = ConfigurationFactory.GetDefaultConfiguration(_postgresContainer.GetConnectionString());
+        builder.UseConfiguration(Configuration);
 
         builder.ConfigureTestServices(services =>
         {
             services.RemoveAll(typeof(DbContextOptions<PaymentDbContext>));
 
-            var dbConnectionString = _postgresContainer.GetConnectionString();
             services.AddDbContext<PaymentDbContext>(
-                options => options.UseNpgsql(dbConnectionString),
+                options => options.UseNpgsql(_postgresContainer.GetConnectionString()),
                 contextLifetime: ServiceLifetime.Scoped,
                 optionsLifetime: ServiceLifetime.Scoped);
 
@@ -63,41 +57,19 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         });
     }
 
-
-    public async Task InitializeAsync()
+    public virtual async Task InitializeAsync()
     {
         await _postgresContainer.StartAsync();
-        await _wireMockContainer.StartAsync();
         _scope = Services.CreateScope();
 
-        WiremockClient = _wireMockContainer.CreateWireMockAdminClient();
-
         await MigrateDatabaseAsync<PaymentDbContext>();
-
         await SeedDatabaseAsync();
     }
 
-    public async Task DisposeAsync()
+    public new virtual async Task DisposeAsync()
     {
         await _postgresContainer.DisposeAsync();
-        await _wireMockContainer.DisposeAsync();
         _scope.Dispose();
-    }
-
-    private IConfiguration GetConfiguration()
-    {
-        var integrationConfig = new ConfigurationBuilder()
-            .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!)
-            .AddJsonFile("appsettings.Tests.json")
-            .Build();
-
-        integrationConfig["ConnectionStrings:Postgres"] = _postgresContainer.GetConnectionString();
-
-        var wireMockUrl = _wireMockContainer.GetPublicUrl();
-        integrationConfig["Identity:BaseUrl"] = wireMockUrl;
-        integrationConfig["StripeSettings:ApiBase"] = wireMockUrl;
-
-        return integrationConfig;
     }
 
     private async Task MigrateDatabaseAsync<TDbContext>() where TDbContext : DbContext
