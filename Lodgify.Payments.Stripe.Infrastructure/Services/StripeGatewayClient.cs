@@ -34,6 +34,7 @@ public class StripeGatewayClient : Lodgify.Payments.Stripe.Application.Services.
                 {
                     Payer = "application",
                 },
+                RequirementCollection = "stripe",
             },
             Capabilities = new AccountCapabilitiesOptions
             {
