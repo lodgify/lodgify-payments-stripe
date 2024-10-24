@@ -24,7 +24,7 @@ public static class HostingExtensions
         {
             builder.Configuration.AddJsonLodgifyConfiguration(ConfigurationFileType.Json);
         }
-       
+
         builder.Configuration.AddJsonFile("appsettings.json");
         if (builder.Environment.IsDevelopment())
             builder.Configuration.AddJsonFile("appsettings.Development.json", true);
@@ -42,12 +42,11 @@ public static class HostingExtensions
             builder.Services.AddLodgifyAuthentication(
                 builder.Configuration.GetValue<string>("identity:baseUrl")!,
                 builder.Configuration);
+
+            builder.Services.AddLodgifyAuthorization();
+            //needed to properly resolve PropertyOwnerId and SubOwnerId from the impersonated request (request from backend client)
+            builder.Services.AddLodgifyImpersonation();
         }
-
-
-        builder.Services.AddLodgifyAuthorization();
-        //needed to properly resolve PropertyOwnerId and SubOwnerId from the impersonated request (request from backend client)
-        builder.Services.AddLodgifyImpersonation();
 
         builder.Services.AddOpenTelemetry()
             .ConfigureResource(builder => builder.AddService("lodgify-payments-stripe"))

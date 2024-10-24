@@ -13,11 +13,11 @@ namespace Lodgify.Payments.Stripe.Server.Controllers.v1;
 [Authorize(nameof(LodgifyAuthPolicies.AnySubscribed))]
 [ApiController]
 [Route("api/v1/accounts")]
-public class WireMockAccountController : ControllerBase
+public class AccountController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public WireMockAccountController(IMediator mediator)
+    public AccountController(IMediator mediator)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }

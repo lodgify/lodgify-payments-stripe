@@ -7,7 +7,6 @@ using Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Mocks;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.WireMock.Mappings;
-using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Controllers.v1;
@@ -46,7 +45,7 @@ public class AccountSessionControllerTests : BaseWireMockIntegrationTest
 
     private async Task AssertSessionAccountCreated(string stripeAccountId, string clientSecret)
     {
-        var accountSession = await DbContext.Set<AccountSession>().Where(x => x.StripeAccountId == stripeAccountId && x.ClientSecret == clientSecret).FirstAsync();
+        var accountSession = await GetFirstAsync<AccountSession>(x => x.StripeAccountId == stripeAccountId && x.ClientSecret == clientSecret);
         accountSession.Should().NotBeNull();
     }
 }

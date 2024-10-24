@@ -8,6 +8,7 @@ using Stripe;
 
 namespace Lodgify.Payments.Stripe.Server.Controllers.v1.External;
 
+
 [ApiController]
 [Route("api/v1/external/webhooks/stripe")]
 public class WebhooksController : Controller
@@ -24,7 +25,7 @@ public class WebhooksController : Controller
     }
 
     /// <summary>
-    /// Receives webhooks with updates about users, connected accounts, devices, and keycodes from Seam.
+    /// Receives webhooks with updates about account.
     /// </summary>
     [HttpPost]
     [Route("")]

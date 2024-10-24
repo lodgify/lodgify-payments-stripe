@@ -3,6 +3,7 @@ using FluentAssertions;
 using Lodgify.Payments.Stripe.Application.UseCases.UpdateAccount;
 using Lodgify.Payments.Stripe.Infrastructure.Settings;
 using Lodgify.Payments.Stripe.Server.Controllers.v1.External;
+using Lodgify.Payments.Stripe.Server.Tests.Shared;
 using Lodgify.Payments.Stripe.Server.UnitTests.Payloads;
 using Lodgify.Payments.Stripe.Shared.Payloads;
 using MediatR;

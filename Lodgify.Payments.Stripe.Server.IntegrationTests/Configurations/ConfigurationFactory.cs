@@ -7,6 +7,7 @@ public class ConfigurationFactory
 {
     internal const string ApiKey = "StripeSettings:ApiKey";
     internal const string ApiBase = "StripeSettings:ApiBase";
+    internal const string WebhookSecret = "StripeSettings:WebhookSecret";
     internal const string IdentityBaseUrl = "Identity:BaseUrl";
     internal const string PostgresConnectionString = "ConnectionStrings:Postgres";
     

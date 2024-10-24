@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Lodgify.Payments.Stripe.Infrastructure.Settings;
+﻿namespace Lodgify.Payments.Stripe.Infrastructure.Settings;
 
 public record StripeSettings
 {

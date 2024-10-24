@@ -1,4 +1,5 @@
-﻿using Lodgify.Payments.Stripe.Infrastructure;
+﻿using Lodgify.Extensions.AspNetCore;
+using Lodgify.Payments.Stripe.Infrastructure;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Configurations;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -27,9 +28,8 @@ public abstract class BaseFixture : WebApplicationFactory<Program>, IAsyncLifeti
         .WithPortBinding(8999, true)
         .Build();
 
-    private IServiceScope _scope;
+    internal IServiceScope Scope;
     internal IConfiguration Configuration;
-    internal PaymentDbContext DbContext => _scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -54,13 +54,22 @@ public abstract class BaseFixture : WebApplicationFactory<Program>, IAsyncLifeti
                     opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
                 .AddJwtBearer("lodgify-jwt", AuthHelper.JwtBearerOptions);
+
+            AddLodgifyAuthorizationBase(services);
         });
+    }
+
+    protected virtual void AddLodgifyAuthorizationBase(IServiceCollection services)
+    {
+        services.AddLodgifyAuthorization();
+        //needed to properly resolve PropertyOwnerId and SubOwnerId from the impersonated request (request from backend client)
+        services.AddLodgifyImpersonation();
     }
 
     public virtual async Task InitializeAsync()
     {
         await _postgresContainer.StartAsync();
-        _scope = Services.CreateScope();
+        Scope = Services.CreateScope();
 
         await MigrateDatabaseAsync<PaymentDbContext>();
         await SeedDatabaseAsync();
@@ -69,7 +78,7 @@ public abstract class BaseFixture : WebApplicationFactory<Program>, IAsyncLifeti
     public new virtual async Task DisposeAsync()
     {
         await _postgresContainer.DisposeAsync();
-        _scope.Dispose();
+        Scope.Dispose();
     }
 
     private async Task MigrateDatabaseAsync<TDbContext>() where TDbContext : DbContext

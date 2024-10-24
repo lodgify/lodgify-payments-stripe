@@ -50,6 +50,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lodgify.Payments.Stripe.Ser
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lodgify.Payments.Stripe.Server.IntegrationTests", "Lodgify.Payments.Stripe.Server.IntegrationTests\Lodgify.Payments.Stripe.Server.IntegrationTests.csproj", "{8A35DAA8-F1E7-4C6B-B8A2-CA3A2313609F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lodgify.Payments.Stripe.Server.Tests.Shared", "Lodgify.Payments.Stripe.Server.Tests.Shared\Lodgify.Payments.Stripe.Server.Tests.Shared.csproj", "{25DBCD69-59C6-412C-8773-0AC4259C9D1B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +102,10 @@ Global
 		{8A35DAA8-F1E7-4C6B-B8A2-CA3A2313609F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A35DAA8-F1E7-4C6B-B8A2-CA3A2313609F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A35DAA8-F1E7-4C6B-B8A2-CA3A2313609F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25DBCD69-59C6-412C-8773-0AC4259C9D1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25DBCD69-59C6-412C-8773-0AC4259C9D1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25DBCD69-59C6-412C-8773-0AC4259C9D1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25DBCD69-59C6-412C-8773-0AC4259C9D1B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,5 +115,6 @@ Global
 		{8477C719-E184-47E9-BCFF-DF3014459F2A} = {9500657B-73F5-457F-82D9-87633451B299}
 		{8E11320F-CE8F-43B0-A30A-FEF252812A98} = {9500657B-73F5-457F-82D9-87633451B299}
 		{8A35DAA8-F1E7-4C6B-B8A2-CA3A2313609F} = {9500657B-73F5-457F-82D9-87633451B299}
+		{25DBCD69-59C6-412C-8773-0AC4259C9D1B} = {9500657B-73F5-457F-82D9-87633451B299}
 	EndGlobalSection
 EndGlobal
