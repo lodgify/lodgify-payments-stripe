@@ -10,9 +10,9 @@ public static partial class PredefinedMocks
         {
             return Account.Create(userId, "test@example.com", "acct_123", "application", "application", "stripe", "collection", "none", false, false, DateTime.UtcNow);
         }
-        public static Account CreateWithStripeAccountId(int userId, string stripeAccountId)
+        public static Account CreateWithStripeAccountId(int userId, string stripeAccountId, DateTime? createdAt = null)
         {
-            return Account.Create(userId, "test@example.com", stripeAccountId, "application", "application", "stripe", "collection", "none", false, false, DateTime.UtcNow);
+            return Account.Create(userId, "test@example.com", stripeAccountId, "application", "application", "stripe", "collection", "none", false, false, createdAt ?? DateTime.UtcNow);
         }
         
     }

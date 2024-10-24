@@ -7,11 +7,9 @@ using Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Mocks;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.WireMock.Mappings;
-using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Controllers.v1;
-
 
 public class AccountControllerTests : BaseWireMockIntegrationTest
 {
@@ -58,10 +56,10 @@ public class AccountControllerTests : BaseWireMockIntegrationTest
 
     private async Task AssertAccountHistoryCreated(string stripeAccountId)
     {
-        var account = await DbContext.Set<Account>().Where(x => x.StripeAccountId == stripeAccountId).FirstOrDefaultAsync();
+        var account = await GetFirstAsync<Account>(x => x.StripeAccountId == stripeAccountId);
         account.Should().NotBeNull();
 
-        var accountHistories = await DbContext.Set<AccountHistory>().Where(x => x.AccountId == account.Id).ToListAsync();
+        var accountHistories = await GetListAsync<AccountHistory>(x => x.AccountId == account.Id);
         accountHistories.Should().HaveCount(2);
     }
 }

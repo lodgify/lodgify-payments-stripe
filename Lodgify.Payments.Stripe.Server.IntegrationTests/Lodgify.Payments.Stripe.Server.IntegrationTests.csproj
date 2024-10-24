@@ -30,6 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Lodgify.Payments.Stripe.Server.Tests.Shared\Lodgify.Payments.Stripe.Server.Tests.Shared.csproj" />
       <ProjectReference Include="..\Lodgify.Payments.Stripe.Server\Lodgify.Payments.Stripe.Server.csproj" />
     </ItemGroup>
 
@@ -45,6 +46,10 @@
       <EmbeddedResource Include="WireMock\Payloads\stripe_create_account_response.json" />
       <None Remove="WireMock\Payloads\stripe_create_account_session_response.json" />
       <EmbeddedResource Include="WireMock\Payloads\stripe_create_account_session_response.json" />
+      <None Remove="WireMock\Payloads\stripe_account_updated_webhook.json" />
+      <Content Include="WireMock\Payloads\stripe_account_updated_webhook.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

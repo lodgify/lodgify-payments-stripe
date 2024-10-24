@@ -5,13 +5,11 @@ using Lodgify.Payments.Stripe.Domain.AccountHistories;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Mocks;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
-using Microsoft.EntityFrameworkCore;
 using Stripe;
 using Xunit;
 using Account = Lodgify.Payments.Stripe.Domain.Accounts.Account;
 
 namespace Lodgify.Payments.Stripe.Server.IntegrationTests.Controllers.v1;
-
 
 public class StripeAccountControllerTests : BaseStripeIntegrationTest
 {
@@ -53,16 +51,16 @@ public class StripeAccountControllerTests : BaseStripeIntegrationTest
 
     private async Task AssertAccountCreated(string stripeAccountId)
     {
-        var account = await DbContext.Set<Account>().SingleOrDefaultAsync(x => x.StripeAccountId == stripeAccountId);
+        var account = await GetSingleOrDefaultAsync<Account>(x => x.StripeAccountId == stripeAccountId);
         account.Should().NotBeNull();
     }
 
     private async Task AssertAccountHistoryCreated(string stripeAccountId)
     {
-        var account = await DbContext.Set<Account>().SingleOrDefaultAsync(x => x.StripeAccountId == stripeAccountId);
+        var account = await GetSingleOrDefaultAsync<Account>(x => x.StripeAccountId == stripeAccountId);
         account.Should().NotBeNull();
 
-        var accountHistories = await DbContext.Set<AccountHistory>().Where(x => x.AccountId == account.Id).ToListAsync();
+        var accountHistories = await GetListAsync<AccountHistory>(x => x.AccountId == account.Id);
         accountHistories.Should().HaveCount(2);
     }
 }

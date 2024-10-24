@@ -4,7 +4,6 @@ using Lodgify.Payments.Stripe.Api.Models.v1.Responses;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Fixtures;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Mocks;
 using Lodgify.Payments.Stripe.Server.IntegrationTests.Shared;
-using Microsoft.EntityFrameworkCore;
 using Stripe;
 using Xunit;
 
@@ -55,7 +54,7 @@ public class StripeAccountSessionControllerTests : BaseStripeIntegrationTest
 
     private async Task AssertSessionAccountCreated(string stripeAccountId, string clientSecret)
     {
-        var accountSession = await DbContext.Set<Lodgify.Payments.Stripe.Domain.AccountSessions.AccountSession>().SingleOrDefaultAsync(x => x.StripeAccountId == stripeAccountId && x.ClientSecret == clientSecret);
+        var accountSession = await GetSingleOrDefaultAsync<Lodgify.Payments.Stripe.Domain.AccountSessions.AccountSession>(x => x.StripeAccountId == stripeAccountId && x.ClientSecret == clientSecret);
         accountSession.Should().NotBeNull();
     }
 }

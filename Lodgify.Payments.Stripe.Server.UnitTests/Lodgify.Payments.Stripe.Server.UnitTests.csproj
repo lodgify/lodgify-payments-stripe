@@ -29,6 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Lodgify.Payments.Stripe.Server.Tests.Shared\Lodgify.Payments.Stripe.Server.Tests.Shared.csproj" />
       <ProjectReference Include="..\Lodgify.Payments.Stripe.Server\Lodgify.Payments.Stripe.Server.csproj" />
     </ItemGroup>
 
